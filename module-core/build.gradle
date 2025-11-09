@@ -1,0 +1,3 @@
+dependencies {
+    implementation project(':module-util') // util 모듈을 의존
+}
