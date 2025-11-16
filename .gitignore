@@ -1,0 +1,29 @@
+### IntelliJ 설정파일 ###
+.idea/
+out/
+.tmp/
+caches/
+daemon/
+native/
+workers/
+wrapper/
+gradlew
+gradlew.bat
+
+### Gradle 자동 생성되는 파일이라 올릴 필요 없고, Gradle Wrapper 올려야됨###
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+### Multi-module build 모듈 내부에서도 build 생성되니깐 제외해도됨 ###
+module-core/build/
+module-util/build/
+
+### 컴파일 된 클래스 파일 제외해도됨###
+*.class
+
+### Package 파일 제외해도됨###
+*.jar
+*.war
+*.ear
