@@ -6,7 +6,7 @@ caches/
 daemon/
 native/
 workers/
-wrapper/
+/wrapper/
 gradlew
 gradlew.bat
 
@@ -24,6 +24,5 @@ module-util/build/
 *.class
 
 ### Package 파일 제외해도됨###
-*.jar
 *.war
 *.ear
