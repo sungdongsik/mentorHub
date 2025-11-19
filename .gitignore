@@ -1,11 +1,9 @@
 ### IntelliJ 설정파일 ###
 .idea/
-out/
 .tmp/
 caches/
 daemon/
 native/
-workers/
 /wrapper/
 gradlew
 gradlew.bat
@@ -19,10 +17,3 @@ build/
 ### Multi-module build 모듈 내부에서도 build 생성되니깐 제외해도됨 ###
 module-core/build/
 module-util/build/
-
-### 컴파일 된 클래스 파일 제외해도됨###
-*.class
-
-### Package 파일 제외해도됨###
-*.war
-*.ear
