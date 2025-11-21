@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
-    implementation 'org.springframework.boot:spring-boot-starter:4.0.0-RC2'
+    implementation 'org.springframework.boot:spring-boot-starter:3.5.7'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.5.7'
 }
