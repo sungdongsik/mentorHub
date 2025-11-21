@@ -1,0 +1,3 @@
+rootProject.name = 'mentorHub'
+include 'module-core'
+include 'module-util'
