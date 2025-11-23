@@ -26,4 +26,28 @@ public class PageResponse<T> {
 
     private int pageSize;
 
+    private static final int DEFAULT_PAGE = 1;
+
+    private static final int PAGE_SIZE = 20;
+
+    // 리스트만 넣으면 내부에서 기본 page, pageSize로 처리
+    public static <T> PageResponse<T> of(List<T> list) {
+        int page = DEFAULT_PAGE;
+        int pageSize = PAGE_SIZE;
+
+        int totalCount = list.size();
+        int totalPages = (int) Math.ceil(totalCount / (double) pageSize);
+
+        int fromIndex = Math.min((page - 1) * pageSize, totalCount);
+        int toIndex = Math.min(fromIndex + pageSize, totalCount);
+        List<T> pageList = list.subList(fromIndex, toIndex);
+
+        return PageResponse.<T>builder()
+                .contents(pageList)
+                .totalCount(totalCount)
+                .totalPages(totalPages)
+                .pageSize(pageSize)
+                .build();
+    }
 }
+

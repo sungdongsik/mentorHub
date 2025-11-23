@@ -1,5 +1,9 @@
 package com.mentorHub.api.dto.request;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 /**
@@ -12,6 +16,9 @@ import java.time.LocalDateTime;
  * - startDate: 시작일
  */
 
+@Getter
+@Setter
+@ToString
 public class MenteeRequest {
     private String name;
 

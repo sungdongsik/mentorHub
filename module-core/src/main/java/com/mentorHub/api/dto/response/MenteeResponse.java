@@ -1,7 +1,9 @@
 package com.mentorHub.api.dto.response;
 
+import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +22,15 @@ import java.util.List;
  */
 
 @Getter
+@Builder
 public class MenteeResponse{
     private Long menteeId; // 멘티 고유 ID
 
     private String name;
 
     private String status;
+
+    private LocalDateTime startDate;
 
     private String[] keyword;
 
@@ -35,6 +40,6 @@ public class MenteeResponse{
 
     private String job;
 
-    private List<ReviewsResponse> reviews = new ArrayList<>();
+    private List<ReviewsResponse> reviews;
 
 }
