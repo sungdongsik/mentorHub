@@ -1,5 +1,7 @@
 ### IntelliJ 설정파일 ###
 .idea/
+out/
+generated/
 
 ### Gradle 자동 생성되는 파일이라 올릴 필요 없고, Gradle Wrapper 올려야됨###
 .gradle/
