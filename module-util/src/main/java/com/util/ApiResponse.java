@@ -2,6 +2,7 @@ package com.util;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 /**
  * API 공통 응답
@@ -22,8 +23,8 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
-                .status(HttpStatusCode.SUCCESS.getCode())
-                .message(HttpStatusCode.SUCCESS.name())
+                .status(HttpStatus.OK.value())
+                .message(HttpStatus.OK.name())
                 .data(data)
                 .build();
     }

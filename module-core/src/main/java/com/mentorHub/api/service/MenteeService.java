@@ -35,7 +35,7 @@ public class MenteeService {
         return PageResponse.of(list);
     }
 
-    public CreateMenteeResponse setMentors(CreateMenteeRequest request){
+    public CreateMenteeResponse setMentees(CreateMenteeRequest request){
         return CreateMenteeResponse.builder()
                 .writingId(1L)
                 .title(request.getTitle())
