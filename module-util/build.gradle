@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-
+    implementation 'org.springframework:spring-web:6.2.12'
 }
