@@ -23,7 +23,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class MenteeResponse{
+public class MenteeResponse {
     private Long menteeId; // 멘티 고유 ID
 
     private String name;

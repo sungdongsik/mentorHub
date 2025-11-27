@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
  */
 
 @Getter
-@Builder
 @ToString
 public class CreateMenteeRequest {
     private String title;
@@ -29,16 +28,4 @@ public class CreateMenteeRequest {
     private String[] keyword;
 
     private String job;
-
-
-    public CreateMenteeRequest() {
-    }
-
-    public CreateMenteeRequest(String title, String content, LocalDateTime startDate, String[] keyword, String job) {
-        this.title = title;
-        this.content = content;
-        this.startDate = startDate;
-        this.keyword = keyword;
-        this.job = job;
-    }
 }
