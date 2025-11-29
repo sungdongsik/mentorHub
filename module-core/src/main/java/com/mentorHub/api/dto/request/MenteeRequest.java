@@ -1,5 +1,6 @@
 package com.mentorHub.api.dto.request;
 
+import com.util.UserType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,9 +23,9 @@ import java.time.LocalDateTime;
 public class MenteeRequest {
     private String name;
 
-    private String keyword;
+    private String[] keyword;
 
-    private String status;
+    private UserType status;
 
     private LocalDateTime startDate;
 }

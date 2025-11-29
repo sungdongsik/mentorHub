@@ -1,4 +1,4 @@
-package com.util;
+package com.mentorHub.common;
 
 import lombok.Builder;
 import lombok.Getter;

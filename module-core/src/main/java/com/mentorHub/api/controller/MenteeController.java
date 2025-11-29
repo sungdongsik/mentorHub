@@ -1,17 +1,15 @@
 package com.mentorHub.api.controller;
 
 import com.mentorHub.api.dto.PageResponse;
-import com.mentorHub.api.dto.request.CreateMenteeRequest;
-import com.mentorHub.api.dto.request.MenteeRequest;
-import com.mentorHub.api.dto.response.CreateMenteeResponse;
+import com.mentorHub.api.dto.request.*;
+import com.mentorHub.api.dto.response.MenteeApplicationResponse;
+import com.mentorHub.api.dto.response.MenteeCommandResponse;
 import com.mentorHub.api.dto.response.MenteeResponse;
 import com.mentorHub.api.service.MenteeService;
-import com.util.ApiResponse;
+import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 /**
  * 25.11.22
@@ -34,8 +32,32 @@ public class MenteeController {
     }
 
     @PostMapping
-    public ApiResponse<CreateMenteeResponse> setMentees(@RequestBody CreateMenteeRequest request) {
+    public ApiResponse<MenteeCommandResponse> setMentees(@RequestBody MenteeCreateRequest request) {
         log.info("request: {}", request);
         return ApiResponse.success(menteeService.setMentees(request));
+    }
+
+    @DeleteMapping
+    public ApiResponse<MenteeCommandResponse> deleteMentees(@RequestBody MenteeDeleteRequest request) {
+        log.info("request: {}", request);
+        return ApiResponse.success(menteeService.deleteMentees(request));
+    }
+
+    @PutMapping
+    public ApiResponse<MenteeCommandResponse> putMentees(@RequestBody MenteePutRequest request) {
+        log.info("request: {}", request);
+        return ApiResponse.success(menteeService.putMentees(request));
+    }
+
+    @PostMapping("/applications")
+    public ApiResponse<MenteeApplicationResponse> createMenteesApplication(@RequestBody MenteeApplicationCreateRequest request) {
+        log.info("request: {}", request);
+        return ApiResponse.success(menteeService.createMenteesApplication(request));
+    }
+
+    @PutMapping("/applications/status")
+    public ApiResponse<MenteeApplicationResponse> updateApplicationStatus(@RequestBody MenteeApplicationPutRequest request) {
+        log.info("request: {}", request);
+        return ApiResponse.success(menteeService.updateApplicationStatus(request));
     }
 }
