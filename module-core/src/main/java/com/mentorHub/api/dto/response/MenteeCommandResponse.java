@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CreateMenteeResponse {
+public class MenteeCommandResponse {
     private Long writingId;
 
     private String title;
