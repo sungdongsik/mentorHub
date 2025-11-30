@@ -1,7 +1,8 @@
 package com.mentorHub.api.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.util.ApplicationStausType;
+import com.util.UserType;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
  * 25.11.21
  * 멘티 리스트 조회 Response Dto
  * 주요 포함 정보:
- * - menteeId: 멘티 고유 ID
+ * - writingId: 멘티 글 고유 ID
  * - name: 멘티 이름
  * - status: 멘토링 상태
  * - keyword: 관심 키워드 목록
@@ -22,13 +23,16 @@ import java.util.List;
  */
 
 @Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MenteeResponse {
-    private Long menteeId; // 멘티 고유 ID
+    private Long writingId;
 
     private String name;
 
-    private String status;
+    private UserType status;
 
     private LocalDateTime startDate;
 
