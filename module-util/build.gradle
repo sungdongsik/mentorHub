@@ -3,5 +3,13 @@ plugins {
 }
 
 dependencies {
-    implementation 'org.springframework:spring-web:6.2.12'
+}
+
+bootJar {
+    enabled = false
+}
+
+// 또는
+tasks.named('bootJar') {
+    enabled = false
 }

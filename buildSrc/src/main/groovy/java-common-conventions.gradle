@@ -1,5 +1,7 @@
 plugins {
     id 'java-library'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
 }
 
 repositories {
@@ -7,13 +9,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'org.slf4j:slf4j-api'
 
     // lombok
     // compileOnly - 컴파일 시 Lombook 라이브러리를 참조할 수 있게 해준다..
     // annotationProcessor - 애노테이션 코드를 사용할 수 있게 컴파일러 알림
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 }
 
 java {
