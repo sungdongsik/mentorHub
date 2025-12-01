@@ -1,6 +1,7 @@
 package com.mentorHub.api.dto.request;
 
 
+import com.mentorHub.api.entity.MenteeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,8 +19,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @ToString
-public class CreateMenteeRequest {
+public class MenteeCreateRequest {
     private String title;
+
+    private Long userId;
 
     private String content;
 
@@ -28,4 +31,16 @@ public class CreateMenteeRequest {
     private String[] keyword;
 
     private String job;
+
+
+    public MenteeEntity toEntity() {
+        return MenteeEntity.builder()
+                .title(title)
+                .userId(userId)
+                .content(content)
+                .startDate(startDate)
+                .keyword(keyword)
+                .job(job)
+                .build();
+    }
 }
