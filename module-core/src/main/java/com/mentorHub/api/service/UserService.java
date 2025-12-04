@@ -13,9 +13,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponse setUsers(UserCreateRequest request) {
+    public UserResponse setUsers(UserEntity request) {
 
-        UserEntity en = userRepository.save(request.toEntity());
+        UserEntity en = userRepository.save(request);
 
         return UserResponse.builder()
                 .userId(en.getUserId())

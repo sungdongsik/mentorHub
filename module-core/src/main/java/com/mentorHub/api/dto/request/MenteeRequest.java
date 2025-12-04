@@ -1,5 +1,6 @@
 package com.mentorHub.api.dto.request;
 
+import com.mentorHub.api.entity.MenteeEntity;
 import com.util.UserType;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
  * 25.11.21
  * 멘티 조건 Request Dto
  * 주요 포함 정보:
- * - name: 멘티 이름
+ * - title: 제목
  * - keyword: 관심 키워드 목록
  * - status: 멘토링 상태
  * - startDate: 시작일
@@ -21,11 +22,12 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class MenteeRequest {
-    private String name;
+    private String title;
 
     private String[] keyword;
 
     private UserType status;
 
     private LocalDateTime startDate;
+
 }

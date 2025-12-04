@@ -1,5 +1,6 @@
 package com.mentorHub.api.dto.response;
 
+import com.mentorHub.api.entity.MenteeEntity;
 import com.util.ApplicationStausType;
 import com.util.UserType;
 import lombok.*;
@@ -46,4 +47,12 @@ public class MenteeResponse {
 
     private List<ReviewsResponse> reviews;
 
+    public static MenteeResponse from(MenteeEntity en) {
+        return MenteeResponse.builder()
+                .writingId(en.getWritingId())
+                .title(en.getTitle())
+                .startDate(en.getStartDate())
+                .keyword(en.getKeyword())
+                .build();
+    }
 }

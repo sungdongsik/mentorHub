@@ -22,7 +22,7 @@ public class UserController {
     @PostMapping
     public ApiResponse<UserResponse> setUsers(@RequestBody UserCreateRequest request){
         log.info("request: {}", request);
-        return ApiResponse.success(userService.setUsers(request));
+        return ApiResponse.success(userService.setUsers(request.toEntity()));
     }
 
 }

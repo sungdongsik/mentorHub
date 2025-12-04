@@ -21,12 +21,16 @@ public class MenteeApplicationEntity extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menteeId;
 
+    @Column(updatable = false)
     private Long userId;
 
+    @Column(updatable = false)
     private String name;
 
+    @Column(updatable = false)
     private LocalDateTime startDate;
 
+    @Column(updatable = false)
     private String comment;
 
     @Enumerated(EnumType.STRING)

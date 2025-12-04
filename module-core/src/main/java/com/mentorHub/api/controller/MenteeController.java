@@ -5,6 +5,8 @@ import com.mentorHub.api.dto.request.*;
 import com.mentorHub.api.dto.response.MenteeApplicationResponse;
 import com.mentorHub.api.dto.response.MenteeCommandResponse;
 import com.mentorHub.api.dto.response.MenteeResponse;
+import com.mentorHub.api.entity.MenteeApplicationEntity;
+import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.service.MenteeService;
 import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,30 +36,40 @@ public class MenteeController {
     @PostMapping
     public ApiResponse<MenteeCommandResponse> setMentees(@RequestBody MenteeCreateRequest request) {
         log.info("request: {}", request);
-        return ApiResponse.success(menteeService.setMentees(request));
+        MenteeEntity en = menteeService.setMentees(request.toEntity());
+
+        return ApiResponse.success(MenteeCommandResponse.from(en));
     }
 
     @DeleteMapping
     public ApiResponse<MenteeCommandResponse> deleteMentees(@RequestBody MenteeDeleteRequest request) {
         log.info("request: {}", request);
-        return ApiResponse.success(menteeService.deleteMentees(request));
+        MenteeEntity en = menteeService.deleteMentees(request.toEntity());
+
+        return ApiResponse.success(MenteeCommandResponse.from(en));
     }
 
     @PutMapping
     public ApiResponse<MenteeCommandResponse> putMentees(@RequestBody MenteePutRequest request) {
         log.info("request: {}", request);
-        return ApiResponse.success(menteeService.putMentees(request));
+        MenteeEntity en = menteeService.putMentees(request.toEntity());
+
+        return ApiResponse.success(MenteeCommandResponse.from(en));
     }
 
     @PostMapping("/applications")
     public ApiResponse<MenteeApplicationResponse> createMenteesApplication(@RequestBody MenteeApplicationCreateRequest request) {
         log.info("request: {}", request);
-        return ApiResponse.success(menteeService.createMenteesApplication(request));
+        MenteeApplicationEntity en = menteeService.createMenteesApplication(request.toEntity());
+
+        return ApiResponse.success(MenteeApplicationResponse.from(en));
     }
 
     @PutMapping("/applications/status")
     public ApiResponse<MenteeApplicationResponse> updateApplicationStatus(@RequestBody MenteeApplicationPutRequest request) {
         log.info("request: {}", request);
-        return ApiResponse.success(menteeService.updateApplicationStatus(request));
+        MenteeApplicationEntity en = menteeService.updateApplicationStatus(request.toEntity());
+
+        return ApiResponse.success(MenteeApplicationResponse.from(en));
     }
 }
