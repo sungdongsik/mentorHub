@@ -13,13 +13,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponse setUsers(UserEntity request) {
-
-        UserEntity en = userRepository.save(request);
-
-        return UserResponse.builder()
-                .userId(en.getUserId())
-                .name(en.getName())
-                .build();
+    public UserEntity setUsers(UserEntity request) {
+        return userRepository.save(request);
     }
 }

@@ -2,6 +2,7 @@ package com.mentorHub.api.controller;
 
 import com.mentorHub.api.dto.request.UserCreateRequest;
 import com.mentorHub.api.dto.response.UserResponse;
+import com.mentorHub.api.entity.UserEntity;
 import com.mentorHub.api.service.UserService;
 import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,9 @@ public class UserController {
     @PostMapping
     public ApiResponse<UserResponse> setUsers(@RequestBody UserCreateRequest request){
         log.info("request: {}", request);
-        return ApiResponse.success(userService.setUsers(request.toEntity()));
+        UserEntity en = userService.setUsers(request.toEntity());
+
+        return ApiResponse.success(UserResponse.from(en));
     }
 
 }
