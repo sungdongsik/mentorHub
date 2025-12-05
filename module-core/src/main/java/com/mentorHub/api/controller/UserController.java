@@ -1,16 +1,14 @@
 package com.mentorHub.api.controller;
 
 import com.mentorHub.api.dto.request.UserCreateRequest;
+import com.mentorHub.api.dto.request.UserPutRequest;
 import com.mentorHub.api.dto.response.UserResponse;
 import com.mentorHub.api.entity.UserEntity;
 import com.mentorHub.api.service.UserService;
 import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -28,4 +26,11 @@ public class UserController {
         return ApiResponse.success(UserResponse.from(en));
     }
 
+    @PutMapping("/me")
+    public ApiResponse<UserResponse> putUsers(@RequestBody UserPutRequest request) {
+        log.info("request: {}", request);
+        UserEntity en = userService.putUsers(request.toEntity());
+
+        return ApiResponse.success(UserResponse.from(en));
+    }
 }

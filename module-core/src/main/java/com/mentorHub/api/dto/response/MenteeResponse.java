@@ -47,12 +47,4 @@ public class MenteeResponse {
 
     private List<ReviewsResponse> reviews;
 
-    public static MenteeResponse from(MenteeEntity en) {
-        return MenteeResponse.builder()
-                .writingId(en.getWritingId())
-                .title(en.getTitle())
-                .startDate(en.getStartDate())
-                .keyword(en.getKeyword())
-                .build();
-    }
 }

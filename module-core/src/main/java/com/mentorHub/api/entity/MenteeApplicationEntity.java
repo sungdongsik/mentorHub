@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenteeApplicationEntity extends BaseEntity{
+public class MenteeApplicationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +36,14 @@ public class MenteeApplicationEntity extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private ApplicationStausType admission;
+
+    @Column(updatable = false)
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
+
+    @Builder.Default
+    @Column(name = "del_yn", length = 1)
+    private String delYn = "N";  // 기본값 N
 }

@@ -1,6 +1,5 @@
 package com.mentorHub.api.entity;
 
-import com.util.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,28 +10,26 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TB_MENTEE")
+@Table(name = "TB_REVIEW")
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenteeEntity {
+public class ReviewEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long writingId;
+    private Long reviewId;
 
-    private Long userId;
+    private Long menteeId;
 
     private String title;
 
     private String content;
 
-    private LocalDateTime startDate;
+    private int rating;
 
-    private String[] keyword;
-
-    private String job;
+    private String name;
 
     @Column(updatable = false)
     private LocalDateTime createdDate;
