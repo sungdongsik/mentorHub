@@ -2,7 +2,9 @@ package com.mentorHub.api.dto.request;
 
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.ReviewEntity;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 
@@ -18,6 +20,7 @@ import lombok.ToString;
 
 
 @Getter
+@Builder
 @ToString
 public class ReviewCreateRequest {
     private Long writingId;
