@@ -55,7 +55,8 @@ public class ReviewController {
     @PutMapping
     public ApiResponse<ReviewCommandResponse> putReviews(@RequestBody ReviewPutRequest request) {
         log.info("request: {}", request);
-        ReviewEntity en = reviewService.putReviews(request.toEntity());
+        MenteeEntity mentee = menteeService.findById(request.getWritingId());
+        ReviewEntity en = reviewService.putReviews(request.toEntity(mentee));
 
         return ApiResponse.success(ReviewCommandResponse.from(en));
     }

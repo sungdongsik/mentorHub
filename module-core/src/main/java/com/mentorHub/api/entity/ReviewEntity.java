@@ -2,7 +2,9 @@ package com.mentorHub.api.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class ReviewEntity {
 
     @Id
@@ -31,6 +34,7 @@ public class ReviewEntity {
     @JoinColumn(name = "writingId")   // FK
     private MenteeEntity mentee;
 
+    @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
 

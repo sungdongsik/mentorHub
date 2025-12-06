@@ -42,7 +42,7 @@ public class ReviewService {
     }
 
     private ReviewEntity findById(ReviewEntity request) {
-        return reviewRepository.findById(request.getMentee().getWritingId())
+        return reviewRepository.findById(request.getReviewId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID 입니다!"));
     }
 }

@@ -7,11 +7,11 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ReviewDeleteRequest {
-    private Long reviewsId;
+    private Long reviewId;
 
     public ReviewEntity toEntity() {
         return ReviewEntity.builder()
-                .reviewId(reviewsId)
+                .reviewId(reviewId)
                 .build();
     }
 }

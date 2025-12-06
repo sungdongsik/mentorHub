@@ -28,12 +28,15 @@ public class ReviewCreateRequest {
 
     private double rating;
 
-    public ReviewEntity toEntity(final MenteeEntity en) {
+    private String name;
+
+    public ReviewEntity toEntity(MenteeEntity en) {
         return ReviewEntity.builder()
                 .title(title)
                 .content(content)
                 .mentee(en)
                 .rating(rating)
+                .name(name)
                 .build();
     }
 }

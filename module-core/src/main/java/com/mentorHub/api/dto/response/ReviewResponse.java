@@ -18,7 +18,7 @@ public class ReviewResponse {
 
     private String name;
 
-    private LocalDateTime insertDate;
+    private LocalDateTime createDate;
 
 
     public static ReviewResponse from(ReviewEntity en) {
@@ -27,7 +27,7 @@ public class ReviewResponse {
                 .content(en.getContent())
                 .name(en.getName())
                 .writingId(en.getMentee().getWritingId())
-                .insertDate(en.getCreatedDate())
+                .createDate(en.getCreatedDate())
                 .build();
     }
 }

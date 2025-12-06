@@ -35,7 +35,6 @@ public class MenteeApplicationServiceTest {
         Long menteeId = 5L;
         ApplicationStausType admission = ApplicationStausType.APPLICATION;
         MenteeApplicationCreateRequest request = new MenteeApplicationCreateRequest();
-        request.setName("김멘티");
 
         // 2. Repository가 저장 후 반환할 가짜 Entity 정의
         MenteeApplicationEntity mockSavedEntity = MenteeApplicationEntity.builder()
@@ -48,7 +47,7 @@ public class MenteeApplicationServiceTest {
                 .willReturn(mockSavedEntity);
 
         // 실행
-        MenteeApplicationResponse response = menteeApplicationService.createMenteesApplication(request);
+        MenteeApplicationEntity response = menteeApplicationService.createMenteesApplication(request.toEntity());
 
         // 반환된 응답의 필드 검증
         assertThat(response.getMenteeId()).isEqualTo(menteeId);

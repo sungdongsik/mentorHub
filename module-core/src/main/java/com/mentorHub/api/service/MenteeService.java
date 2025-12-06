@@ -42,11 +42,11 @@ public class MenteeService {
         
         List<ReviewEntity> reviews = reviewService.getReviews();
 
-        Map<MenteeEntity, List<ReviewEntity>> reviewMap = reviews.stream()
-                .collect(Collectors.groupingBy(ReviewEntity::getMentee));
+        Map<Long, List<ReviewEntity>> reviewMap = reviews.stream()
+                .collect(Collectors.groupingBy(r -> r.getMentee().getWritingId()));
 
         mentees.forEach(m ->
-                m.setReviews(reviewMap.getOrDefault(m, new ArrayList<>()))
+                m.setReviews(reviewMap.getOrDefault(m.getWritingId(), new ArrayList<>()))
         );
 
         return mentees;
