@@ -2,6 +2,7 @@ package com.mentorHub.api.repository.query;
 
 import com.mentorHub.api.dto.request.MenteeRequest;
 import com.mentorHub.api.dto.response.MenteeResponse;
+import com.mentorHub.api.entity.MenteeEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,13 +22,12 @@ public class MenteeQuery {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<MenteeResponse> getMentees(MenteeRequest request) {
+    public List<MenteeEntity> getMentees(MenteeEntity request) {
 
         return queryFactory.select(Projections.bean(
-                        MenteeResponse.class,
+                        MenteeEntity.class,
                         menteeEntity.writingId,
                         userEntity.name,
-                        userEntity.status,
                         menteeEntity.startDate,
                         menteeEntity.keyword,
                         menteeEntity.title,
@@ -44,7 +44,7 @@ public class MenteeQuery {
                 .fetch();
     }
 
-    private BooleanBuilder builder(MenteeRequest request) {
+    private BooleanBuilder builder(MenteeEntity request) {
 
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -54,10 +54,6 @@ public class MenteeQuery {
 
         if (request.getKeyword() != null) {
             builder.and(menteeEntity.keyword.in(request.getKeyword()));
-        }
-
-        if (request.getStatus() != null) {
-            builder.and(userEntity.status.eq(request.getStatus()));
         }
 
         if (request.getStartDate() != null) {

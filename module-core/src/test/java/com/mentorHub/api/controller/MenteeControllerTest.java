@@ -2,9 +2,9 @@ package com.mentorHub.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mentorHub.api.dto.PageResponse;
-import com.mentorHub.api.dto.request.CreateMenteeRequest;
+import com.mentorHub.api.dto.request.MenteeCreateRequest;
 import com.mentorHub.api.dto.response.MenteeResponse;
-import com.util.ApiResponse;
+import com.mentorHub.common.ApiResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ class MenteeControllerTest {
                 );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getData().getContents().get(0).getName()).isEqualTo("Mentee1");
+        assertThat(response.getBody().getData().getContents().get(0).getName()).isEqualTo("1");
 
         response.getBody().getData().getContents()
                 .forEach(m -> System.out.println(m.getName()));
@@ -68,7 +68,7 @@ class MenteeControllerTest {
                 );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getData().getContents().get(0).getName()).isEqualTo("Mentee10");
+        assertThat(response.getBody().getData().getContents().get(0).getName()).isEqualTo("tse");
 
         response.getBody().getData().getContents()
                 .forEach(m -> System.out.println(m.getName()));
@@ -78,7 +78,7 @@ class MenteeControllerTest {
     @DisplayName("멘티 글 등록")
     void testSetMentors() throws Exception {
         // 요청 객체 생성
-        CreateMenteeRequest request = new CreateMenteeRequest();
+        MenteeCreateRequest request = new MenteeCreateRequest();
         request.setTitle("Test Title");
         request.setContent("Test Content");
         request.setStartDate(LocalDateTime.now());

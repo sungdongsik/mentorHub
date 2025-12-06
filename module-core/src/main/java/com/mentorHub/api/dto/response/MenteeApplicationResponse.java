@@ -1,5 +1,7 @@
 package com.mentorHub.api.dto.response;
 
+import com.mentorHub.api.entity.MenteeApplicationEntity;
+import com.mentorHub.api.entity.MenteeEntity;
 import com.util.ApplicationStausType;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,4 +20,11 @@ public class MenteeApplicationResponse {
     private Long menteeId;
 
     private ApplicationStausType admission;
+
+    public static MenteeApplicationResponse from(MenteeApplicationEntity en) {
+        return MenteeApplicationResponse.builder()
+                .menteeId(en.getMenteeId())
+                .admission(en.getAdmission())
+                .build();
+    }
 }

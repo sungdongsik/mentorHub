@@ -53,7 +53,7 @@ class MenteeServiceTest {
                 .willReturn(en);
 
         // 실행하기
-        MenteeCommandResponse response = menteeService.setMentees(request);
+        MenteeEntity response = menteeService.setMentees(request.toEntity());
 
         // 검증하기
         assertThat(response.getWritingId()).isEqualTo(writingId);
@@ -69,9 +69,8 @@ class MenteeServiceTest {
     void deleteMenteesTest() {
         Long writingId = 20L;
         MenteeDeleteRequest request = new MenteeDeleteRequest();
-        request.setWritingId(writingId);
 
-        MenteeCommandResponse result = menteeService.deleteMentees(request);
+        MenteeEntity result = menteeService.deleteMentees(request.toEntity());
 
         // 검증
         verify(menteeRepository, times(1)).deleteById(writingId);

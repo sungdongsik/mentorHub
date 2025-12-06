@@ -1,0 +1,48 @@
+package com.mentorHub.api.service;
+
+import com.mentorHub.api.entity.MenteeEntity;
+import com.mentorHub.api.entity.ReviewEntity;
+import com.mentorHub.api.repository.MenteeRepository;
+import com.mentorHub.api.repository.ReviewRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Transactional
+@AllArgsConstructor
+public class ReviewService {
+
+    private final ReviewRepository reviewRepository;
+
+    @Transactional(readOnly = true)
+    public List<ReviewEntity> getReviews() {
+        return reviewRepository.findAll();
+    }
+
+    public ReviewEntity setReviews(ReviewEntity request) {
+        // 1) 부모에도 리뷰 연결 (양방향 유지)
+        request.getMentee().getReviews().add(request);
+
+        return reviewRepository.save(request);
+    }
+
+    public ReviewEntity deleteReviews(ReviewEntity request) {
+        ReviewEntity en = findById(request);
+
+        reviewRepository.delete(en);
+
+        return en;
+    }
+
+    public ReviewEntity putReviews(ReviewEntity request) {
+        return reviewRepository.save(request);
+    }
+
+    private ReviewEntity findById(ReviewEntity request) {
+        return reviewRepository.findById(request.getReviewId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID 입니다!"));
+    }
+}

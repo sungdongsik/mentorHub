@@ -1,5 +1,6 @@
 package com.mentorHub.api.dto.request;
 
+import com.mentorHub.api.entity.MenteeEntity;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -17,4 +18,11 @@ public class MenteeDeleteRequest {
     private Long writingId;
 
     private Long userId;
+
+    public MenteeEntity toEntity() {
+        return MenteeEntity.builder()
+                .writingId(writingId)
+                .userId(userId)
+                .build();
+    }
 }

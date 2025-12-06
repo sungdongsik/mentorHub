@@ -1,5 +1,6 @@
 package com.mentorHub.api.dto.request;
 
+import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.util.ApplicationStausType;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,4 +20,12 @@ public class MenteeApplicationPutRequest {
     private Long menteeId;
 
     private ApplicationStausType admission;
+
+
+    public MenteeApplicationEntity toEntity() {
+        return MenteeApplicationEntity.builder()
+                .menteeId(menteeId)
+                .admission(admission)
+                .build();
+    }
 }
