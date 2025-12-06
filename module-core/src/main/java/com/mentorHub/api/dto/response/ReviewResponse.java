@@ -12,7 +12,7 @@ public class ReviewResponse {
 
     private Long reviewsId;
 
-    private Long menteeId;
+    private Long writingId;
 
     private String content;
 
@@ -24,9 +24,9 @@ public class ReviewResponse {
     public static ReviewResponse from(ReviewEntity en) {
         return ReviewResponse.builder()
                 .reviewsId(en.getReviewId())
-                .menteeId(en.getMenteeId())
                 .content(en.getContent())
                 .name(en.getName())
+                .writingId(en.getMentee().getWritingId())
                 .insertDate(en.getCreatedDate())
                 .build();
     }

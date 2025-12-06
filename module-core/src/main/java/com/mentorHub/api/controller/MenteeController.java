@@ -7,7 +7,9 @@ import com.mentorHub.api.dto.response.MenteeCommandResponse;
 import com.mentorHub.api.dto.response.MenteeResponse;
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.entity.MenteeEntity;
+import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.service.MenteeService;
+import com.mentorHub.api.service.ReviewService;
 import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +31,17 @@ public class MenteeController {
 
     private final MenteeService menteeService;
 
+    private final ReviewService reviewService;
+
     @GetMapping
     public ApiResponse<PageResponse<MenteeResponse>> getMentees(@ModelAttribute MenteeRequest request) {
-        log.info("request: {}", request);
-        return ApiResponse.success(menteeService.getMentees(request));
+        List<MenteeEntity> mentees = menteeService.getMentees(request.toEntity());
+
+        List<MenteeResponse> responses = mentees.stream()
+                .map(MenteeResponse::from)
+                .toList();
+
+        return ApiResponse.success(PageResponse.of(responses));
     }
 
     @PostMapping

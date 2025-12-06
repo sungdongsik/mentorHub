@@ -1,10 +1,7 @@
 package com.mentorHub.api.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
@@ -21,15 +18,18 @@ public class ReviewEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
-    private Long menteeId;
-
     private String title;
 
     private String content;
 
-    private int rating;
+    private double rating;
 
     private String name;
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writingId")   // FK
+    private MenteeEntity mentee;
 
     @Column(updatable = false)
     private LocalDateTime createdDate;

@@ -2,13 +2,12 @@ package com.mentorHub.api.entity;
 
 import com.util.UserType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "TB_MENTEE")
@@ -16,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MenteeEntity {
 
     @Id
@@ -23,6 +23,8 @@ public class MenteeEntity {
     private Long writingId;
 
     private Long userId;
+
+    private String name;
 
     private String title;
 
@@ -33,6 +35,10 @@ public class MenteeEntity {
     private String[] keyword;
 
     private String job;
+
+    @Setter
+    @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
     @Column(updatable = false)
     private LocalDateTime createdDate;

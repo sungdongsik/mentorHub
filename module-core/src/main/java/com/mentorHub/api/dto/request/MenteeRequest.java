@@ -26,8 +26,13 @@ public class MenteeRequest {
 
     private String[] keyword;
 
-    private UserType status;
-
     private LocalDateTime startDate;
 
+    public MenteeEntity toEntity() {
+        return MenteeEntity.builder()
+                .title(title)
+                .keyword(keyword)
+                .startDate(startDate)
+                .build();
+    }
 }

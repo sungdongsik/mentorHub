@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
  */
 
 @Getter
+@Setter
 @ToString
 public class MenteeCreateRequest {
     private String title;

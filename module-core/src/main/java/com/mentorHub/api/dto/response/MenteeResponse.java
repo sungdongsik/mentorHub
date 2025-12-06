@@ -15,7 +15,6 @@ import java.util.List;
  * 주요 포함 정보:
  * - writingId: 멘티 글 고유 ID
  * - name: 멘티 이름
- * - status: 멘토링 상태
  * - keyword: 관심 키워드 목록
  * - title: 멘티 요청 제목
  * - content: 멘티 요청 내용
@@ -28,12 +27,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MenteeResponse {
     private Long writingId;
 
     private String name;
-
-    private UserType status;
 
     private LocalDateTime startDate;
 
@@ -46,5 +44,26 @@ public class MenteeResponse {
     private String job;
 
     private List<ReviewsResponse> reviews;
+
+    public static MenteeResponse from(MenteeEntity entity) {
+        return MenteeResponse.builder()
+                .writingId(entity.getWritingId())
+                .name(entity.getName())
+                .startDate(entity.getStartDate())
+                .keyword(entity.getKeyword())
+                .title(entity.getTitle())
+                .content(entity.getContent())
+                .job(entity.getJob())
+                .reviews(
+                        entity.getReviews().stream()
+                                .map(ReviewsResponse::from)
+                                .toList()
+                )
+                .build();
+    }
+
+
+
+
 
 }
