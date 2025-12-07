@@ -41,7 +41,7 @@ public class MenteeEntity {
     private String job;
 
     @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewEntity> reviews = new ArrayList<>();
+    private List<ReviewEntity> reviews;
 
     @CreatedDate
     @Column(updatable = false)
