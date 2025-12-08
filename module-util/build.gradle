@@ -4,12 +4,3 @@ plugins {
 
 dependencies {
 }
-
-bootJar {
-    enabled = false
-}
-
-// 또는
-tasks.named('bootJar') {
-    enabled = false
-}
