@@ -7,13 +7,19 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    }
+}
+
 dependencies {
-    implementation 'org.slf4j:slf4j-api:2.0.17'
+    implementation 'org.slf4j:slf4j-api'
     // lombok
     // compileOnly - 컴파일 시 Lombook 라이브러리를 참조할 수 있게 해준다..
     // annotationProcessor - 애노테이션 코드를 사용할 수 있게 컴파일러 알림
-    compileOnly 'org.projectlombok:lombok:1.18.30' // 최신 버전으로 수정
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    compileOnly 'org.projectlombok:lombok' // 최신 버전으로 수정
+    annotationProcessor 'org.projectlombok:lombok'
 }
 
 java {
