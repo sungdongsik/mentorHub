@@ -5,18 +5,23 @@ import com.mentorHub.api.dto.request.*;
 import com.mentorHub.api.dto.response.MenteeApplicationResponse;
 import com.mentorHub.api.dto.response.MenteeCommandResponse;
 import com.mentorHub.api.dto.response.MenteeResponse;
+import com.mentorHub.api.dto.response.ReviewsResponse;
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.entity.MenteeEntity;
+import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.MenteeApplicationRepository;
 import com.mentorHub.api.repository.MenteeRepository;
-import com.mentorHub.api.repository.query.MenteeApplicationQuery;
+import com.mentorHub.api.repository.ReviewRepository;
 import com.mentorHub.api.repository.query.MenteeQuery;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,61 +34,50 @@ public class MenteeService {
 
     private final MenteeApplicationRepository menteeApplicationRepository;
 
-    private final MenteeApplicationQuery menteeApplicationQuery;
+    private final ReviewService reviewService;
 
     @Transactional(readOnly = true)
-    public PageResponse<MenteeResponse> getMentees(MenteeRequest request) {
-        List<MenteeResponse> list = menteeQuery.getMentees(request);
-        return PageResponse.of(list);
+    public List<MenteeEntity> getMentees(MenteeEntity request) {
+        List<MenteeEntity> mentees = menteeQuery.getMentees(request);
+        
+        List<ReviewEntity> reviews = reviewService.getReviews();
+
+        Map<Long, List<ReviewEntity>> reviewMap = reviews.stream()
+                .collect(Collectors.groupingBy(r -> r.getMentee().getWritingId()));
+
+        mentees.forEach(m ->
+                m.setReviews(reviewMap.getOrDefault(m.getWritingId(), new ArrayList<>()))
+        );
+
+        return mentees;
     }
 
-    public MenteeCommandResponse setMentees(MenteeCreateRequest request){
-
-        MenteeEntity en = menteeRepository.save(request.toEntity());
-
-        return MenteeCommandResponse.builder()
-                .writingId(en.getWritingId())
-                .title(en.getTitle())
-                .build();
+    public MenteeEntity setMentees(MenteeEntity request){
+        return menteeRepository.save(request);
     }
 
-    public MenteeCommandResponse deleteMentees(MenteeDeleteRequest request) {
+    public MenteeEntity deleteMentees(MenteeEntity request) {
+        MenteeEntity en = findById(request.getWritingId());
 
-        menteeRepository.deleteById(request.getWritingId());
+        menteeRepository.delete(en);
 
-        return MenteeCommandResponse.builder()
-                .writingId(request.getWritingId())
-                .title(null)
-                .build();
+        return en;
     }
 
-    public MenteeCommandResponse putMentees(MenteePutRequest request) {
-
-        MenteeEntity en = menteeRepository.save(request.toEntity());
-
-        return MenteeCommandResponse.builder()
-                .writingId(en.getWritingId())
-                .title(en.getTitle())
-                .build();
+    public MenteeEntity putMentees(MenteeEntity request) {
+        return menteeRepository.save(request);
     }
 
-    public MenteeApplicationResponse createMenteesApplication(MenteeApplicationCreateRequest request) {
-
-        MenteeApplicationEntity en = menteeApplicationRepository.save(request.toEntity());
-
-        return MenteeApplicationResponse.builder()
-                .menteeId(en.getMenteeId())
-                .admission(en.getAdmission())
-                .build();
+    public MenteeApplicationEntity createMenteesApplication(MenteeApplicationEntity request) {
+        return menteeApplicationRepository.save(request);
     }
 
-    public MenteeApplicationResponse updateApplicationStatus(MenteeApplicationPutRequest request) {
+    public MenteeApplicationEntity updateApplicationStatus(MenteeApplicationEntity request) {
+        return menteeApplicationRepository.save(request);
+    }
 
-        menteeApplicationQuery.updateApplicationStatus(request);
-
-        return MenteeApplicationResponse.builder()
-                .menteeId(request.getMenteeId())
-                .admission(request.getAdmission())
-                .build();
+    public MenteeEntity findById(Long writingId) {
+        return menteeRepository.findById(writingId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
 }
