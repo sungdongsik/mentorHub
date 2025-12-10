@@ -1,25 +1,39 @@
 package com.mentorHub.api.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@Entity
+@Table(name = "TB_REVIEW")
+@Builder
 @Getter
-@SuperBuilder
 @NoArgsConstructor
-public abstract class BaseEntity {
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+public class ReviewEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reviewId;
+
+    private String title;
+
+    private String content;
+
+    private double rating;
+
+    private String name;
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writingId")   // FK
+    private MenteeEntity mentee;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
