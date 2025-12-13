@@ -1,24 +1,33 @@
 version: "3.8"
 
 services:
-  app:
-    build: .
-    container_name: mentorhub
+  # Spring Boot 웹 애플리케이션 서비스
+  web:
+    build: .  # 현재 디렉토리의 Dockerfile을 사용하여 이미지 빌드
+    container_name: mentorhub  # 컨테이너 이름 지정
     ports:
-      - "8080:8080"
+      - "8080:8080"  # 호스트의 8080 포트를 컨테이너의 8080 포트와 매핑
     depends_on:
-      - mysql
+      - mysql  # mysql 서비스가 먼저 시작되도록 의존성 설정
     environment:
+      # MySQL 데이터베이스 연결 URL (호스트명은 서비스명 'mysql' 사용)
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mentorhub?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      # 데이터베이스 접속 사용자명
       SPRING_DATASOURCE_USERNAME: root
+      # 데이터베이스 접속 비밀번호
       SPRING_DATASOURCE_PASSWORD: 1234
+      # JDBC 드라이버 클래스 지정 (MySQL 8.x용 드라이버)
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
 
+  # MySQL 데이터베이스 서비스
   mysql:
-    image: mysql:8
-    container_name: mysql
-    restart: always
+    image: mysql:8  # MySQL 8 버전 공식 이미지 사용
+    container_name: mysql  # 컨테이너 이름 지정
+    restart: always  # 컨테이너 종료 시 항상 자동 재시작
     environment:
+      # MySQL root 계정 비밀번호 설정
       MYSQL_ROOT_PASSWORD: 1234
+      # 초기 생성할 데이터베이스 이름
       MYSQL_DATABASE: mentorhub
     ports:
-      - "3307:3306"
+      - "3306:3306"  # 호스트의 3306 포트를 컨테이너의 3306 포트와 매핑 (외부 접속용)

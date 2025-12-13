@@ -1,15 +1,32 @@
-# syntax=docker/dockerfile:1
-FROM eclipse-temurin:17-jdk-alpine
+# ============================================
+# Stage 1: Build (Gradle 빌드 수행)
+# ============================================
+# 컴파일 + 빌드 전용
+FROM gradle:8.5-jdk17-alpine AS builder
 
-# 프로젝트 파일이 위치할 디렉토리
-WORKDIR /app
+WORKDIR /web
 
-# Gradle 또는 Maven 빌드로 만들어진 jar 복사
-# odule-core/build/libs/*.jar -> 실제 jar 이름 맞춰서 수정
-COPY module-core/build/libs/*.jar app.jar
+# 루트 Gradle 구성 복사
+COPY settings.gradle .
+COPY buildSrc buildSrc
 
-# 서버 포트 (application.yml/server.port와 동일해야 함)
+# 모든 모듈 복사 (멀티모듈 필수)
+COPY module-core module-core
+COPY module-util module-util
+
+# 루트 기준으로 module-core만 빌드
+RUN gradle clean :module-core:bootJar --no-daemon
+
+# ============================================
+# Stage 2: Runtime
+# ============================================
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /web
+
+# builder 스테이지에서 빌드된 jar 파일만 복사
+COPY --from=builder /web/module-core/build/libs/*.jar app.jar
+
 EXPOSE 8080
 
-# 자바 실행 명령어
 ENTRYPOINT ["java", "-jar", "app.jar"]
