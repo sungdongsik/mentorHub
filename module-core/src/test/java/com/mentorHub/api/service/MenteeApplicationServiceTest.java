@@ -1,7 +1,6 @@
 package com.mentorHub.api.service;
 
 import com.mentorHub.api.dto.request.MenteeApplicationCreateRequest;
-import com.mentorHub.api.dto.response.MenteeApplicationResponse;
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.repository.MenteeApplicationRepository;
 import com.util.ApplicationStausType;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.times;
 public class MenteeApplicationServiceTest {
 
     @InjectMocks
-    private MenteeService menteeApplicationService;
+    private MenteeShipService menteeShipService;
 
     @Mock
     private MenteeApplicationRepository menteeApplicationRepository;
@@ -47,7 +46,7 @@ public class MenteeApplicationServiceTest {
                 .willReturn(mockSavedEntity);
 
         // 실행
-        MenteeApplicationEntity response = menteeApplicationService.createMenteesApplication(request.toEntity());
+        MenteeApplicationEntity response = menteeShipService.createMenteesApplication(request.toEntity());
 
         // 반환된 응답의 필드 검증
         assertThat(response.getMenteeId()).isEqualTo(menteeId);

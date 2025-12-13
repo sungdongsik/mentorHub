@@ -27,6 +27,8 @@ public class MenteeCreateRequest {
 
     private String content;
 
+    private String name;
+
     private LocalDateTime startDate;
 
     private String[] keyword;
@@ -39,6 +41,7 @@ public class MenteeCreateRequest {
                 .title(title)
                 .userId(userId)
                 .content(content)
+                .name(name)
                 .startDate(startDate)
                 .keyword(keyword)
                 .job(job)

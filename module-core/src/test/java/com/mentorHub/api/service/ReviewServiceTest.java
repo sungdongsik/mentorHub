@@ -1,8 +1,6 @@
 package com.mentorHub.api.service;
 
-import com.mentorHub.api.dto.request.MenteeDeleteRequest;
 import com.mentorHub.api.dto.request.ReviewCreateRequest;
-import com.mentorHub.api.dto.request.ReviewDeleteRequest;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.MenteeRepository;
@@ -13,10 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -27,7 +23,7 @@ class ReviewServiceTest {
 
     // 테스트 대상
     @InjectMocks
-    private ReviewService reviewService;
+    private MenteeShipService menteeShipService;
 
     @Mock
     private ReviewRepository reviewRepository;
@@ -56,7 +52,7 @@ class ReviewServiceTest {
         given(reviewRepository.save(any(ReviewEntity.class)))
                 .willReturn(request.toEntity(en));
 
-        ReviewEntity response = reviewService.setReviews(request.toEntity(en));
+        ReviewEntity response = menteeShipService.setReviews(request.toEntity(en));
 
         // 검증하기
         assertThat(response.getMentee().getWritingId()).isEqualTo(writingId);
@@ -75,10 +71,10 @@ class ReviewServiceTest {
                 .reviewId(reviewId)
                 .build();
 
-        ReviewEntity result = reviewService.deleteReviews(en);
+        ReviewEntity result = menteeShipService.deleteReviews(en);
 
         // 검증
-        verify(reviewService, times(1)).deleteReviews(en);
+        verify(menteeShipService, times(1)).deleteReviews(en);
 
         // 2. 반환된 응답의 필드 검증
         assertThat(result.getReviewId()).isEqualTo(reviewId);
