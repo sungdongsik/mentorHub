@@ -1,6 +1,5 @@
 package com.mentorHub.api.entity;
 
-import com.util.UserType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,8 +7,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -26,6 +23,7 @@ public class MenteeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long writingId;
 
+    @Column(updatable = false)
     private Long userId;
 
     private String name;

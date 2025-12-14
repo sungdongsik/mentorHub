@@ -8,8 +8,7 @@ import com.mentorHub.api.dto.response.MenteeResponse;
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.ReviewEntity;
-import com.mentorHub.api.service.MenteeService;
-import com.mentorHub.api.service.ReviewService;
+import com.mentorHub.api.service.MenteeShipService;
 import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +28,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenteeController {
 
-    private final MenteeService menteeService;
-
-    private final ReviewService reviewService;
+    private final MenteeShipService menteeShipService;
 
     @GetMapping
     public ApiResponse<PageResponse<MenteeResponse>> getMentees(@ModelAttribute MenteeRequest request) {
-        List<MenteeEntity> mentees = menteeService.getMentees(request.toEntity());
 
-        List<MenteeResponse> responses = mentees.stream()
+        List<MenteeEntity> mentees = menteeShipService.getMentees(request.toEntity());
+        List<ReviewEntity> reviews = menteeShipService.getReviews();
+        List<MenteeEntity> menteesWithReviews = menteeShipService.getMenteesWithReviews(mentees, reviews);
+
+        List<MenteeResponse> responses = menteesWithReviews.stream()
                 .map(MenteeResponse::from)
                 .toList();
 
@@ -47,7 +47,7 @@ public class MenteeController {
     @PostMapping
     public ApiResponse<MenteeCommandResponse> setMentees(@RequestBody MenteeCreateRequest request) {
         log.info("request: {}", request);
-        MenteeEntity en = menteeService.setMentees(request.toEntity());
+        MenteeEntity en = menteeShipService.setMentees(request.toEntity());
 
         return ApiResponse.success(MenteeCommandResponse.from(en));
     }
@@ -55,7 +55,7 @@ public class MenteeController {
     @DeleteMapping
     public ApiResponse<MenteeCommandResponse> deleteMentees(@RequestBody MenteeDeleteRequest request) {
         log.info("request: {}", request);
-        MenteeEntity en = menteeService.deleteMentees(request.toEntity());
+        MenteeEntity en = menteeShipService.deleteMentees(request.toEntity());
 
         return ApiResponse.success(MenteeCommandResponse.from(en));
     }
@@ -63,7 +63,7 @@ public class MenteeController {
     @PutMapping
     public ApiResponse<MenteeCommandResponse> putMentees(@RequestBody MenteePutRequest request) {
         log.info("request: {}", request);
-        MenteeEntity en = menteeService.putMentees(request.toEntity());
+        MenteeEntity en = menteeShipService.putMentees(request.toEntity());
 
         return ApiResponse.success(MenteeCommandResponse.from(en));
     }
@@ -71,7 +71,7 @@ public class MenteeController {
     @PostMapping("/applications")
     public ApiResponse<MenteeApplicationResponse> createMenteesApplication(@RequestBody MenteeApplicationCreateRequest request) {
         log.info("request: {}", request);
-        MenteeApplicationEntity en = menteeService.createMenteesApplication(request.toEntity());
+        MenteeApplicationEntity en = menteeShipService.createMenteesApplication(request.toEntity());
 
         return ApiResponse.success(MenteeApplicationResponse.from(en));
     }
@@ -79,7 +79,7 @@ public class MenteeController {
     @PutMapping("/applications/status")
     public ApiResponse<MenteeApplicationResponse> updateApplicationStatus(@RequestBody MenteeApplicationPutRequest request) {
         log.info("request: {}", request);
-        MenteeApplicationEntity en = menteeService.updateApplicationStatus(request.toEntity());
+        MenteeApplicationEntity en = menteeShipService.updateApplicationStatus(request.toEntity());
 
         return ApiResponse.success(MenteeApplicationResponse.from(en));
     }
