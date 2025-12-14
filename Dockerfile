@@ -24,7 +24,7 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /web
 
-# builder 스테이지에서 빌드된 jar 파일만 복사
+# 스테이지에서 빌드된 jar 파일만 복사
 COPY --from=builder /web/module-core/build/libs/*.jar app.jar
 
 EXPOSE 8080
