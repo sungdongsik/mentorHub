@@ -7,11 +7,13 @@ import com.mentorHub.api.repository.MenteeApplicationRepository;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.ReviewRepository;
 import com.mentorHub.api.repository.query.MenteeQuery;
+import com.mentorHub.api.repository.query.ReviewQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,11 +29,32 @@ public class MenteeShipService {
 
     private final MenteeQuery menteeQuery;
 
+    private final ReviewQuery reviewQuery;
+
     private final MenteeApplicationRepository menteeApplicationRepository;
 
     @Transactional(readOnly = true)
     public List<MenteeEntity> getMentees(MenteeEntity request) {
-        return menteeQuery.getMentees(request);
+        // 멘티 목록 조회
+        List<MenteeEntity> mentees = menteeQuery.getMentees(request);
+
+        // 조회 결과가 없으면 불필요한 쿼리 방지
+        if (mentees.isEmpty()) {
+            return mentees;
+        }
+
+        // 멘티 글 PK(writingId) 추출
+        List<Long> writingIds = mentees.stream()
+                .map(MenteeEntity::getWritingId)
+                .collect(Collectors.toList());
+
+        // writingId IN 쿼리로 리뷰 한 번에 조회
+        List<ReviewEntity> reviews = reviewQuery.getReviews(writingIds);
+
+        // 멘티 ↔ 리뷰 매핑
+        getMenteesWithReviews(mentees, reviews);
+
+        return mentees;
     }
 
     public MenteeEntity setMentees(MenteeEntity request){
@@ -91,14 +114,22 @@ public class MenteeShipService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID 입니다!"));
     }
 
-    public List<MenteeEntity> getMenteesWithReviews(List<MenteeEntity> mentees, List<ReviewEntity> reviews) {
-        Map<Long, List<ReviewEntity>> reviewMap = reviews.stream()
-                .collect(Collectors.groupingBy(r -> r.getMentee().getWritingId()));
+    public void getMenteesWithReviews(List<MenteeEntity> mentees, List<ReviewEntity> reviews) {
+        // writingId 기준으로 리뷰 그룹핑
+        Map<Long, List<ReviewEntity>> reviewMap =
+                reviews.stream()
+                        .collect(Collectors.groupingBy(
+                                r -> r.getMentee().getWritingId()
+                        ));
 
-        mentees.forEach(m ->
-                m.setReviews(reviewMap.getOrDefault(m.getWritingId(), new ArrayList<>()))
-        );
-
-        return mentees;
+        // 각 멘티에 해당 리뷰들 추가
+        for (MenteeEntity mentee : mentees) {
+            mentee.addReviews(
+                    reviewMap.getOrDefault(
+                            mentee.getWritingId(),
+                            Collections.emptyList()
+                    )
+            );
+        }
     }
 }

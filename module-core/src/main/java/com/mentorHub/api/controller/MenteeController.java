@@ -34,10 +34,8 @@ public class MenteeController {
     public ApiResponse<PageResponse<MenteeResponse>> getMentees(@ModelAttribute MenteeRequest request) {
 
         List<MenteeEntity> mentees = menteeShipService.getMentees(request.toEntity());
-        List<ReviewEntity> reviews = menteeShipService.getReviews();
-        List<MenteeEntity> menteesWithReviews = menteeShipService.getMenteesWithReviews(mentees, reviews);
 
-        List<MenteeResponse> responses = menteesWithReviews.stream()
+        List<MenteeResponse> responses = mentees.stream()
                 .map(MenteeResponse::from)
                 .toList();
 
