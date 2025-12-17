@@ -23,7 +23,7 @@ class ReviewServiceTest {
 
     // 테스트 대상
     @InjectMocks
-    private MenteeShipService menteeShipService;
+    private ReviewService reviewService;
 
     @Mock
     private ReviewRepository reviewRepository;
@@ -52,7 +52,7 @@ class ReviewServiceTest {
         given(reviewRepository.save(any(ReviewEntity.class)))
                 .willReturn(request.toEntity(en));
 
-        ReviewEntity response = menteeShipService.setReviews(request.toEntity(en));
+        ReviewEntity response = reviewService.setReviews(request.toEntity(en));
 
         // 검증하기
         assertThat(response.getMentee().getWritingId()).isEqualTo(writingId);
@@ -71,10 +71,10 @@ class ReviewServiceTest {
                 .reviewId(reviewId)
                 .build();
 
-        ReviewEntity result = menteeShipService.deleteReviews(en);
+        ReviewEntity result = reviewService.deleteReviews(en);
 
         // 검증
-        verify(menteeShipService, times(1)).deleteReviews(en);
+        verify(reviewService, times(1)).deleteReviews(en);
 
         // 2. 반환된 응답의 필드 검증
         assertThat(result.getReviewId()).isEqualTo(reviewId);

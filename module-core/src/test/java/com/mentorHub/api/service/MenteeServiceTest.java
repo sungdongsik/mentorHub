@@ -22,7 +22,7 @@ class MenteeServiceTest {
 
     // 테스트 대상
     @InjectMocks
-    private MenteeShipService menteeShipService;
+    private MenteeService menteeService;
 
     @Mock
     private MenteeRepository menteeRepository;
@@ -52,7 +52,7 @@ class MenteeServiceTest {
                 .willReturn(en);
 
         // 실행하기
-        MenteeEntity response = menteeShipService.setMentees(request.toEntity());
+        MenteeEntity response = menteeService.setMentees(request.toEntity());
 
         // 검증하기
         assertThat(response.getWritingId()).isEqualTo(writingId);
@@ -69,7 +69,7 @@ class MenteeServiceTest {
         Long writingId = 20L;
         MenteeDeleteRequest request = new MenteeDeleteRequest();
 
-        MenteeEntity result = menteeShipService.deleteMentees(request.toEntity());
+        MenteeEntity result = menteeService.deleteMentees(request.toEntity());
 
         // 검증
         verify(menteeRepository, times(1)).deleteById(writingId);

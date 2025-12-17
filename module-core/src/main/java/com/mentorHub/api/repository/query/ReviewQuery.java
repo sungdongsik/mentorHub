@@ -16,7 +16,7 @@ public class ReviewQuery {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<ReviewEntity> getReviews(List<Long> writingIds) {
+    public List<ReviewEntity> findByWritingIds(List<Long> writingIds) {
         return queryFactory.select(reviewEntity)
                 .from(reviewEntity)
                 .where(reviewEntity.mentee.writingId.in(writingIds))
