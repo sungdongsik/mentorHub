@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class MenteeShipFacade {
 
@@ -66,6 +65,7 @@ public class MenteeShipFacade {
         }
     }
 
+    @Transactional
     public ReviewEntity setReviews(ReviewCreateRequest request) {
         MenteeEntity mentee = menteeService.findById(request.getWritingId());
         ReviewEntity en = reviewService.setReviews(request.toEntity(mentee));
@@ -73,6 +73,7 @@ public class MenteeShipFacade {
         return en;
     }
 
+    @Transactional
     public ReviewEntity putReviews(ReviewPutRequest request) {
         MenteeEntity mentee = menteeService.findById(request.getWritingId());
         ReviewEntity en = reviewService.setReviews(request.toEntity(mentee));
