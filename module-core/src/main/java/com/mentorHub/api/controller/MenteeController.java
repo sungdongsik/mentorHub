@@ -10,6 +10,7 @@ import com.mentorHub.api.service.MenteeService;
 import com.mentorHub.api.service.MenteeShipFacade;
 import com.mentorHub.api.service.ReviewService;
 import com.mentorHub.common.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,7 @@ public class MenteeController {
     }
 
     @PostMapping
-    public ApiResponse<MenteeCommandResponse> setMentees(@RequestBody MenteeCreateRequest request) {
+    public ApiResponse<MenteeCommandResponse> setMentees(@Valid @RequestBody MenteeCreateRequest request) {
         log.info("request: {}", request);
         MenteeEntity en = menteeService.setMentees(request.toEntity());
 
@@ -55,7 +56,7 @@ public class MenteeController {
     }
 
     @DeleteMapping
-    public ApiResponse<MenteeCommandResponse> deleteMentees(@RequestBody MenteeDeleteRequest request) {
+    public ApiResponse<MenteeCommandResponse> deleteMentees(@Valid @RequestBody MenteeDeleteRequest request) {
         log.info("request: {}", request);
         MenteeEntity en = menteeService.deleteMentees(request.toEntity());
 
@@ -63,7 +64,7 @@ public class MenteeController {
     }
 
     @PutMapping
-    public ApiResponse<MenteeCommandResponse> putMentees(@RequestBody MenteePutRequest request) {
+    public ApiResponse<MenteeCommandResponse> putMentees(@Valid @RequestBody MenteePutRequest request) {
         log.info("request: {}", request);
         MenteeEntity en = menteeService.putMentees(request.toEntity());
 
@@ -71,7 +72,7 @@ public class MenteeController {
     }
 
     @PostMapping("/applications")
-    public ApiResponse<MenteeApplicationResponse> createMenteesApplication(@RequestBody MenteeApplicationCreateRequest request) {
+    public ApiResponse<MenteeApplicationResponse> createMenteesApplication(@Valid @RequestBody MenteeApplicationCreateRequest request) {
         log.info("request: {}", request);
         MenteeApplicationEntity en = menteeService.createMenteesApplication(request.toEntity());
 
@@ -79,7 +80,7 @@ public class MenteeController {
     }
 
     @PutMapping("/applications/status")
-    public ApiResponse<MenteeApplicationResponse> updateApplicationStatus(@RequestBody MenteeApplicationPutRequest request) {
+    public ApiResponse<MenteeApplicationResponse> updateApplicationStatus(@Valid @RequestBody MenteeApplicationPutRequest request) {
         log.info("request: {}", request);
         MenteeApplicationEntity en = menteeService.updateApplicationStatus(request.toEntity());
 

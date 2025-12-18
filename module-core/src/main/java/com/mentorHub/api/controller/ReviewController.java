@@ -11,6 +11,7 @@ import com.mentorHub.api.service.MenteeService;
 import com.mentorHub.api.service.MenteeShipFacade;
 import com.mentorHub.api.service.ReviewService;
 import com.mentorHub.common.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ApiResponse<ReviewCommandResponse> setReviews(@RequestBody ReviewCreateRequest request) {
+    public ApiResponse<ReviewCommandResponse> setReviews(@Valid @RequestBody ReviewCreateRequest request) {
         log.info("request: {}", request);
         ReviewEntity en = menteeShipFacade.setReviews(request);
 
@@ -45,7 +46,7 @@ public class ReviewController {
     }
 
     @DeleteMapping
-    public ApiResponse<ReviewCommandResponse> deleteReviews(@RequestBody ReviewDeleteRequest request) {
+    public ApiResponse<ReviewCommandResponse> deleteReviews(@Valid @RequestBody ReviewDeleteRequest request) {
         log.info("request: {}", request);
         ReviewEntity en = reviewService.deleteReviews(request.toEntity());
 
@@ -53,7 +54,7 @@ public class ReviewController {
     }
 
     @PutMapping
-    public ApiResponse<ReviewCommandResponse> putReviews(@RequestBody ReviewPutRequest request) {
+    public ApiResponse<ReviewCommandResponse> putReviews(@Valid @RequestBody ReviewPutRequest request) {
         log.info("request: {}", request);
         ReviewEntity en = menteeShipFacade.putReviews(request);
 

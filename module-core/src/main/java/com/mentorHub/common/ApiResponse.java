@@ -28,4 +28,13 @@ public class ApiResponse<T> {
                 .data(data)
                 .build();
     }
+
+    public static <T> ApiResponse<T> fail(T data) {
+        return ApiResponse.<T>builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(HttpStatus.BAD_REQUEST.name())
+                .data(data)
+                .build();
+    }
+    
 }

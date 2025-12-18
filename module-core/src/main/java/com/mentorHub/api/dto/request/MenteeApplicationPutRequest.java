@@ -2,6 +2,7 @@ package com.mentorHub.api.dto.request;
 
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.util.ApplicationStausType;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -16,7 +17,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class MenteeApplicationPutRequest {
-
+    @NotNull(message = "멘티 글 ID는 필수입니다.")
     private Long menteeId;
 
     private ApplicationStausType admission;
