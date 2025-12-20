@@ -76,7 +76,7 @@ public class MenteeShipFacade {
     @Transactional
     public ReviewEntity putReviews(ReviewPutRequest request) {
         MenteeEntity mentee = menteeService.findById(request.getWritingId());
-        ReviewEntity en = reviewService.setReviews(request.toEntity(mentee));
+        ReviewEntity en = reviewService.putReviews(request.toEntity(mentee));
 
         return en;
     }

@@ -1,10 +1,10 @@
 package com.mentorHub.api.controller;
 
-import com.mentorHub.api.dto.request.ReviewCreateRequest;
-import com.mentorHub.api.dto.request.ReviewDeleteRequest;
-import com.mentorHub.api.dto.request.ReviewPutRequest;
+import com.mentorHub.api.dto.request.*;
+import com.mentorHub.api.dto.response.CommentCommandResponse;
 import com.mentorHub.api.dto.response.ReviewCommandResponse;
 import com.mentorHub.api.dto.response.ReviewResponse;
+import com.mentorHub.api.entity.CommentEntity;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.service.MenteeService;
@@ -59,5 +59,29 @@ public class ReviewController {
         ReviewEntity en = menteeShipFacade.putReviews(request);
 
         return ApiResponse.success(ReviewCommandResponse.from(en));
+    }
+
+    @PostMapping("/comments")
+    public ApiResponse<CommentCommandResponse> setComments(@Valid @RequestBody CommentCreateRequest request) {
+        log.info("request: {}", request);
+        CommentEntity en = reviewService.setComments(request.toEntity());
+
+        return ApiResponse.success(CommentCommandResponse.from(en));
+    }
+
+    @DeleteMapping("/comments")
+    public ApiResponse<CommentCommandResponse> deleteComments(@Valid @RequestBody CommentDeleteRequest request) {
+        log.info("request: {}", request);
+        CommentEntity en = reviewService.deleteComments(request.toEntity());
+
+        return ApiResponse.success(CommentCommandResponse.from(en));
+    }
+
+    @PutMapping("/comments")
+    public ApiResponse<CommentCommandResponse> putComments(@Valid @RequestBody CommentPutRequest request) {
+        log.info("request: {}", request);
+        CommentEntity en = reviewService.putComments(request.toEntity());
+
+        return ApiResponse.success(CommentCommandResponse.from(en));
     }
 }
