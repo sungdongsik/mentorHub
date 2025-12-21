@@ -6,13 +6,8 @@ FROM gradle:8.5-jdk17-alpine AS builder
 
 WORKDIR /web
 
-# 루트 Gradle 구성 복사
-COPY settings.gradle .
-COPY buildSrc buildSrc
-
-# 모든 모듈 복사 (멀티모듈 필수)
-COPY module-core module-core
-COPY module-util module-util
+# 전체 프로젝트 복사 (.dockerignore가 필터링)앷
+COPY . .
 
 # 루트 기준으로 module-core만 빌드
 RUN gradle clean :module-core:bootJar --no-daemon
