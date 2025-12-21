@@ -8,7 +8,9 @@ services:
     ports:
       - "8080:8080"  # 호스트의 8080 포트를 컨테이너의 8080 포트와 매핑
     depends_on:
-      - mysql  # mysql 서비스가 먼저 시작되도록 의존성 설정
+      mysql:
+        # mysql 컨테이너가 healthcheck를 통과(healthy)한 뒤에만 web 컨테이너 시작
+        condition: service_healthy
     environment:
       # MySQL 데이터베이스 연결 URL (호스트명은 서비스명 'mysql' 사용)
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mentorhub?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -31,3 +33,10 @@ services:
       MYSQL_DATABASE: mentorhub
     ports:
       - "3306:3306"  # 호스트의 3306 포트를 컨테이너의 3306 포트와 매핑 (외부 접속용)
+
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p1234" ]  # MySQL ping 체크
+      interval: 10s  # 10초마다 헬스체크 실행
+      timeout: 5s  # 타임아웃 5초
+      retries: 5  # 5번 실패 시 unhealthy로 판단
+      start_period: 30s  # 컨테이너 시작 후 30초는 실패해도 카운트 안함
