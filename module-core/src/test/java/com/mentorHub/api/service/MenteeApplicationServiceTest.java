@@ -21,7 +21,7 @@ import static org.mockito.Mockito.times;
 public class MenteeApplicationServiceTest {
 
     @InjectMocks
-    private MenteeShipService menteeShipService;
+    private MenteeService menteeService;
 
     @Mock
     private MenteeApplicationRepository menteeApplicationRepository;
@@ -46,7 +46,7 @@ public class MenteeApplicationServiceTest {
                 .willReturn(mockSavedEntity);
 
         // 실행
-        MenteeApplicationEntity response = menteeShipService.createMenteesApplication(request.toEntity());
+        MenteeApplicationEntity response = menteeService.createMenteesApplication(request.toEntity());
 
         // 반환된 응답의 필드 검증
         assertThat(response.getMenteeId()).isEqualTo(menteeId);

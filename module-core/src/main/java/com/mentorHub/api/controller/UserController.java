@@ -6,6 +6,7 @@ import com.mentorHub.api.dto.response.UserResponse;
 import com.mentorHub.api.entity.UserEntity;
 import com.mentorHub.api.service.UserService;
 import com.mentorHub.common.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ApiResponse<UserResponse> setUsers(@RequestBody UserCreateRequest request){
+    public ApiResponse<UserResponse> setUsers(@Valid @RequestBody UserCreateRequest request){
         log.info("request: {}", request);
         UserEntity en = userService.setUsers(request.toEntity());
 
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public ApiResponse<UserResponse> putUsers(@RequestBody UserPutRequest request) {
+    public ApiResponse<UserResponse> putUsers(@Valid @RequestBody UserPutRequest request) {
         log.info("request: {}", request);
         UserEntity en = userService.putUsers(request.toEntity());
 

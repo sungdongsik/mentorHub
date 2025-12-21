@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,7 +40,7 @@ public class MenteeEntity {
     private String job;
 
     @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewEntity> reviews;
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)
@@ -51,4 +52,14 @@ public class MenteeEntity {
     @Builder.Default
     @Column(name = "del_yn", length = 1)
     private String delYn = "N";  // 기본값 N
+
+    /**
+     * 내부 상태를 안전하게 변경하기 위한 메서드
+     */
+    public void addReviews(List<ReviewEntity> reviews) {
+        if (reviews == null || reviews.isEmpty()) {
+            return;
+        }
+        this.reviews.addAll(reviews);
+    }
 }

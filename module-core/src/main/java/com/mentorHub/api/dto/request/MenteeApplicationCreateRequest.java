@@ -2,6 +2,7 @@ package com.mentorHub.api.dto.request;
 
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.util.ApplicationStausType;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 public class MenteeApplicationCreateRequest {
+    @NotNull(message = "유저 ID는 필수입니다.")
     private Long userId;
 
     private String name;

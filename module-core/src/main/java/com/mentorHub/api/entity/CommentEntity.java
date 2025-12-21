@@ -1,5 +1,6 @@
 package com.mentorHub.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -7,37 +8,30 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "TB_REVIEW")
+@Table(name = "TB_COMMENT")
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class ReviewEntity {
+public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
+    private Long commentId;
 
-    private String title;
+    private Long userId;
 
     private String content;
 
-    private double rating;
-
     private String name;
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writingId")   // FK
-    private MenteeEntity mentee;
-
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommentEntity> comments = new ArrayList<>();
+    @JsonIgnore
+    @JoinColumn(name = "reviewId")   // FK
+    private ReviewEntity review;
 
     @CreatedDate
     @Column(updatable = false)
@@ -49,4 +43,8 @@ public class ReviewEntity {
     @Builder.Default
     @Column(name = "del_yn", length = 1)
     private String delYn = "N";  // 기본값 N
+
+    public void putContent(String content) {
+        this.content = content;
+    }
 }
