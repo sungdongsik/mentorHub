@@ -1,6 +1,7 @@
 package com.mentorHub.api.dto.request;
 
 import com.mentorHub.api.entity.CommentEntity;
+import com.mentorHub.api.entity.ReviewEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -29,9 +30,9 @@ public class CommentCreateRequest {
 
     private String name;
 
-    public CommentEntity toEntity() {
+    public CommentEntity toEntity(ReviewEntity en) {
         return CommentEntity.builder()
-                .reviewsId(reviewsId)
+                .review(en)
                 .userId(userId)
                 .content(content)
                 .name(name)

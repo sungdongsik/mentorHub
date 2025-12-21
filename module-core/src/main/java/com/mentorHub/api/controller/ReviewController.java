@@ -31,7 +31,6 @@ public class ReviewController {
     @GetMapping
     public ApiResponse<List<ReviewResponse>> getReviews() {
         List<ReviewEntity> reviews = reviewService.getReviews();
-
         return ApiResponse.success(reviews.stream()
                 .map(ReviewResponse::from)
                 .toList());
@@ -64,7 +63,8 @@ public class ReviewController {
     @PostMapping("/comments")
     public ApiResponse<CommentCommandResponse> setComments(@Valid @RequestBody CommentCreateRequest request) {
         log.info("request: {}", request);
-        CommentEntity en = reviewService.setComments(request.toEntity());
+        ReviewEntity review = reviewService.findById(request.getReviewsId());
+        CommentEntity en = reviewService.setComments(request.toEntity(review));
 
         return ApiResponse.success(CommentCommandResponse.from(en));
     }

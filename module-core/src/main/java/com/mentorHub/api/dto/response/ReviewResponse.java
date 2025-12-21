@@ -1,10 +1,12 @@
 package com.mentorHub.api.dto.response;
 
+import com.mentorHub.api.entity.CommentEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -14,20 +16,26 @@ public class ReviewResponse {
 
     private Long writingId;
 
+    private String title;
+
     private String content;
 
     private String name;
 
     private LocalDateTime createDate;
 
+    private List<CommentEntity> comments;
+
 
     public static ReviewResponse from(ReviewEntity en) {
         return ReviewResponse.builder()
                 .reviewsId(en.getReviewId())
+                .title(en.getMentee().getTitle())
                 .content(en.getContent())
                 .name(en.getName())
                 .writingId(en.getMentee().getWritingId())
                 .createDate(en.getCreatedDate())
+                .comments(en.getComments())
                 .build();
     }
 }

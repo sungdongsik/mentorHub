@@ -24,7 +24,7 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public List<ReviewEntity> getReviews() {
-        return reviewRepository.findAll();
+        return reviewQuery.getReview();
     }
 
     public ReviewEntity setReviews(ReviewEntity request) {
@@ -32,7 +32,7 @@ public class ReviewService {
     }
 
     public ReviewEntity deleteReviews(ReviewEntity request) {
-        ReviewEntity en = findById(request);
+        ReviewEntity en = findById(request.getReviewId());
 
         reviewRepository.delete(en);
 
@@ -43,8 +43,8 @@ public class ReviewService {
         return reviewRepository.save(request);
     }
 
-    private ReviewEntity findById(ReviewEntity request) {
-        return reviewRepository.findById(request.getReviewId())
+    public ReviewEntity findById(Long reviewId) {
+        return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID 입니다!"));
     }
 

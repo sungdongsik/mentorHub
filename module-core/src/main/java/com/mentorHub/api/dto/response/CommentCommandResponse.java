@@ -14,7 +14,7 @@ public class CommentCommandResponse {
     public static CommentCommandResponse from(CommentEntity en) {
         return CommentCommandResponse.builder()
                 .commentId(en.getCommentId())
-                .reviewsId(en.getReviewsId())
+                .reviewsId(en.getReview().getReviewId())
                 .build();
     }
 }
