@@ -4,7 +4,6 @@ import com.mentorHub.api.entity.CommentEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.CommentRepository;
 import com.mentorHub.api.repository.ReviewRepository;
-import com.mentorHub.api.repository.query.ReviewQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +17,11 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    private final ReviewQuery reviewQuery;
-
     private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
     public List<ReviewEntity> getReviews() {
-        return reviewQuery.getReview();
+        return reviewRepository.getReviews();
     }
 
     public ReviewEntity setReviews(ReviewEntity request) {
@@ -50,7 +47,7 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public List<ReviewEntity> findByWritingIds(List<Long> writingIds) {
-        return reviewQuery.findByWritingIds(writingIds);
+        return reviewRepository.findByMentee_WritingIdIn(writingIds);
     }
 
     public CommentEntity setComments(CommentEntity request) {
