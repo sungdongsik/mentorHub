@@ -2,7 +2,9 @@ package com.mentorHub.api.repository;
 
 import com.mentorHub.api.entity.ReviewEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,4 +20,8 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
           and m.delYn = 'N'
     """)
     List<ReviewEntity> getReviews();
+
+    @Modifying
+    @Query("update ReviewEntity r set r.delYn = 'Y' where r.reviewId = :reviewId and r.delYn = 'N'")
+    int deleteReview(@Param("reviewId") Long reviewId);
 }

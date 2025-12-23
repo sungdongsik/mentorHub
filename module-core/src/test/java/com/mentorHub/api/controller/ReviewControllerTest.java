@@ -3,7 +3,9 @@ package com.mentorHub.api.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mentorHub.api.dto.PageResponse;
+import com.mentorHub.api.dto.request.MenteeDeleteRequest;
 import com.mentorHub.api.dto.request.ReviewCreateRequest;
+import com.mentorHub.api.dto.request.ReviewDeleteRequest;
 import com.mentorHub.api.dto.request.ReviewPutRequest;
 import com.mentorHub.api.dto.response.MenteeResponse;
 import com.mentorHub.api.dto.response.ReviewResponse;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -97,5 +100,50 @@ class ReviewControllerTest {
 
         // POST 요청
         restTemplate.put(url, request);
+    }
+
+    @Test
+    @DisplayName("리뷰 삭제하기")
+    public void deleteReview() {
+        String url = "http://localhost:" + port + "/api/reviews";
+
+        ReviewDeleteRequest request = new ReviewDeleteRequest();
+        request.setReviewId(1L);
+
+        HttpEntity<ReviewDeleteRequest> entity = new HttpEntity<>(request);
+
+        ResponseEntity<ApiResponse> response = restTemplate.exchange(
+                url,
+                HttpMethod.DELETE,
+                entity,
+                ApiResponse.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(200, response.getBody().getStatus());
+    }
+
+    @Test
+    @DisplayName("리뷰 ID 보내지 않고 삭제하기")
+    public void deleteReview2() {
+        String url = "http://localhost:" + port + "/api/reviews";
+
+        ReviewDeleteRequest request = new ReviewDeleteRequest();
+
+        HttpEntity<ReviewDeleteRequest> entity = new HttpEntity<>(request);
+
+        ResponseEntity<ApiResponse> response = restTemplate.exchange(
+                url,
+                HttpMethod.DELETE,
+                entity,
+                ApiResponse.class
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(400, response.getBody().getStatus());
+        assertTrue(response.getBody().getData().toString()
+                .contains("리뷰 ID는 필수입니다."));
     }
 }

@@ -6,7 +6,9 @@ import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.MenteeApplicationRepository;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.query.MenteeQuery;
+import com.mentorHub.common.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,11 +36,14 @@ public class MenteeService {
     }
 
     public MenteeEntity deleteMentees(MenteeEntity request) {
-        MenteeEntity en = findById(request.getWritingId());
 
-        menteeRepository.delete(en);
+        int deletedMentees = menteeRepository.deleteMentee(request.getWritingId());
 
-        return en;
+        if (deletedMentees == 0) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "이미 삭제되었거나 존재하지 않는 멘티 글입니다.");
+        }
+
+        return findById(request.getWritingId());
     }
 
     public MenteeEntity putMentees(MenteeEntity request) {
