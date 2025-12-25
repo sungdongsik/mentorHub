@@ -4,6 +4,7 @@ import com.mentorHub.api.dto.request.MenteeCreateRequest;
 import com.mentorHub.api.dto.request.MenteeDeleteRequest;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.repository.MenteeRepository;
+import com.mentorHub.common.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,13 +13,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class MenteeServiceTest {
@@ -86,17 +90,20 @@ class MenteeServiceTest {
     @Test
     @DisplayName("이미 삭제된 멘티 글을 다시 삭제 요청하면 예외가 발생하기")
     public void deleteMentee_twice_Exception() {
+
+        Long writingId = 1L;
         MenteeDeleteRequest request = new MenteeDeleteRequest();
-        request.setWritingId(2L);
+        request.setWritingId(writingId);
 
-        MenteeEntity result = menteeService.deleteMentees(request.toEntity());
+        when(menteeRepository.findById(eq(writingId)))
+                .thenReturn(Optional.empty());
 
-        // 검증
-        verify(menteeRepository, times(1)).deleteById(request.getWritingId());
+        // when & then
+        assertThatThrownBy(() -> menteeService.deleteMentees(request.toEntity()))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("삭제된 글입니다.");
 
-        // 2. 반환된 응답의 필드 검증
-        assertThat(result.getWritingId()).isEqualTo(request.getWritingId());
-        assertThat(result.getTitle()).isNull();
+        verify(menteeRepository, never()).deleteMentee(writingId);
     }
 
 }

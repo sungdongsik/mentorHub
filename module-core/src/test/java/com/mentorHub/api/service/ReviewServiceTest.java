@@ -7,18 +7,23 @@ import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.ReviewRepository;
+import com.mentorHub.common.BusinessException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
@@ -87,16 +92,19 @@ class ReviewServiceTest {
     @Test
     @DisplayName("이미 삭제된 리뷰을 다시 삭제 요청하면 예외가 발생하기")
     public void deleteReview_twice_Exception() {
+        // given
+        Long reviewId = 1L;
         ReviewDeleteRequest request = new ReviewDeleteRequest();
-        request.setReviewId(1L);
+        request.setReviewId(reviewId);
 
-        ReviewEntity result = reviewService.deleteReviews(request.toEntity());
+        when(reviewRepository.findById(eq(reviewId)))
+                .thenReturn(Optional.empty());
 
-        // 검증
-        verify(menteeRepository, times(1)).deleteById(request.getReviewId());
+        // when & then
+        assertThatThrownBy(() -> reviewService.deleteReviews(request.toEntity()))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("이미 삭제된 리뷰");
 
-        // 2. 반환된 응답의 필드 검증
-        assertThat(result.getReviewId()).isEqualTo(request.getReviewId());
-        assertThat(result.getTitle()).isNull();
+        verify(reviewRepository, never()).deleteReview(reviewId);
     }
 }
