@@ -1,6 +1,8 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.dto.request.MenteeDeleteRequest;
 import com.mentorHub.api.dto.request.ReviewCreateRequest;
+import com.mentorHub.api.dto.request.ReviewDeleteRequest;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.MenteeRepository;
@@ -81,4 +83,20 @@ class ReviewServiceTest {
         assertThat(result.getTitle()).isNull();
     }
 
+
+    @Test
+    @DisplayName("이미 삭제된 리뷰을 다시 삭제 요청하면 예외가 발생하기")
+    public void deleteReview_twice_Exception() {
+        ReviewDeleteRequest request = new ReviewDeleteRequest();
+        request.setReviewId(1L);
+
+        ReviewEntity result = reviewService.deleteReviews(request.toEntity());
+
+        // 검증
+        verify(menteeRepository, times(1)).deleteById(request.getReviewId());
+
+        // 2. 반환된 응답의 필드 검증
+        assertThat(result.getReviewId()).isEqualTo(request.getReviewId());
+        assertThat(result.getTitle()).isNull();
+    }
 }

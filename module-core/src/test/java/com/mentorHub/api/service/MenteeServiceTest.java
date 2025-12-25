@@ -11,7 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,5 +82,21 @@ class MenteeServiceTest {
         assertThat(result.getTitle()).isNull();
     }
 
+
+    @Test
+    @DisplayName("이미 삭제된 멘티 글을 다시 삭제 요청하면 예외가 발생하기")
+    public void deleteMentee_twice_Exception() {
+        MenteeDeleteRequest request = new MenteeDeleteRequest();
+        request.setWritingId(2L);
+
+        MenteeEntity result = menteeService.deleteMentees(request.toEntity());
+
+        // 검증
+        verify(menteeRepository, times(1)).deleteById(request.getWritingId());
+
+        // 2. 반환된 응답의 필드 검증
+        assertThat(result.getWritingId()).isEqualTo(request.getWritingId());
+        assertThat(result.getTitle()).isNull();
+    }
 
 }
