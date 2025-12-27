@@ -1,6 +1,6 @@
 package com.mentorHub.api.entity;
 
-import com.util.UserType;
+import com.util.MenteeType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +34,7 @@ public class UserEntity {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    private UserType status;
+    private MenteeType status;
 
     private String keyword[];
 
