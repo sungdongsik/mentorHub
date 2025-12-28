@@ -3,6 +3,7 @@ package com.mentorHub.api.dto.request;
 import com.mentorHub.api.entity.MenteeEntity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -14,6 +15,7 @@ import lombok.ToString;
  */
 
 @Getter
+@Setter
 @ToString
 public class MenteeDeleteRequest {
     @NotNull(message = "멘티 글 ID는 필수입니다.")

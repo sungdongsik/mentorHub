@@ -1,22 +1,29 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.dto.request.MenteeDeleteRequest;
 import com.mentorHub.api.dto.request.ReviewCreateRequest;
+import com.mentorHub.api.dto.request.ReviewDeleteRequest;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.ReviewRepository;
+import com.mentorHub.common.BusinessException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
@@ -81,4 +88,23 @@ class ReviewServiceTest {
         assertThat(result.getTitle()).isNull();
     }
 
+
+    @Test
+    @DisplayName("이미 삭제된 리뷰을 다시 삭제 요청하면 예외가 발생하기")
+    public void deleteReview_twice_Exception() {
+        // given
+        Long reviewId = 1L;
+        ReviewDeleteRequest request = new ReviewDeleteRequest();
+        request.setReviewId(reviewId);
+
+        when(reviewRepository.findById(eq(reviewId)))
+                .thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> reviewService.deleteReviews(request.toEntity()))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("이미 삭제된 리뷰");
+
+        verify(reviewRepository, never()).deleteReview(reviewId);
+    }
 }

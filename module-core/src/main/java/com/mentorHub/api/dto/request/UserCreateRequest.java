@@ -1,7 +1,7 @@
 package com.mentorHub.api.dto.request;
 
 import com.mentorHub.api.entity.UserEntity;
-import com.util.UserType;
+import com.util.MenteeType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -31,7 +31,7 @@ public class UserCreateRequest {
     )
     private String phoneNumber;
 
-    private UserType status;
+    private MenteeType status;
 
     private String[] keyword;
 

@@ -1,12 +1,9 @@
 package com.mentorHub.api.dto.response;
 
 import com.mentorHub.api.entity.MenteeEntity;
-import com.util.ApplicationStausType;
-import com.util.UserType;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

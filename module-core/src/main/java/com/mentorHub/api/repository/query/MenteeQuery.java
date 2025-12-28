@@ -1,12 +1,9 @@
 package com.mentorHub.api.repository.query;
 
-import com.mentorHub.api.dto.request.MenteeRequest;
-import com.mentorHub.api.dto.response.MenteeResponse;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.util.UserType;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;

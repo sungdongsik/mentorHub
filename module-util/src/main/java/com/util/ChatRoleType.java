@@ -1,12 +1,12 @@
 package com.util;
 
-public enum UserType {
-    MENTEE(000000),
-    MENTO(000001)
-;
+public enum ChatRoleType {
+    USER(000000),
+    BOT(000001)
+    ;
     private final int code;
 
-    UserType(int code) {
+    ChatRoleType(int code) {
         this.code = code;
     }
 

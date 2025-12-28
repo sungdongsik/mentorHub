@@ -1,9 +1,10 @@
 package com.mentorHub.api.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.Type;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,38 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "TB_MENTEE")
+@Table(name = "TB_CHAT_ROOM")
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class MenteeEntity {
+public class ChatRoomEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long writingId;
+    private Long chatId;
 
-    @Column(updatable = false)
     private Long userId;
-
-    private String name;
 
     private String title;
 
-    private String content;
-
-    private LocalDateTime startDate;
-
-    @Type(JsonType.class)
-    @Column(columnDefinition = "json")
-    private String[] keyword;
-
-    private String job;
-
-    @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewEntity> reviews = new ArrayList<>();
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatRoomMessageEntity> chatRoomMessages = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)
@@ -56,12 +43,4 @@ public class MenteeEntity {
     @Builder.Default
     @Column(name = "del_yn", length = 1)
     private String delYn = "N";  // 기본값 N
-
-    /**
-     * 내부 상태를 안전하게 변경하기 위한 메서드
-     */
-    public void addReviews(List<ReviewEntity> reviews) {
-        if (reviews == null) return;
-        this.reviews.addAll(reviews);
-    }
 }
