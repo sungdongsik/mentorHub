@@ -62,4 +62,11 @@ public class MenteeService {
         return menteeRepository.findById(writingId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
+
+    public List<MenteeEntity> getChatMentee(String content) {
+        // ["java"] 형태의 문자열 생성
+        return menteeRepository.findChatMentees("[\"" + content.toLowerCase() + "\"]");
+    }
+
+
 }

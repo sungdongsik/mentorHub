@@ -30,7 +30,7 @@ public class UserPutRequest {
 
     private MenteeType status;
 
-    private String keyword[];
+    private String[] keyword;
 
     private String job;
 

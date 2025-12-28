@@ -2,6 +2,7 @@ package com.mentorHub.api.dto.request;
 
 import com.mentorHub.api.entity.ChatRoomEntity;
 import com.mentorHub.api.entity.ChatRoomMessageEntity;
+import com.util.ChatRoleType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class ChatRoomMessageCreateRequest {
     public ChatRoomMessageEntity toEntity(ChatRoomEntity en) {
         return ChatRoomMessageEntity.builder()
                 .chatRoom(en)
+                .role(ChatRoleType.USER)
                 .content(content)
                 .build();
     }

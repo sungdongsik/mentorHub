@@ -1,11 +1,13 @@
 package com.mentorHub.api.entity;
 
 import com.util.MenteeType;
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -36,7 +38,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private MenteeType status;
 
-    private String keyword[];
+    @Type(JsonType.class)
+    @Column(columnDefinition = "json")
+    private String[] keyword;
 
     private String job;
 

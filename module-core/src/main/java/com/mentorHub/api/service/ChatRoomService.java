@@ -40,12 +40,7 @@ public class ChatRoomService {
     }
 
     public ChatRoomMessageEntity setMessage(ChatRoomMessageEntity request) {
-
-        // 사용자가 요청한 메시지 저장하기
-        ChatRoomMessageEntity chatRoomMessage = chatRoomMessageRepository.save(request);
-
-
-
-        return null;
+        return chatRoomMessageRepository.save(request);
     }
+
 }

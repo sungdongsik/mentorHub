@@ -1,16 +1,19 @@
 package com.mentorHub.api.dto.response;
 
-import com.mentorHub.api.entity.ChatRoomMessageEntity;
+import com.util.ChatRoleType;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
 public class ChatRoomMessageResponse {
-    private Long chatId;
+    private Long messageId;
 
-    private List<ChatRoomMessageEntity> chatRoomMessages;
+    private ChatRoleType role;
 
+    private String content;
+
+    private LocalDateTime createDate;
 }

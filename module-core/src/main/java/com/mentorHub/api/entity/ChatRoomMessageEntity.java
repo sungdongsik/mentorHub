@@ -1,5 +1,4 @@
 package com.mentorHub.api.entity;
-
 import com.util.ChatRoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +24,7 @@ public class ChatRoomMessageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chatId")
     private ChatRoomEntity chatRoom;
 
