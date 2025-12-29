@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MenteeCommandResponse {
+public class MenteeDeleteResponse {
     private Long writingId;
 
     private String title;
 
-    public static MenteeCommandResponse from(MenteeEntity en) {
-        return MenteeCommandResponse.builder()
+    public static MenteeDeleteResponse from(MenteeEntity en) {
+        return MenteeDeleteResponse.builder()
                 .writingId(en.getWritingId())
                 .title(en.getTitle())
                 .build();

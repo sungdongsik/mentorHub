@@ -6,14 +6,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ReviewCommandResponse {
+public class ReviewCreateResponse {
 
     private Long reviewsId;
 
     private String title;
 
-    public static ReviewCommandResponse from(ReviewEntity en) {
-        return ReviewCommandResponse.builder()
+    public static ReviewCreateResponse from(ReviewEntity en) {
+        return ReviewCreateResponse.builder()
                 .reviewsId(en.getReviewId())
                 .title(en.getTitle())
                 .build();

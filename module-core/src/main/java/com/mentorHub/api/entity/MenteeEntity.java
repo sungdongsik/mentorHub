@@ -1,6 +1,5 @@
 package com.mentorHub.api.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -37,8 +36,6 @@ public class MenteeEntity {
 
     private LocalDateTime startDate;
 
-    @Type(JsonType.class)
-    @Column(columnDefinition = "json")
     private String[] keyword;
 
     private String job;

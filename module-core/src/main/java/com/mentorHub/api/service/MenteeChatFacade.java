@@ -1,5 +1,7 @@
 package com.mentorHub.api.service;
 
+import com.google.genai.Client;
+import com.google.genai.types.GenerateContentResponse;
 import com.mentorHub.api.entity.ChatRoomMessageEntity;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.message.ChatDefaultMessage;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +21,8 @@ public class MenteeChatFacade {
     private final ChatRoomService chatRoomService;
 
     private final MenteeService menteeService;
+
+    private final Client client;
 
     @Transactional
     public List<ChatRoomMessageEntity> sendMessage(ChatRoomMessageEntity request) {
@@ -79,5 +84,25 @@ public class MenteeChatFacade {
                         .map(m -> "• " + m.getName()
                                 + " (" + String.join(", ", m.getKeyword()) + ")")
                         .collect(Collectors.joining("\n"));
+    }
+
+
+    public String generate(String prompt) {
+        Map<String, Object> body = Map.of(
+                "contents", List.of(
+                        Map.of(
+                                "parts", List.of(
+                                        Map.of("text", prompt)
+                                )
+                        )
+                )
+        );
+
+        return restClient.post()
+                .uri("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent")
+                .header("x-goog-api-key", apiKey)
+                .body(body)
+                .retrieve()
+                .body(String.class);
     }
 }

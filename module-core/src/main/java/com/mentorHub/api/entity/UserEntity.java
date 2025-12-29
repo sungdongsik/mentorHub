@@ -1,7 +1,6 @@
 package com.mentorHub.api.entity;
 
 import com.util.MenteeType;
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,8 +37,6 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private MenteeType status;
 
-    @Type(JsonType.class)
-    @Column(columnDefinition = "json")
     private String[] keyword;
 
     private String job;

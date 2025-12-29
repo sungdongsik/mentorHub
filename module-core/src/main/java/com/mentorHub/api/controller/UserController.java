@@ -2,7 +2,8 @@ package com.mentorHub.api.controller;
 
 import com.mentorHub.api.dto.request.UserCreateRequest;
 import com.mentorHub.api.dto.request.UserPutRequest;
-import com.mentorHub.api.dto.response.UserResponse;
+import com.mentorHub.api.dto.response.UserCreateResponse;
+import com.mentorHub.api.dto.response.UserPutResponse;
 import com.mentorHub.api.entity.UserEntity;
 import com.mentorHub.api.service.UserService;
 import com.mentorHub.common.ApiResponse;
@@ -20,18 +21,18 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ApiResponse<UserResponse> setUsers(@Valid @RequestBody UserCreateRequest request){
+    public ApiResponse<UserCreateResponse> setUsers(@Valid @RequestBody UserCreateRequest request){
         log.info("request: {}", request);
         UserEntity en = userService.setUsers(request.toEntity());
 
-        return ApiResponse.success(UserResponse.from(en));
+        return ApiResponse.success(UserCreateResponse.from(en));
     }
 
     @PutMapping("/me")
-    public ApiResponse<UserResponse> putUsers(@Valid @RequestBody UserPutRequest request) {
+    public ApiResponse<UserPutResponse> putUsers(@Valid @RequestBody UserPutRequest request) {
         log.info("request: {}", request);
         UserEntity en = userService.putUsers(request.toEntity());
 
-        return ApiResponse.success(UserResponse.from(en));
+        return ApiResponse.success(UserPutResponse.from(en));
     }
 }
