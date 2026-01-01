@@ -1,11 +1,22 @@
 package com.message;
 
-public class ChatDefaultMessage {
-    public static String messageSelect() {
-        return "멘티 추천과 관련된 질문을 주시면 도와드릴 수 있어요 😊\n" +
-                "아래 번호 중에서 선택해주세요.\n\n" +
-                "1️⃣ 백엔드\n" +
-                "2️⃣ 프론트엔드\n" +
-                "3️⃣ 모바일";
+import lombok.Getter;
+
+@Getter
+public enum ChatDefaultMessage {
+    MENTEE_RECOMMENDATION("너는 개발 멘티 추천을 도와주는 AI야. 답변은 간결하고 명확하게 해. 출력은 반드시 한국어로 해."),
+
+    INTENT_CLASSIFIER("당신은 의도 분류자입니다. JSON만 반환합니다. { \"intent\": \"MENTEE_SEARCH\" or \"CHAT\", \"skills\": [\"keyword1\"] } User: %s")
+    ;
+
+    private final String message;
+
+    ChatDefaultMessage(String message) {
+        this.message = message;
     }
+
+    public String format(Object... args) {
+        return message.formatted(args);
+    }
+
 }

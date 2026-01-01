@@ -37,13 +37,15 @@ public class MenteeService {
 
     public MenteeEntity deleteMentees(MenteeEntity request) {
 
-        int deletedMentees = menteeRepository.deleteMentee(request.getWritingId());
+        MenteeEntity en = findById(request.getWritingId());
+
+        int deletedMentees = menteeRepository.deleteMentee(en.getWritingId());
 
         if (deletedMentees == 0) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "이미 삭제되었거나 존재하지 않는 멘티 글입니다.");
         }
 
-        return findById(request.getWritingId());
+        return en;
     }
 
     public MenteeEntity putMentees(MenteeEntity request) {
@@ -62,11 +64,5 @@ public class MenteeService {
         return menteeRepository.findById(writingId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
-
-    public List<MenteeEntity> getChatMentee(String content) {
-        // ["java"] 형태의 문자열 생성
-        return menteeRepository.findChatMentees("[\"" + content.toLowerCase() + "\"]");
-    }
-
 
 }
