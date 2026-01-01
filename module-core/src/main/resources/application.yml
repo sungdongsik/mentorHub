@@ -12,8 +12,13 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-
-gemini:
-  api:
-    key: ${GEMINI_API_KEY}
-    model: "gemini-2.5-flash" # 현재 가장 대중적인 최신 모델
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}      # Gemini API 호출에 사용하는 Google API Key
+        project-id: ${GCP_PROJECT_ID}  # Google Cloud Project ID
+        location: us-central1          # Gemini API 실행 리전 (전 세계 공통 권장값)
+        chat:
+          model: gemini-2.5-flash      # 사용할 Gemini 모델
+          options:
+            temperature: 0.5           # 응답 창의성 조절 (0.0=정확 / 1.0=창의적, 0.5는 균형형)
