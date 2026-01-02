@@ -15,8 +15,8 @@ public enum ChatDefaultMessage {
         this.message = message;
     }
 
-    public String format(Object... args) {
-        return message.formatted(args);
+    public String format(String format) {
+        return message.formatted(format);
     }
 
 }
