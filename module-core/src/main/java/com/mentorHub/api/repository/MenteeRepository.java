@@ -19,4 +19,15 @@ public interface MenteeRepository extends JpaRepository<MenteeEntity, Long> {
             "ORDER BY RAND() LIMIT 3",
             nativeQuery = true)
     List<MenteeEntity> findChatMentees(@Param("keywordJson") String keywordJson);
+
+    @Query("""
+    SELECT m 
+    FROM MenteeEntity m 
+    WHERE 
+    m.keyword = :keyword
+    or m.keyword like concat(:keyword, ',%')
+    or m.keyword like concat('%,', :keyword)
+    or m.keyword like concat('%,', :keyword, ',%')
+    """)
+    List<MenteeEntity> findByKeyword(@Param("keyword") String keyword);
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.List;
 
 @Getter
+@Setter
 @Builder
 public class IntentResponse {
 
@@ -13,6 +14,6 @@ public class IntentResponse {
     private List<String> skills;
 
     public boolean isMenteeSearch() {
-        return IntentType.MENTEE_SEARCH.name().equalsIgnoreCase(intent.name());
+        return IntentType.MENTEE_SEARCH.name().equals(intent.name());
     }
 }

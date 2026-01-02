@@ -50,7 +50,7 @@ public class MenteeQuery {
         }
 
         if (request.getKeyword() != null) {
-            builder.and(menteeEntity.keyword.in(request.getKeyword()));
+            builder.and(menteeEntity.keyword.like("%" + request.getKeyword() + "%"));
         }
 
         if (request.getStartDate() != null) {

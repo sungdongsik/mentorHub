@@ -32,7 +32,7 @@ public class MenteeResponse {
 
     private LocalDateTime startDate;
 
-    private String[] keyword;
+    private List<String> keyword;
 
     private String title;
 
@@ -47,7 +47,7 @@ public class MenteeResponse {
                 .writingId(entity.getWritingId())
                 .name(entity.getName())
                 .startDate(entity.getStartDate())
-                .keyword(entity.getKeyword())
+                .keyword(entity.getKeywordList())
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .job(entity.getJob())

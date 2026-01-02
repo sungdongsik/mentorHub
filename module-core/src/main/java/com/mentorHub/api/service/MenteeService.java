@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -65,4 +66,10 @@ public class MenteeService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
 
+    public List<MenteeEntity> findByKeywords(List<String> keyword) {
+        return keyword.stream()
+                .flatMap(kw -> menteeRepository.findByKeyword(kw).stream())  // keyword 하나씩 꺼내서 DB 검색
+                .distinct()// 여러 keyword 검색 결과에서 중복 제거
+                .toList(); // 최종 List 로 변환
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -36,7 +37,7 @@ public class MenteeEntity {
 
     private LocalDateTime startDate;
 
-    private String[] keyword;
+    private String keyword;
 
     private String job;
 
@@ -60,5 +61,9 @@ public class MenteeEntity {
     public void addReviews(List<ReviewEntity> reviews) {
         if (reviews == null) return;
         this.reviews.addAll(reviews);
+    }
+
+    public List<String> getKeywordList() {
+        return Arrays.asList(this.keyword.split(","));
     }
 }
