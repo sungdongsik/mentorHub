@@ -35,8 +35,6 @@ public class MenteeQuery {
                 .leftJoin(menteeEntity).on(userEntity.userId.eq(menteeEntity.userId))
                 .where(
                         builder(request)
-                                .and(menteeEntity.delYn.eq("N"))
-                                .and(userEntity.delYn.eq("N"))
                 )
                 .fetch();
     }
