@@ -18,8 +18,7 @@ public interface MenteeRepository extends JpaRepository<MenteeEntity, Long> {
     SELECT m 
     FROM MenteeEntity m 
     WHERE 
-    m.keyword = :keyword
-    or m.keyword like concat(:keyword, ',%')
+    m.keyword like concat(:keyword, ',%')
     or m.keyword like concat('%,', :keyword)
     or m.keyword like concat('%,', :keyword, ',%')
     """)
