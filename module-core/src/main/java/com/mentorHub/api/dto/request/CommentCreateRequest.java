@@ -13,6 +13,7 @@ import lombok.Getter;
  * 주요 포함 정보:
  * - reviewsId: 리뷰 고유 ID
  * - userId: 유저 고유 ID
+ * - parentId: 부모 댓글 ID
  * - content: 내용
  */
 
@@ -25,6 +26,8 @@ public class CommentCreateRequest {
     @NotNull(message = "유저 ID는 필수입니다.")
     private Long userId;
 
+    private Long parentId;
+
     @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
@@ -34,6 +37,7 @@ public class CommentCreateRequest {
         return CommentEntity.builder()
                 .review(en)
                 .userId(userId)
+                .parentId(parentId)
                 .content(content)
                 .name(name)
                 .build();
