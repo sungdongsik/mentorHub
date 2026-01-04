@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CommentCommandResponse {
+public class CommentDeleteResponse {
     private Long commentId;
 
     private Long reviewsId;
 
-    public static CommentCommandResponse from(CommentEntity en) {
-        return CommentCommandResponse.builder()
+    public static CommentDeleteResponse from(CommentEntity en) {
+        return CommentDeleteResponse.builder()
                 .commentId(en.getCommentId())
                 .reviewsId(en.getReview().getReviewId())
                 .build();

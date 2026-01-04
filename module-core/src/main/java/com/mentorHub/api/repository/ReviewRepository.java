@@ -16,12 +16,10 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     @Query("""
         select r from ReviewEntity r
         join fetch r.mentee m
-        where r.delYn = 'N'
-          and m.delYn = 'N'
     """)
     List<ReviewEntity> getReviews();
 
     @Modifying
-    @Query("update ReviewEntity r set r.delYn = 'Y' where r.reviewId = :reviewId and r.delYn = 'N'")
+    @Query("update ReviewEntity r set r.delYn = 'Y' where r.reviewId = :reviewId")
     int deleteReview(@Param("reviewId") Long reviewId);
 }

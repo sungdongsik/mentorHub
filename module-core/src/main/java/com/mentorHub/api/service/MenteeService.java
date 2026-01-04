@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -37,13 +38,15 @@ public class MenteeService {
 
     public MenteeEntity deleteMentees(MenteeEntity request) {
 
-        int deletedMentees = menteeRepository.deleteMentee(request.getWritingId());
+        MenteeEntity en = findById(request.getWritingId());
+
+        int deletedMentees = menteeRepository.deleteMentee(en.getWritingId());
 
         if (deletedMentees == 0) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "이미 삭제되었거나 존재하지 않는 멘티 글입니다.");
         }
 
-        return findById(request.getWritingId());
+        return en;
     }
 
     public MenteeEntity putMentees(MenteeEntity request) {
@@ -63,10 +66,10 @@ public class MenteeService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
 
-    public List<MenteeEntity> getChatMentee(String content) {
-        // ["java"] 형태의 문자열 생성
-        return menteeRepository.findChatMentees("[\"" + content.toLowerCase() + "\"]");
+    public List<MenteeEntity> findByKeywords(List<String> keyword) {
+        return keyword.stream()
+                .flatMap(kw -> menteeRepository.findByKeyword(kw).stream())  // keyword 하나씩 꺼내서 DB 검색
+                .distinct()// 여러 keyword 검색 결과에서 중복 제거
+                .toList(); // 최종 List 로 변환
     }
-
-
 }

@@ -29,9 +29,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    // JPA Entity에서 바로 매핑하기 위한 라이브러리
-    // (String[], List<String>, Map 등 → JSON 컬럼 자동 변환 지원)
-    implementation 'com.vladmihalcea:hibernate-types-60:2.21.1'
+
+    implementation 'org.springframework.ai:spring-ai-starter-model-google-genai'
 }
 
 def querydslDir = "src/main/generated"

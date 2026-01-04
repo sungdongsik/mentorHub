@@ -5,10 +5,8 @@ import com.mentorHub.api.dto.request.*;
 import com.mentorHub.api.dto.response.*;
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.entity.MenteeEntity;
-import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.service.MenteeService;
 import com.mentorHub.api.service.MenteeShipFacade;
-import com.mentorHub.api.service.ReviewService;
 import com.mentorHub.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,27 +46,27 @@ public class MenteeController {
     }
 
     @PostMapping
-    public ApiResponse<MenteeCommandResponse> setMentees(@Valid @RequestBody MenteeCreateRequest request) {
+    public ApiResponse<MenteeCreateResponse> setMentees(@Valid @RequestBody MenteeCreateRequest request) {
         log.info("request: {}", request);
         MenteeEntity en = menteeService.setMentees(request.toEntity());
 
-        return ApiResponse.success(MenteeCommandResponse.from(en));
+        return ApiResponse.success(MenteeCreateResponse.from(en));
     }
 
     @DeleteMapping
-    public ApiResponse<MenteeCommandResponse> deleteMentees(@Valid @RequestBody MenteeDeleteRequest request) {
+    public ApiResponse<MenteeDeleteResponse> deleteMentees(@Valid @RequestBody MenteeDeleteRequest request) {
         log.info("request: {}", request);
         MenteeEntity en = menteeService.deleteMentees(request.toEntity());
 
-        return ApiResponse.success(MenteeCommandResponse.from(en));
+        return ApiResponse.success(MenteeDeleteResponse.from(en));
     }
 
     @PutMapping
-    public ApiResponse<MenteeCommandResponse> putMentees(@Valid @RequestBody MenteePutRequest request) {
+    public ApiResponse<MenteePutResponse> putMentees(@Valid @RequestBody MenteePutRequest request) {
         log.info("request: {}", request);
         MenteeEntity en = menteeService.putMentees(request.toEntity());
 
-        return ApiResponse.success(MenteeCommandResponse.from(en));
+        return ApiResponse.success(MenteePutResponse.from(en));
     }
 
     @PostMapping("/applications")

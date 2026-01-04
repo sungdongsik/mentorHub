@@ -31,14 +31,15 @@ public class ReviewService {
     }
 
     public ReviewEntity deleteReviews(ReviewEntity request) {
+        ReviewEntity en = findById(request.getReviewId());
 
-        int deleteReview = reviewRepository.deleteReview(request.getReviewId());
+        int deleteReview = reviewRepository.deleteReview(en.getReviewId());
 
         if (deleteReview == 0) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "이미 삭제되었거나 존재하지 않는 리뷰입니다.");
         }
 
-        return findById(request.getReviewId());
+        return en;
     }
 
     public ReviewEntity putReviews(ReviewEntity request) {

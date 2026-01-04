@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 25.11.23
@@ -37,7 +38,7 @@ public class MenteeCreateRequest {
 
     private LocalDateTime startDate;
 
-    private String[] keyword;
+    private String keyword;
 
     private String job;
 

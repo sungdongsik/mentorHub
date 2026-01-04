@@ -1,13 +1,9 @@
 package com.mentorHub.api.controller;
 
 import com.mentorHub.api.dto.request.*;
-import com.mentorHub.api.dto.response.CommentCommandResponse;
-import com.mentorHub.api.dto.response.ReviewCommandResponse;
-import com.mentorHub.api.dto.response.ReviewResponse;
+import com.mentorHub.api.dto.response.*;
 import com.mentorHub.api.entity.CommentEntity;
-import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.ReviewEntity;
-import com.mentorHub.api.service.MenteeService;
 import com.mentorHub.api.service.MenteeShipFacade;
 import com.mentorHub.api.service.ReviewService;
 import com.mentorHub.common.ApiResponse;
@@ -37,51 +33,51 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ApiResponse<ReviewCommandResponse> setReviews(@Valid @RequestBody ReviewCreateRequest request) {
+    public ApiResponse<ReviewCreateResponse> setReviews(@Valid @RequestBody ReviewCreateRequest request) {
         log.info("request: {}", request);
         ReviewEntity en = menteeShipFacade.setReviews(request);
 
-        return ApiResponse.success(ReviewCommandResponse.from(en));
+        return ApiResponse.success(ReviewCreateResponse.from(en));
     }
 
     @DeleteMapping
-    public ApiResponse<ReviewCommandResponse> deleteReviews(@Valid @RequestBody ReviewDeleteRequest request) {
+    public ApiResponse<ReviewDeleteResponse> deleteReviews(@Valid @RequestBody ReviewDeleteRequest request) {
         log.info("request: {}", request);
         ReviewEntity en = reviewService.deleteReviews(request.toEntity());
 
-        return ApiResponse.success(ReviewCommandResponse.from(en));
+        return ApiResponse.success(ReviewDeleteResponse.from(en));
     }
 
     @PutMapping
-    public ApiResponse<ReviewCommandResponse> putReviews(@Valid @RequestBody ReviewPutRequest request) {
+    public ApiResponse<ReviewPutResponse> putReviews(@Valid @RequestBody ReviewPutRequest request) {
         log.info("request: {}", request);
         ReviewEntity en = menteeShipFacade.putReviews(request);
 
-        return ApiResponse.success(ReviewCommandResponse.from(en));
+        return ApiResponse.success(ReviewPutResponse.from(en));
     }
 
     @PostMapping("/comments")
-    public ApiResponse<CommentCommandResponse> setComments(@Valid @RequestBody CommentCreateRequest request) {
+    public ApiResponse<CommentCreateResponse> setComments(@Valid @RequestBody CommentCreateRequest request) {
         log.info("request: {}", request);
         ReviewEntity review = reviewService.findById(request.getReviewsId());
         CommentEntity en = reviewService.setComments(request.toEntity(review));
 
-        return ApiResponse.success(CommentCommandResponse.from(en));
+        return ApiResponse.success(CommentCreateResponse.from(en));
     }
 
     @DeleteMapping("/comments")
-    public ApiResponse<CommentCommandResponse> deleteComments(@Valid @RequestBody CommentDeleteRequest request) {
+    public ApiResponse<CommentDeleteResponse> deleteComments(@Valid @RequestBody CommentDeleteRequest request) {
         log.info("request: {}", request);
         CommentEntity en = reviewService.deleteComments(request.toEntity());
 
-        return ApiResponse.success(CommentCommandResponse.from(en));
+        return ApiResponse.success(CommentDeleteResponse.from(en));
     }
 
     @PutMapping("/comments")
-    public ApiResponse<CommentCommandResponse> putComments(@Valid @RequestBody CommentPutRequest request) {
+    public ApiResponse<CommentPutResponse> putComments(@Valid @RequestBody CommentPutRequest request) {
         log.info("request: {}", request);
         CommentEntity en = reviewService.putComments(request.toEntity());
 
-        return ApiResponse.success(CommentCommandResponse.from(en));
+        return ApiResponse.success(CommentPutResponse.from(en));
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,7 +84,7 @@ class MenteeControllerTest {
         request.setTitle("Test Title");
         request.setContent("Test Content");
         request.setStartDate(LocalDateTime.now());
-        request.setKeyword(new String[]{"Java", "jsp"});
+        request.setKeyword("Java,jsp");
         request.setJob("Test Job");
 
         String url = "http://localhost:" + port + "/api/mentees";

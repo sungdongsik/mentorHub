@@ -1,8 +1,8 @@
 package com.mentorHub.api.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@SQLRestriction("del_yn = 'N'")
 public class MenteeEntity {
 
     @Id
@@ -37,9 +39,7 @@ public class MenteeEntity {
 
     private LocalDateTime startDate;
 
-    @Type(JsonType.class)
-    @Column(columnDefinition = "json")
-    private String[] keyword;
+    private String keyword;
 
     private String job;
 
@@ -63,5 +63,9 @@ public class MenteeEntity {
     public void addReviews(List<ReviewEntity> reviews) {
         if (reviews == null) return;
         this.reviews.addAll(reviews);
+    }
+
+    public List<String> getKeywordList() {
+        return Arrays.asList(this.keyword.split(","));
     }
 }

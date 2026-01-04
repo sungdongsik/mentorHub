@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserResponse {
+public class UserCreateResponse {
     private Long userId;
 
     private String name;
 
-    public static UserResponse from(UserEntity en) {
-        return UserResponse.builder()
+    public static UserCreateResponse from(UserEntity en) {
+        return UserCreateResponse.builder()
                 .userId(en.getUserId())
                 .name(en.getName())
                 .build();

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 25.11.29
@@ -33,7 +34,7 @@ public class MenteePutRequest {
 
     private LocalDateTime startDate;
 
-    private String[] keyword;
+    private String keyword;
 
     private String job;
 

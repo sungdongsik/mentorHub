@@ -35,8 +35,6 @@ public class MenteeQuery {
                 .leftJoin(menteeEntity).on(userEntity.userId.eq(menteeEntity.userId))
                 .where(
                         builder(request)
-                                .and(menteeEntity.delYn.eq("N"))
-                                .and(userEntity.delYn.eq("N"))
                 )
                 .fetch();
     }
@@ -50,7 +48,7 @@ public class MenteeQuery {
         }
 
         if (request.getKeyword() != null) {
-            builder.and(menteeEntity.keyword.in(request.getKeyword()));
+            builder.and(menteeEntity.keyword.like("%" + request.getKeyword() + "%"));
         }
 
         if (request.getStartDate() != null) {
