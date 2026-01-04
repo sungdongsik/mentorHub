@@ -1,5 +1,7 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.Mapper.CommentMapper;
+import com.mentorHub.api.dto.response.CommentResponse;
 import com.mentorHub.api.entity.CommentEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.CommentRepository;
@@ -10,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -55,25 +59,38 @@ public class ReviewService {
         return reviewRepository.findByMentee_WritingIdIn(writingIds);
     }
 
+    // 대댓글 최소 1depth 까지만 저장하기
     public CommentEntity setComments(CommentEntity request) {
+        // parentId 없으면 댓글 작성임 → 바로 저장
+        if (request.getParentId() == null) {
+            return commentRepository.save(request);
+        }
+
+        // parentId 있으면 부모 조회
+        CommentEntity en = findByComment(request.getParentId());
+
+        // 부모가 이미 대댓글이면 차단
+        if (en.getParentId() != null)
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "대댓글에는 대댓글을 작성할 수 없습니다.");
+
         return commentRepository.save(request);
     }
 
     public CommentEntity deleteComments(CommentEntity request) {
-        CommentEntity en = findById(request);
+        CommentEntity en = findByComment(request.getCommentId());
 
         commentRepository.delete(en);
 
         return en;
     }
 
-    private CommentEntity findById(CommentEntity request) {
-        return commentRepository.findById(request.getCommentId())
+    private CommentEntity findByComment(Long commentId) {
+        return commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID 입니다!"));
     }
 
     public CommentEntity putComments(CommentEntity request) {
-        CommentEntity en = findById(request);
+        CommentEntity en = findByComment(request.getCommentId());
 
         // 내용만 수정
         en.putContent(request.getContent());

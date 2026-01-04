@@ -1,6 +1,5 @@
 package com.mentorHub.api.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,12 +23,13 @@ public class CommentEntity {
 
     private Long userId;
 
+    private Long parentId; // null = 댓글, not null = 대댓글
+
     private String content;
 
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     @JoinColumn(name = "reviewId")   // FK
     private ReviewEntity review;
 

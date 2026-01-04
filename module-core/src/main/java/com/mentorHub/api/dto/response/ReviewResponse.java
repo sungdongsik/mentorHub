@@ -1,6 +1,6 @@
 package com.mentorHub.api.dto.response;
 
-import com.mentorHub.api.entity.CommentEntity;
+import com.mentorHub.Mapper.CommentMapper;
 import com.mentorHub.api.entity.ReviewEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +24,7 @@ public class ReviewResponse {
 
     private LocalDateTime createDate;
 
-    private List<CommentEntity> comments;
-
+    private List<CommentResponse> comments;
 
     public static ReviewResponse from(ReviewEntity en) {
         return ReviewResponse.builder()
@@ -35,7 +34,7 @@ public class ReviewResponse {
                 .name(en.getName())
                 .writingId(en.getMentee().getWritingId())
                 .createDate(en.getCreatedDate())
-                .comments(en.getComments())
+                .comments(CommentMapper.fromList(en.getComments()))
                 .build();
     }
 }
