@@ -1,6 +1,6 @@
 package com.mentorHub.api.dto.response;
 
-import com.mentorHub.Mapper.CommentMapper;
+import com.mentorHub.mapper.CommentMapper;
 import com.mentorHub.api.entity.ReviewEntity;
 import lombok.Builder;
 import lombok.Getter;

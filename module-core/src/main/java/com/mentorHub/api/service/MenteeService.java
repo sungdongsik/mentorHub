@@ -2,7 +2,6 @@ package com.mentorHub.api.service;
 
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.entity.MenteeEntity;
-import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.MenteeApplicationRepository;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.query.MenteeQuery;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service

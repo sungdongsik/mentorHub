@@ -7,7 +7,6 @@ import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.formatter.MessageFormatter;
 import com.message.ChatDefaultMessage;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
