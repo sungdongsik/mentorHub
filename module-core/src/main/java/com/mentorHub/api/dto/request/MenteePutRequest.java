@@ -34,7 +34,7 @@ public class MenteePutRequest {
 
     private LocalDateTime startDate;
 
-    private String keyword;
+    private List<String> keyword;
 
     private String job;
 

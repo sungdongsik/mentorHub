@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -21,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @SQLRestriction("del_yn = 'N'")
+@ToString
 public class MenteeEntity {
 
     @Id
@@ -38,7 +38,7 @@ public class MenteeEntity {
 
     private LocalDateTime startDate;
 
-    private String keyword;
+    private List<String> keyword;
 
     private String job;
 
@@ -62,9 +62,5 @@ public class MenteeEntity {
     public void addReviews(List<ReviewEntity> reviews) {
         if (reviews == null) return;
         this.reviews.addAll(reviews);
-    }
-
-    public List<String> getKeywordList() {
-        return Arrays.asList(this.keyword.split(","));
     }
 }

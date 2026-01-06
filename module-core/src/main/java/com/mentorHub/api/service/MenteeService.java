@@ -64,10 +64,8 @@ public class MenteeService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
 
-    public List<MenteeEntity> findByKeywords(List<String> keyword) {
-        return keyword.stream()
-                .flatMap(kw -> menteeRepository.findByKeyword(kw).stream())  // keyword 하나씩 꺼내서 DB 검색
-                .distinct()// 여러 keyword 검색 결과에서 중복 제거
-                .toList(); // 최종 List 로 변환
+    // 로직 고민해볼 필요가 있을 거 같음.. 전체 조회라서 필터를 걸어서 보낼지 전체 다 보낼지 고민좀 해보고 결정하기..
+    public List<MenteeEntity> findAll() {
+        return menteeRepository.findAll();
     }
 }
