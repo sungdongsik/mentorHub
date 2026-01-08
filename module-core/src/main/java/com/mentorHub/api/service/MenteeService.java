@@ -1,12 +1,15 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.dto.response.MenteeKeywordResponse;
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.repository.MenteeApplicationRepository;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.query.MenteeQuery;
 import com.mentorHub.common.BusinessException;
+import com.util.MenteeRecruitmentStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,8 +67,7 @@ public class MenteeService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
 
-    // 로직 고민해볼 필요가 있을 거 같음.. 전체 조회라서 필터를 걸어서 보낼지 전체 다 보낼지 고민좀 해보고 결정하기..
-    public List<MenteeEntity> findAll() {
-        return menteeRepository.findAll();
+    public List<MenteeKeywordResponse> findTopWithKeywords() {
+        return menteeRepository.findTopWithKeywords(MenteeRecruitmentStatus.RECRUITING, PageRequest.of(0, 10));
     }
 }

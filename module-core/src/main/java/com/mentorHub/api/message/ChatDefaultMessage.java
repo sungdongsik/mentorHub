@@ -1,6 +1,6 @@
 package com.mentorHub.api.message;
 
-import com.mentorHub.api.entity.MenteeEntity;
+import com.mentorHub.api.dto.response.MenteeKeywordResponse;
 import lombok.Getter;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public enum ChatDefaultMessage {
         this.message = message;
     }
 
-    public String format(List<MenteeEntity> mentees, String format) {
+    public String format(List<MenteeKeywordResponse> mentees, String format) {
         return message.formatted(mentees, format);
     }
 

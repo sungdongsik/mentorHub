@@ -1,5 +1,6 @@
 package com.mentorHub.api.entity;
 
+import com.util.MenteeRecruitmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
@@ -44,6 +45,9 @@ public class MenteeEntity {
 
     @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewEntity> reviews = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private MenteeRecruitmentStatus recruitmentStatus;
 
     @CreatedDate
     @Column(updatable = false)

@@ -15,7 +15,7 @@ public class MenteeChatFacade {
 
     public ChatMessageResponse sendMessage(ChatMessageCreateRequest request) {
         // 사용자가 입력한 메시지를 분석하여 멘티 추천 관련 질문인지, 일반 대화인지 분류한다.
-        String result = geminiService.classify(menteeService.findAll(), request.getContent());
+        String result = geminiService.classify(menteeService.findTopWithKeywords(), request.getContent());
 
         return ChatMessageResponse.from(result);
     }

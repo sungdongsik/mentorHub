@@ -2,6 +2,7 @@ package com.mentorHub.api.dto.request;
 
 
 import com.mentorHub.api.entity.MenteeEntity;
+import com.util.MenteeRecruitmentStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -42,6 +43,7 @@ public class MenteeCreateRequest {
 
     private String job;
 
+    private MenteeRecruitmentStatus recruitmentStatus;
 
     public MenteeEntity toEntity() {
         return MenteeEntity.builder()
@@ -52,6 +54,7 @@ public class MenteeCreateRequest {
                 .startDate(startDate)
                 .keyword(keyword)
                 .job(job)
+                .recruitmentStatus(recruitmentStatus)
                 .build();
     }
 }
