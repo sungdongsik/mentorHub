@@ -24,7 +24,7 @@ import java.util.List;
 public class MenteeRequest {
     private String title;
 
-    private String keyword;
+    private List<String> keyword;
 
     private LocalDateTime startDate;
 

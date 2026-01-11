@@ -1,4 +1,4 @@
-package com.mentorHub.Mapper;
+package com.mentorHub.mapper;
 
 import com.mentorHub.api.dto.response.CommentResponse;
 import com.mentorHub.api.entity.CommentEntity;

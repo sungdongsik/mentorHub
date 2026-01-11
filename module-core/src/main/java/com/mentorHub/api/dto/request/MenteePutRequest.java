@@ -1,6 +1,7 @@
 package com.mentorHub.api.dto.request;
 
 import com.mentorHub.api.entity.MenteeEntity;
+import com.util.MenteeRecruitmentStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -34,9 +35,11 @@ public class MenteePutRequest {
 
     private LocalDateTime startDate;
 
-    private String keyword;
+    private List<String> keyword;
 
     private String job;
+
+    private MenteeRecruitmentStatus recruitmentStatus;
 
     // Entity 선언해서 값 넣어주기~
     public MenteeEntity toEntity() {
@@ -47,6 +50,7 @@ public class MenteePutRequest {
                  .startDate(startDate)
                  .keyword(keyword)
                  .job(job)
+                 .recruitmentStatus(recruitmentStatus)
                  .build();
     }
 }
