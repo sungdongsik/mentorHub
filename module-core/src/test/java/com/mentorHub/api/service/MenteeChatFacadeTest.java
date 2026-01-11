@@ -1,12 +1,10 @@
 package com.mentorHub.api.service;
 
-import com.mentorHub.api.dto.IntentResponse;
 import com.mentorHub.api.dto.request.ChatMessageCreateRequest;
 import com.mentorHub.api.dto.response.ChatMessageResponse;
+import com.mentorHub.api.dto.response.MenteeKeywordResponse;
 import com.mentorHub.api.entity.MenteeEntity;
-import com.mentorHub.api.repository.MenteeRepository;
-import com.message.ChatDefaultMessage;
-import com.util.IntentType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,14 +15,14 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MenteeChatFacadeTest {
 
     @InjectMocks
-    private MenteeChatFacade menteeChatFacade;   // 실제 객체
+    private MenteeChatFacade menteeChatFacade;
 
     @Mock
     private MenteeService menteeService;
@@ -32,112 +30,78 @@ class MenteeChatFacadeTest {
     @Mock
     private GeminiService geminiService;
 
-    @Mock
-    private MenteeRepository menteeRepository;
-
     @Test
-    void 멘티_메시지_성공() {
-        // 테스트용 요청 객체 생성
+    @DisplayName("멘티 추천 응답 받기")
+    void sendMessage() {
+
+        // 사용자가 채팅으로 입력한 메시지
         ChatMessageCreateRequest request = ChatMessageCreateRequest.builder()
-                .content("자바 멘티 찾아줘")
+                .content("java, python 멘티 찾아줘")
                 .build();
 
-        // Gemini가 분류해서 내려줄 응답(Mock)
-        IntentResponse intent = IntentResponse.builder()
-                .intent(IntentType.MENTEE_SEARCH) // 의도 = 멘티 검색
-                .skills(List.of("java"))          // 분류된 스킬 = java
-                .build();
+        // 실제 DB를 조회하지 않고 이 데이터가 반환되도록 Mock 설정
+        List<MenteeKeywordResponse> menteeKeywords = List.of(
+                new MenteeKeywordResponse("홍길동", List.of("Java", "Python")),
+                new MenteeKeywordResponse("김철수", List.of("HTML", "CSS"))
+        );
 
-        // geminiService.classify()가 호출되면 intent를 반환하도록 Mock 설정
-        when(geminiService.classify("자바 멘티 찾아줘")).thenReturn(intent);
+        when(menteeService.findTopWithKeywords())
+                .thenReturn(menteeKeywords);
 
-        // 테스트용 멘티 리스트를 직접 생성한다(테스트하기 위해서 전체 조회를 했지만 다음엔 3 ~ 5명 필터 걸어서 조회하기)
-        List<MenteeEntity> mentees = menteeRepository.findAll();
+        String geminiAnswer =
+                """
+                1. 홍길동님 – 자바, 파이썬
+                2. 김철수님 – HTML, CSS
+                """;
 
-        // menteeService.findByKeywords() 호출 시 위 데이터 반환하도록 Mock 설정
-        when(menteeService.findByKeywords(List.of("java"))).thenReturn(mentees);
-
-        // 실제 테스트 대상 메서드 실행
-        ChatMessageResponse response = menteeChatFacade.sendMessage(request);
-
-        // Gemini가 실제로 classify를 호출했는지 확인
-        verify(geminiService).classify("자바 멘티 찾아줘");
-
-        // menteeService.findByKeywords()도 호출되었는지 확인
-        verify(menteeService).findByKeywords(List.of("java"));
-
-        // 응답이 null 아니어야 함
-        assertThat(response).isNotNull();
-
-        // 응답 안에 "홍길동" 문자열이 포함되어야 함
-        assertThat(response.getContent()).contains("홍길동");
-    }
-
-    @Test
-    void 스킬이_없으면_NO_SKILL_DETECTED_메시지를_반환() {
-
-        // given
-        // 사용자가 입력한 채팅 메시지 생성
-        ChatMessageCreateRequest request = ChatMessageCreateRequest.builder()
-                .content("GO 멘티 찾아줘")
-                .build();
-
-        // Gemini가 분류해서 내려줄 응답(Mock)
-        IntentResponse intent = IntentResponse.builder()
-                .intent(IntentType.MENTEE_SEARCH) // 의도 = 멘티 검색
-                .skills(List.of("GO"))          // 분류된 스킬 = GO
-                .build();
-
-        // classify() 호출 시 위 IntentResponse 를 반환하도록 Mock 설정
-        when(geminiService.classify(anyString())).thenReturn(intent);
-
-        // when
-        // 실제 Facade 메서드를 호출 → 흐름 검증 시작
-        ChatMessageResponse response = menteeChatFacade.sendMessage(request);
-
-        // then
-        // 스킬이 없으면(findByKeywords가 호출되면 안 됨)
-        verify(menteeService, never()).findByKeywords(anyList());
-
-        // 응답 메시지가 "스킬을 찾을 수 없습니다" 기본 메시지인지 검증
-        assertThat(response.getContent()).isEqualTo(ChatDefaultMessage.NO_SKILL_DETECTED.getMessage());
-    }
-
-    @Test
-    void 멘티_해당_되지_않는_일반_CHAT_메시지를_반환() {
-
-        // given
-        // 사용자가 일반 대화를 입력했다고 가정
-        ChatMessageCreateRequest request = ChatMessageCreateRequest.builder()
-                .content("오늘 날씨 어때?")
-                .build();
-
-        // Intent 분류 결과 → CHAT 으로 반환하도록 Mock 설정
-        IntentResponse intent = IntentResponse.builder()
-                .intent(IntentType.CHAT)  // ⭐ 일반 대화 의도
-                .skills(List.of())        // 스킬 없음
-                .build();
-
-        when(geminiService.classify("오늘 날씨 어때?")).thenReturn(intent);
-
-        // Gemini 챗봇의 응답도 Mock 으로 정의
-        when(geminiService.geminiChat("오늘 날씨 어때?")).thenReturn("오늘 날씨는 맑아요!");
+        // 실제 API 호출 대신 위 문자열을 돌려주도록 설정
+        when(geminiService.classify(menteeKeywords, request.getContent()))
+                .thenReturn(geminiAnswer);
 
         // when
         ChatMessageResponse response = menteeChatFacade.sendMessage(request);
 
         // then
-        // classify 는 호출되어야 하고
-        verify(geminiService).classify("오늘 날씨 어때?");
+        assertThat(response.getContent()).isEqualTo(geminiAnswer);
 
-        // 멘티 검색은 호출되면 안 됨
-        verify(menteeService, never()).findByKeywords(anyList());
+        // 멘티 목록을 조회했는지 검증
+        verify(menteeService).findTopWithKeywords();
 
-        // geminiChat 은 반드시 호출되어야 함
-        verify(geminiService).geminiChat("오늘 날씨 어때?");
-
-        // 응답 검증
-        assertThat(response.getContent()).isEqualTo("오늘 날씨는 맑아요!");
+        // Gemini를 올바른 파라미터로 호출했는지 검증
+        verify(geminiService).classify(menteeKeywords, request.getContent());
     }
 
+    @Test
+    @DisplayName("조건에 맞는 멘티가 없으면 실패 문구를 그대로 반환한다")
+    void sendMessage_noMentee() {
+        // given
+        ChatMessageCreateRequest request = ChatMessageCreateRequest.builder()
+                .content("쿠버네티스, 러스트 멘티 찾아줘")
+                .build();
+
+        List<MenteeKeywordResponse> mentees = List.of(
+                new MenteeKeywordResponse("홍길동", List.of("Java", "Spring")),
+                new MenteeKeywordResponse("김철수", List.of("HTML", "CSS"))
+        );
+
+        when(menteeService.findTopWithKeywords())
+                .thenReturn(mentees);
+
+        // ChatDefaultMessage - 규칙 6번에 따라 실패 문구를 반환했다고 가정
+        String geminiFailMessage =
+                "죄송합니다. 해당 요청에 맞는 멘티를 찾지 못했습니다.";
+
+        // 실제 API 호출 대신 위 문자열을 돌려주도록 설정
+        when(geminiService.classify(mentees, request.getContent()))
+                .thenReturn(geminiFailMessage);
+
+        // when
+        ChatMessageResponse response = menteeChatFacade.sendMessage(request);
+
+        // then
+        assertThat(response.getContent()).isEqualTo(geminiFailMessage);
+
+        verify(menteeService).findTopWithKeywords();
+        verify(geminiService).classify(mentees, request.getContent());
+    }
 }

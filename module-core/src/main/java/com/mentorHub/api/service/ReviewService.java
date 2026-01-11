@@ -1,7 +1,5 @@
 package com.mentorHub.api.service;
 
-import com.mentorHub.Mapper.CommentMapper;
-import com.mentorHub.api.dto.response.CommentResponse;
 import com.mentorHub.api.entity.CommentEntity;
 import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.CommentRepository;
@@ -12,9 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional

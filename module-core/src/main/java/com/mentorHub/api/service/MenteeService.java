@@ -1,18 +1,19 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.dto.response.MenteeKeywordResponse;
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.entity.MenteeEntity;
-import com.mentorHub.api.entity.ReviewEntity;
 import com.mentorHub.api.repository.MenteeApplicationRepository;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.query.MenteeQuery;
 import com.mentorHub.common.BusinessException;
+import com.util.MenteeRecruitmentStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -66,10 +67,7 @@ public class MenteeService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
 
-    public List<MenteeEntity> findByKeywords(List<String> keyword) {
-        return keyword.stream()
-                .flatMap(kw -> menteeRepository.findByKeyword(kw).stream())  // keyword 하나씩 꺼내서 DB 검색
-                .distinct()// 여러 keyword 검색 결과에서 중복 제거
-                .toList(); // 최종 List 로 변환
+    public List<MenteeKeywordResponse> findTopWithKeywords() {
+        return menteeRepository.findTopWithKeywords(MenteeRecruitmentStatus.RECRUITING, PageRequest.of(0, 10));
     }
 }

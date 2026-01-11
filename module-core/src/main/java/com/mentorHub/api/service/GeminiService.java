@@ -1,10 +1,12 @@
 package com.mentorHub.api.service;
 
-import com.mentorHub.api.dto.IntentResponse;
-import com.message.ChatDefaultMessage;
+import com.mentorHub.api.dto.response.MenteeKeywordResponse;
+import com.mentorHub.api.message.ChatDefaultMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -12,25 +14,15 @@ public class GeminiService {
 
     private final ChatClient chatClient;
 
-    public String geminiChat(String userMessage) {
+    public String classify(List<MenteeKeywordResponse> mentees, String message) {
 
-        return chatClient
-                .prompt()
-                .system(ChatDefaultMessage.MENTEE_RECOMMENDATION.getMessage())
-                .user(userMessage)
-                .call()
-                .content();
-    }
-
-    public IntentResponse classify(String message) {
-
-        String prompt = ChatDefaultMessage.INTENT_CLASSIFIER.format(message);
+        String prompt = ChatDefaultMessage.INTENT_CLASSIFIER.format(mentees, message);
 
         return chatClient
                 .prompt()
                 .user(prompt)
                 .call()
-                .entity(IntentResponse.class);
+                .content();
     }
 
 }

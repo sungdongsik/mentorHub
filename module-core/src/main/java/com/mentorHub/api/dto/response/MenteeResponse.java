@@ -47,7 +47,7 @@ public class MenteeResponse {
                 .writingId(entity.getWritingId())
                 .name(entity.getName())
                 .startDate(entity.getStartDate())
-                .keyword(entity.getKeywordList())
+                .keyword(entity.getKeyword())
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .job(entity.getJob())

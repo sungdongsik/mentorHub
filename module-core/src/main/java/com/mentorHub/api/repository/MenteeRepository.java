@@ -1,11 +1,13 @@
 package com.mentorHub.api.repository;
 
+import com.mentorHub.api.dto.response.MenteeKeywordResponse;
 import com.mentorHub.api.entity.MenteeEntity;
+import com.util.MenteeRecruitmentStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,12 +17,13 @@ public interface MenteeRepository extends JpaRepository<MenteeEntity, Long> {
     int deleteMentee(@Param("writingId") Long writingId);
 
     @Query("""
-    SELECT m 
-    FROM MenteeEntity m 
-    WHERE 
-    m.keyword like concat(:keyword, ',%')
-    or m.keyword like concat('%,', :keyword)
-    or m.keyword like concat('%,', :keyword, ',%')
+    SELECT new com.mentorHub.api.dto.response.MenteeKeywordResponse(
+        m.name,
+        m.keyword
+    )
+    FROM MenteeEntity m
+    WHERE m.recruitmentStatus = :recruitmentStatus
+    ORDER BY m.createdDate DESC
     """)
-    List<MenteeEntity> findByKeyword(@Param("keyword") String keyword);
+    List<MenteeKeywordResponse> findTopWithKeywords(@Param("recruitmentStatus") MenteeRecruitmentStatus recruitmentStatus, Pageable pageable);
 }

@@ -47,10 +47,6 @@ public class MenteeQuery {
             builder.and(userEntity.name.contains(request.getName()));
         }
 
-        if (request.getKeyword() != null) {
-            builder.and(menteeEntity.keyword.like("%" + request.getKeyword() + "%"));
-        }
-
         if (request.getStartDate() != null) {
             builder.and(menteeEntity.startDate.goe(request.getStartDate()));
         }
