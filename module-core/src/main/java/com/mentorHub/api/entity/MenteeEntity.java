@@ -21,7 +21,6 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @SQLRestriction("del_yn = 'N'")
-@ToString
 public class MenteeEntity {
 
     @Id
@@ -39,9 +38,10 @@ public class MenteeEntity {
 
     private LocalDateTime startDate;
 
-    private List<String> keyword;
-
     private String job;
+
+    @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MenteeKeywordEntity> keywords = new ArrayList<>();
 
     @OneToMany(mappedBy = "mentee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewEntity> reviews = new ArrayList<>();
@@ -66,5 +66,20 @@ public class MenteeEntity {
     public void addReviews(List<ReviewEntity> reviews) {
         if (reviews == null) return;
         this.reviews.addAll(reviews);
+    }
+
+    /**
+     * 내부 상태를 안전하게 변경하기 위한 메서드
+     */
+    public void addKeyword(List<String> keywords) {
+        if (keywords == null) return;
+
+        keywords.forEach(k -> {
+            MenteeKeywordEntity en = MenteeKeywordEntity.builder()
+                    .keyword(k)
+                    .mentee(this) // 자식 엔티티에 부모(나 자신)를 설정
+                    .build();
+            this.keywords.add(en);
+        });
     }
 }
