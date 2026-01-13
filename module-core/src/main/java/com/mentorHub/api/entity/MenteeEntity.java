@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "TB_MENTEE")
@@ -74,12 +75,17 @@ public class MenteeEntity {
     public void addKeyword(List<String> keywords) {
         if (keywords == null) return;
 
-        keywords.forEach(k -> {
-            MenteeKeywordEntity en = MenteeKeywordEntity.builder()
-                    .keyword(k)
-                    .mentee(this) // 자식 엔티티에 부모(나 자신)를 설정
-                    .build();
-            this.keywords.add(en);
-        });
+        // 기존 리스트를 비우고 새로 추가
+        this.keywords.clear();
+
+        List<MenteeKeywordEntity> en = keywords.stream()
+                .distinct() // 중복 제거
+                .map(k -> MenteeKeywordEntity.builder()
+                        .keyword(k)
+                        .mentee(this)
+                        .build())
+                .collect(Collectors.toList());
+
+        this.keywords.addAll(en);
     }
 }
