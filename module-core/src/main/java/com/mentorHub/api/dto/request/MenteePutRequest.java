@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,14 +44,18 @@ public class MenteePutRequest {
 
     // Entity 선언해서 값 넣어주기~
     public MenteeEntity toEntity() {
-         return MenteeEntity.builder()
-                 .writingId(writingId)
-                 .title(title)
-                 .content(content)
-                 .startDate(startDate)
-                 .keyword(keyword)
-                 .job(job)
-                 .recruitmentStatus(recruitmentStatus)
-                 .build();
+        MenteeEntity mentee = MenteeEntity.builder()
+                .writingId(writingId)
+                .title(title)
+                .content(content)
+                .startDate(startDate)
+                .keywords(new ArrayList<>())
+                .job(job)
+                .recruitmentStatus(recruitmentStatus)
+                .build();
+
+        mentee.addKeyword(keyword);
+
+        return mentee;
     }
 }
