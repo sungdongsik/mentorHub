@@ -61,6 +61,9 @@ public class MenteeEntity {
     @Column(name = "del_yn", length = 1)
     private String delYn = "N";  // 기본값 N
 
+    @Transient // DB 저장/조회 대상에서 제외
+    private List<String> keywordList = new ArrayList<>();
+
     /**
      * 내부 상태를 안전하게 변경하기 위한 메서드
      */
