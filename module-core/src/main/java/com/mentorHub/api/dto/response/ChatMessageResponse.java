@@ -5,21 +5,25 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
 public class ChatMessageResponse {
     private ChatRoleType role;
 
-    private String content;
+    private List<MenteeKeywordResponse> contents;
 
     private LocalDateTime createDate;
 
-    public static ChatMessageResponse from(String content) {
+    private String message;
+
+    public static ChatMessageResponse from(String content, List<MenteeKeywordResponse> contents) {
         return ChatMessageResponse.builder()
                 .role(ChatRoleType.BOT)
-                .content(content)
+                .contents(contents)
                 .createDate(LocalDateTime.now())
+                .message(content)
                 .build();
     }
 }

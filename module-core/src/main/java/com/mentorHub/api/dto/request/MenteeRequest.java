@@ -31,7 +31,7 @@ public class MenteeRequest {
     public MenteeEntity toEntity() {
         return MenteeEntity.builder()
                 .title(title)
-                .keyword(keyword)
+                //.keyword(keyword)
                 .startDate(startDate)
                 .build();
     }

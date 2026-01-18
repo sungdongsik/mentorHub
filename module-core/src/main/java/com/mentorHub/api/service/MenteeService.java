@@ -8,7 +8,9 @@ import com.mentorHub.api.repository.MenteeKeywordRepository;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.query.MenteeQuery;
 import com.mentorHub.common.BusinessException;
+import com.util.MenteeRecruitmentStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,5 +72,9 @@ public class MenteeService {
 
     public List<MenteeKeywordEntity> findAllByWritingIdIn(List<Long> writingIds) {
         return menteeKeywordRepository.findAllByMenteeWritingIdIn(writingIds);
+    }
+
+    public List<MenteeEntity> findByKeywords(List<String> keywords) {
+        return menteeKeywordRepository.findByKeywords(keywords, MenteeRecruitmentStatus.RECRUITING, PageRequest.of(0, 10));
     }
 }
