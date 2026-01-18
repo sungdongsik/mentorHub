@@ -1,9 +1,10 @@
 package com.mentorHub.api.service;
 
-import com.mentorHub.api.dto.response.MenteeKeywordResponse;
 import com.mentorHub.api.entity.MenteeApplicationEntity;
 import com.mentorHub.api.entity.MenteeEntity;
+import com.mentorHub.api.entity.MenteeKeywordEntity;
 import com.mentorHub.api.repository.MenteeApplicationRepository;
+import com.mentorHub.api.repository.MenteeKeywordRepository;
 import com.mentorHub.api.repository.MenteeRepository;
 import com.mentorHub.api.repository.query.MenteeQuery;
 import com.mentorHub.common.BusinessException;
@@ -26,6 +27,8 @@ public class MenteeService {
     private final MenteeQuery menteeQuery;
 
     private final MenteeApplicationRepository menteeApplicationRepository;
+
+    private final MenteeKeywordRepository menteeKeywordRepository;
 
     @Transactional(readOnly = true)
     public List<MenteeEntity> getMentees(MenteeEntity request) {
@@ -67,7 +70,11 @@ public class MenteeService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다!"));
     }
 
-    public List<MenteeKeywordResponse> findTopWithKeywords() {
-        return menteeRepository.findTopWithKeywords(MenteeRecruitmentStatus.RECRUITING, PageRequest.of(0, 10));
+    public List<MenteeKeywordEntity> findAllByWritingIdIn(List<Long> writingIds) {
+        return menteeKeywordRepository.findAllByMenteeWritingIdIn(writingIds);
+    }
+
+    public List<MenteeEntity> findByKeywords(List<String> keywords) {
+        return menteeKeywordRepository.findByKeywords(keywords, MenteeRecruitmentStatus.RECRUITING, PageRequest.of(0, 10));
     }
 }

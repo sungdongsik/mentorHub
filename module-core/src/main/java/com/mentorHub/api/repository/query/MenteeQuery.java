@@ -26,7 +26,6 @@ public class MenteeQuery {
                         menteeEntity.writingId,
                         userEntity.name,
                         menteeEntity.startDate,
-                        menteeEntity.keyword,
                         menteeEntity.title,
                         menteeEntity.content,
                         menteeEntity.job

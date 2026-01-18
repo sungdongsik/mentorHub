@@ -2,12 +2,14 @@ package com.mentorHub.api.dto.request;
 
 
 import com.mentorHub.api.entity.MenteeEntity;
+import com.mentorHub.api.entity.MenteeKeywordEntity;
 import com.util.MenteeRecruitmentStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,15 +48,19 @@ public class MenteeCreateRequest {
     private MenteeRecruitmentStatus recruitmentStatus;
 
     public MenteeEntity toEntity() {
-        return MenteeEntity.builder()
+        MenteeEntity mentee = MenteeEntity.builder()
                 .title(title)
                 .userId(userId)
                 .content(content)
                 .name(name)
                 .startDate(startDate)
-                .keyword(keyword)
+                .keywords(new ArrayList<>())
                 .job(job)
                 .recruitmentStatus(recruitmentStatus)
                 .build();
+
+        mentee.addKeyword(keyword);
+
+        return mentee;
     }
 }
