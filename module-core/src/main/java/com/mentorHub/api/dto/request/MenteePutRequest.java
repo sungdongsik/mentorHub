@@ -43,7 +43,8 @@ public class MenteePutRequest {
 
     // Entity 선언해서 값 넣어주기~
     public MenteeEntity toEntity() {
-        MenteeEntity mentee = MenteeEntity.builder()
+
+        return MenteeEntity.builder()
                 .writingId(writingId)
                 .title(title)
                 .content(content)
@@ -51,7 +52,5 @@ public class MenteePutRequest {
                 .job(job)
                 .recruitmentStatus(recruitmentStatus)
                 .build();
-
-        return mentee;
     }
 }

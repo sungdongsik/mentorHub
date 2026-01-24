@@ -64,7 +64,7 @@ public class MenteeController {
     @PutMapping
     public ApiResponse<MenteePutResponse> putMentees(@Valid @RequestBody MenteePutRequest request) {
         log.info("request: {}", request);
-        MenteeEntity en = menteeService.putMentees(request.toEntity());
+        MenteeEntity en = menteeService.putMentees(request.toEntity(), request.getKeywords());
 
         return ApiResponse.success(MenteePutResponse.from(en));
     }

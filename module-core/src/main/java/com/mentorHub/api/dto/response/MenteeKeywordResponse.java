@@ -1,36 +1,20 @@
 package com.mentorHub.api.dto.response;
 
-import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.MenteeKeywordEntity;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
-
-import java.util.List;
 
 @Getter
 @Builder
-@ToString
 public class MenteeKeywordResponse {
-    private String name;
+    private Long keywordId;
 
-    private List<String> keyword;
+    private String keyword;
 
-    public static MenteeKeywordResponse from(MenteeEntity en) {
+    public static MenteeKeywordResponse from(MenteeKeywordEntity en) {
         return MenteeKeywordResponse.builder()
-                .name(en.getName())
-                .keyword(
-                        en.getKeywords().stream()
-                                .map(MenteeKeywordEntity::getKeyword)
-                                .toList()
-                )
+                .keywordId(en.getKeywordId())
+                .keyword(en.getKeyword())
                 .build();
-    }
-
-
-    public static List<MenteeKeywordResponse> fromList(List<MenteeEntity> entities) {
-        return entities.stream()
-                .map(MenteeKeywordResponse::from)
-                .toList();
     }
 }

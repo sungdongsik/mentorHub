@@ -91,16 +91,20 @@ public class MenteeShipFacade {
 
     private void mapKeyword(List<MenteeEntity> mentees, List<MenteeKeywordEntity> keywords) {
         // Mentee의 ID를 Key로, Keyword 문자열 리스트를 Value로 하는 Map 생성
-        Map<Long, List<String>> keywordMap = keywords.stream()
-                .collect(Collectors.groupingBy(
-                        keywordEntity -> keywordEntity.getMentee().getWritingId(), // Key: writingId
-                        Collectors.mapping(MenteeKeywordEntity::getKeyword, Collectors.toList()) // Value: List<String>
-                ));
+        Map<Long, List<MenteeKeywordEntity>> keywordMap =
+                keywords.stream()
+                        .collect(Collectors.groupingBy(
+                                r -> r.getMentee().getWritingId()
+                        ));
 
         // 특정 멘티의 키워드 리스트 가져오기
-        mentees.forEach(m -> {
-            List<String> keywordNames = keywordMap.getOrDefault(m.getWritingId(), Collections.emptyList());
-            m.setKeywordList(keywordNames); // 엔티티 내부에 저장
-        });
+        for (MenteeEntity mentee : mentees) {
+            mentee.addKeywords(
+                    keywordMap.getOrDefault(
+                            mentee.getWritingId(),
+                            Collections.emptyList()
+                    )
+            );
+        }
     }
 }

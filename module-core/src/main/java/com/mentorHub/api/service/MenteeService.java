@@ -56,8 +56,12 @@ public class MenteeService {
         return en;
     }
 
-    public MenteeEntity putMentees(MenteeEntity request) {
-        return menteeRepository.save(request);
+    public MenteeEntity putMentees(MenteeEntity request, List<KeywordCreateRequest> keywords) {
+        MenteeEntity en = menteeRepository.save(request);
+        List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
+        en.replaceKeywords(menteeKeyword);
+
+        return en;
     }
 
     public MenteeApplicationEntity createMenteesApplication(MenteeApplicationEntity request) {
