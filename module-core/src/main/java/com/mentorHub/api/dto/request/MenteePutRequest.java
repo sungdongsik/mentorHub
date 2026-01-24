@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +35,7 @@ public class MenteePutRequest {
 
     private LocalDateTime startDate;
 
-    private List<String> keyword;
+    private List<KeywordCreateRequest> keywords;
 
     private String job;
 
@@ -49,12 +48,9 @@ public class MenteePutRequest {
                 .title(title)
                 .content(content)
                 .startDate(startDate)
-                .keywords(new ArrayList<>())
                 .job(job)
                 .recruitmentStatus(recruitmentStatus)
                 .build();
-
-        mentee.addKeyword(keyword);
 
         return mentee;
     }

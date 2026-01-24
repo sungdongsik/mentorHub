@@ -3,13 +3,16 @@ package com.mentorHub.api.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TB_ROOT_KEYWORD")
+@Table(name = "TB_ROOT_KEYWORD",
+        uniqueConstraints = @UniqueConstraint(columnNames = "canonicalName")
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)

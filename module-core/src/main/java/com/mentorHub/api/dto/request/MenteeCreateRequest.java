@@ -2,14 +2,12 @@ package com.mentorHub.api.dto.request;
 
 
 import com.mentorHub.api.entity.MenteeEntity;
-import com.mentorHub.api.entity.MenteeKeywordEntity;
 import com.util.MenteeRecruitmentStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +17,7 @@ import java.util.List;
  * - title: 제목
  * - content: 내용
  * - startDate: 시작일
- * - keyword: 키워드
+ * - keywords: 키워드
  * - job: 직업
  */
 
@@ -41,26 +39,21 @@ public class MenteeCreateRequest {
 
     private LocalDateTime startDate;
 
-    private List<String> keyword;
+    private List<KeywordCreateRequest> keywords;
 
     private String job;
 
     private MenteeRecruitmentStatus recruitmentStatus;
 
     public MenteeEntity toEntity() {
-        MenteeEntity mentee = MenteeEntity.builder()
+        return MenteeEntity.builder()
                 .title(title)
                 .userId(userId)
                 .content(content)
                 .name(name)
                 .startDate(startDate)
-                .keywords(new ArrayList<>())
                 .job(job)
                 .recruitmentStatus(recruitmentStatus)
                 .build();
-
-        mentee.addKeyword(keyword);
-
-        return mentee;
     }
 }

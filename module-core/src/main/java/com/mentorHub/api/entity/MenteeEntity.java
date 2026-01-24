@@ -11,7 +11,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "TB_MENTEE")
@@ -70,25 +69,5 @@ public class MenteeEntity {
     public void addReviews(List<ReviewEntity> reviews) {
         if (reviews == null) return;
         this.reviews.addAll(reviews);
-    }
-
-    /**
-     * 내부 상태를 안전하게 변경하기 위한 메서드
-     */
-    public void addKeyword(List<String> keywords) {
-        if (keywords == null) return;
-
-        // 기존 리스트를 비우고 새로 추가
-        this.keywords.clear();
-
-        List<MenteeKeywordEntity> en = keywords.stream()
-                .distinct() // 중복 제거
-                .map(k -> MenteeKeywordEntity.builder()
-                        .keyword(k)
-                        .mentee(this)
-                        .build())
-                .collect(Collectors.toList());
-
-        this.keywords.addAll(en);
     }
 }
