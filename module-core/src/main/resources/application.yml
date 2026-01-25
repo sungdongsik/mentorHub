@@ -22,3 +22,7 @@ spring:
           model: gemini-3-pro-preview      # 사용할 Gemini 모델
           options:
             temperature: 0.5           # 응답 창의성 조절 (0.0=정확 / 1.0=창의적, 0.5는 균형형)
+        embedding:
+          api-key: ${GEMINI_API_KEY}
+          options:
+            model: text-embedding-004  # Gemini embedding 모델
