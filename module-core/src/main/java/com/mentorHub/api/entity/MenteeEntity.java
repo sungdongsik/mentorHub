@@ -11,7 +11,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "TB_MENTEE")
@@ -61,9 +60,6 @@ public class MenteeEntity {
     @Column(name = "del_yn", length = 1)
     private String delYn = "N";  // 기본값 N
 
-    @Transient // DB 저장/조회 대상에서 제외
-    private List<String> keywordList = new ArrayList<>();
-
     /**
      * 내부 상태를 안전하게 변경하기 위한 메서드
      */
@@ -72,23 +68,13 @@ public class MenteeEntity {
         this.reviews.addAll(reviews);
     }
 
-    /**
-     * 내부 상태를 안전하게 변경하기 위한 메서드
-     */
-    public void addKeyword(List<String> keywords) {
-        if (keywords == null) return;
+    public void addKeywords(List<MenteeKeywordEntity> keywords) {
+        if (reviews == null) return;
+        this.keywords.addAll(keywords);
+    }
 
-        // 기존 리스트를 비우고 새로 추가
-        this.keywords.clear();
-
-        List<MenteeKeywordEntity> en = keywords.stream()
-                .distinct() // 중복 제거
-                .map(k -> MenteeKeywordEntity.builder()
-                        .keyword(k)
-                        .mentee(this)
-                        .build())
-                .collect(Collectors.toList());
-
-        this.keywords.addAll(en);
+    public void replaceKeywords(List<MenteeKeywordEntity> newKeywords) {
+        this.keywords.clear();       // 기존 데이터 비워주기
+        this.keywords.addAll(newKeywords);
     }
 }
