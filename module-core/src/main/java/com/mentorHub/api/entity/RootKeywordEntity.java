@@ -1,5 +1,6 @@
 package com.mentorHub.api.entity;
 
+import com.util.KeywordStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,9 @@ public class RootKeywordEntity {
     private Long rootKeywordId;
 
     private String canonicalName;
+
+    @Enumerated(EnumType.STRING)
+    private KeywordStatus status;
 
     @CreatedDate
     @Column(updatable = false)

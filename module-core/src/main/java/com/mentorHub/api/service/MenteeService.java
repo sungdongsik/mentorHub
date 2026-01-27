@@ -27,20 +27,14 @@ public class MenteeService {
 
     private final MenteeKeywordRepository menteeKeywordRepository;
 
-    private final RootKeywordRepository rootKeywordRepository;
-
     @Transactional(readOnly = true)
     public List<MenteeEntity> getMentees(MenteeEntity request) {
         // 멘티 목록 조회
         return menteeQuery.getMentees(request);
     }
 
-    public MenteeEntity setMentees(MenteeEntity request, List<KeywordCreateRequest> keywords){
-        MenteeEntity en = menteeRepository.save(request);
-        List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
-        setMenteeKeyword(menteeKeyword);
-
-        return en;
+    public MenteeEntity setMentees(MenteeEntity request){
+        return menteeRepository.save(request);
     }
 
     public MenteeEntity deleteMentees(MenteeEntity request) {
@@ -58,8 +52,8 @@ public class MenteeService {
 
     public MenteeEntity putMentees(MenteeEntity request, List<KeywordCreateRequest> keywords) {
         MenteeEntity en = menteeRepository.save(request);
-        List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
-        en.replaceKeywords(menteeKeyword);
+        //List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
+        //en.replaceKeywords(menteeKeyword);
 
         return en;
     }
@@ -83,21 +77,6 @@ public class MenteeService {
 
     public List<MenteeEntity> findByKeywords(List<String> keywords) {
         return menteeKeywordRepository.findByKeywords(keywords, MenteeRecruitmentStatus.RECRUITING, PageRequest.of(0, 10));
-    }
-
-    public List<MenteeKeywordEntity> findByMenteeKeyword(List<KeywordCreateRequest> request, MenteeEntity en) {
-
-        return request.stream()
-                .map(req ->
-                        MenteeKeywordEntity.builder()
-                            .keyword(req.getKeyword())
-                            .rootKeyword(rootKeywordRepository
-                                    .findByCanonicalName(req.getKeyword())
-                                    .orElseThrow())
-                            .mentee(en)
-                            .build()
-                )
-                .toList();
     }
 
     public void setMenteeKeyword(List<MenteeKeywordEntity> keywords) {
