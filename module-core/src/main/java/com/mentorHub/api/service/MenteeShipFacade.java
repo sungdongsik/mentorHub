@@ -1,10 +1,9 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.dto.request.KeywordCreateRequest;
 import com.mentorHub.api.dto.request.ReviewCreateRequest;
 import com.mentorHub.api.dto.request.ReviewPutRequest;
-import com.mentorHub.api.entity.MenteeEntity;
-import com.mentorHub.api.entity.MenteeKeywordEntity;
-import com.mentorHub.api.entity.ReviewEntity;
+import com.mentorHub.api.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +20,8 @@ public class MenteeShipFacade {
     private final MenteeService menteeService;
 
     private final ReviewService reviewService;
+
+    private final RootKeywordService rootKeywordService;
 
     @Transactional(readOnly = true)
     public List<MenteeEntity> getMenteesWithReview(MenteeEntity request) {
@@ -107,4 +108,56 @@ public class MenteeShipFacade {
             );
         }
     }
+
+    @Transactional
+    public MenteeEntity setMentees(MenteeEntity request, List<KeywordCreateRequest> keywords) {
+        MenteeEntity en = menteeService.setMentees(request);
+
+        // root_keyword save --> 이쪽부터 역할 분리하도록 로직 수정하기
+        List<String> keywordNames = keywords.stream()
+                .map(k -> k.getKeyword().trim().toLowerCase())
+                .distinct()
+                .toList();
+
+        List<KeywordAliasEntity> aliases = rootKeywordService.findAllByAliasNameIn(keywordNames);
+
+        Map<String, KeywordAliasEntity> aliasMap =
+                aliases.stream()
+                        .collect(Collectors.toMap(
+                                a -> a.getAliasName(),
+                                a -> a
+                        ));
+
+        List<String> notExists = keywordNames.stream()
+                .filter(k -> !aliasMap.containsKey(k))
+                .toList();
+
+        // alias save
+        for (String aliasName : notExists) {
+            RootKeywordEntity root = rootKeywordService.setRootKeyword(RootKeywordEntity.create(aliasName));
+            rootKeywordService.setKeywordAlias(KeywordAliasEntity.create(aliasName, root));
+        }
+
+        List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
+        menteeService.setMenteeKeyword(menteeKeyword);
+
+        return en;
+    }
+
+    public List<MenteeKeywordEntity> findByMenteeKeyword(List<KeywordCreateRequest> request, MenteeEntity en) {
+
+        return request.stream()
+                .map(req ->
+                        MenteeKeywordEntity.builder()
+                                .keyword(req.getKeyword())
+                                .rootKeyword(rootKeywordService
+                                        .findByCanonicalName(req.getKeyword())
+                                )
+                                .mentee(en)
+                                .build()
+                )
+                .toList();
+    }
+
+
 }

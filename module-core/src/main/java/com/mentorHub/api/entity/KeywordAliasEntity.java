@@ -2,6 +2,7 @@ package com.mentorHub.api.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "TB_KEYWORD_ALIAS")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,4 +32,11 @@ public class KeywordAliasEntity {
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
+
+    public static KeywordAliasEntity create(String aliasName, RootKeywordEntity en) {
+        return KeywordAliasEntity.builder()
+                .aliasName(aliasName)
+                .rootKeyword(en)
+                .build();
+    }
 }
