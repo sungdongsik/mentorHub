@@ -1,6 +1,6 @@
 package com.util;
 
-public enum KeywordStatus {
+public enum RootKeywordAliasStatus {
     PENDING(000000),     // 자동 등록된 임시 키워드 (관리자 승인 대기 상태)
     ACTIVE(000001),      // 승인 완료된 정상 사용 키워드
     MERGED(000002),      // 다른 키워드로 병합됨 (실제 사용은 mergedTo 키워드)
@@ -10,7 +10,7 @@ public enum KeywordStatus {
 
     private final int code;
 
-    KeywordStatus(int code) {
+    RootKeywordAliasStatus(int code) {
         this.code = code;
     }
 

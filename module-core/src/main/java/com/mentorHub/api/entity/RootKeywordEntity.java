@@ -1,6 +1,6 @@
 package com.mentorHub.api.entity;
 
-import com.util.KeywordStatus;
+import com.util.RootKeywordAliasStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,7 +25,7 @@ public class RootKeywordEntity {
     private String canonicalName;
 
     @Enumerated(EnumType.STRING)
-    private KeywordStatus status;
+    private RootKeywordAliasStatus status;
 
     @CreatedDate
     @Column(updatable = false)
@@ -35,7 +35,7 @@ public class RootKeywordEntity {
     public static RootKeywordEntity create(String canonicalName) {
         return RootKeywordEntity.builder()
                 .canonicalName(canonicalName)
-                .status(KeywordStatus.PENDING)
+                .status(RootKeywordAliasStatus.PENDING)
                 .build();
     }
 }

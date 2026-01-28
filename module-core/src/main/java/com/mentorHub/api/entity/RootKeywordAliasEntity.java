@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Builder
-@Table(name = "TB_KEYWORD_ALIAS")
+@Table(name = "TB_ROOT_KEYWORD_ALIAS")
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class KeywordAliasEntity {
+public class RootKeywordAliasEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long keywordAliasId;
+    private Long rootKeywordAliasId;
 
     private String aliasName;
 
@@ -33,8 +33,8 @@ public class KeywordAliasEntity {
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
-    public static KeywordAliasEntity create(String aliasName, RootKeywordEntity en) {
-        return KeywordAliasEntity.builder()
+    public static RootKeywordAliasEntity create(String aliasName, RootKeywordEntity en) {
+        return RootKeywordAliasEntity.builder()
                 .aliasName(aliasName)
                 .rootKeyword(en)
                 .build();

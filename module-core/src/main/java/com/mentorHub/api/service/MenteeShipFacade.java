@@ -113,50 +113,14 @@ public class MenteeShipFacade {
     public MenteeEntity setMentees(MenteeEntity request, List<KeywordCreateRequest> keywords) {
         MenteeEntity en = menteeService.setMentees(request);
 
-        // root_keyword save --> 이쪽부터 역할 분리하도록 로직 수정하기
-        List<String> keywordNames = keywords.stream()
-                .map(k -> k.getKeyword().trim().toLowerCase())
-                .distinct()
-                .toList();
+        // 없는 키워드 생성 및 저장 -> 비승인으로 저장 시키기
+        rootKeywordService.ensureKeywordsExist(keywords);
 
-        List<KeywordAliasEntity> aliases = rootKeywordService.findAllByAliasNameIn(keywordNames);
-
-        Map<String, KeywordAliasEntity> aliasMap =
-                aliases.stream()
-                        .collect(Collectors.toMap(
-                                a -> a.getAliasName(),
-                                a -> a
-                        ));
-
-        List<String> notExists = keywordNames.stream()
-                .filter(k -> !aliasMap.containsKey(k))
-                .toList();
-
-        // alias save
-        for (String aliasName : notExists) {
-            RootKeywordEntity root = rootKeywordService.setRootKeyword(RootKeywordEntity.create(aliasName));
-            rootKeywordService.setKeywordAlias(KeywordAliasEntity.create(aliasName, root));
-        }
-
-        List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
+        // 키워드 매칭 시켜서 save 시켜주기
+        List<MenteeKeywordEntity> menteeKeyword = rootKeywordService.findByMenteeKeyword(keywords, en);
         menteeService.setMenteeKeyword(menteeKeyword);
 
         return en;
-    }
-
-    public List<MenteeKeywordEntity> findByMenteeKeyword(List<KeywordCreateRequest> request, MenteeEntity en) {
-
-        return request.stream()
-                .map(req ->
-                        MenteeKeywordEntity.builder()
-                                .keyword(req.getKeyword())
-                                .rootKeyword(rootKeywordService
-                                        .findByCanonicalName(req.getKeyword())
-                                )
-                                .mentee(en)
-                                .build()
-                )
-                .toList();
     }
 
 
