@@ -74,4 +74,8 @@ public class RootKeywordService {
                     setKeywordAlias(RootKeywordAliasEntity.create(canonicalName, root));
                 });
     }
+
+    public List<RootKeywordEntity> getKeywordApproval(RootKeywordEntity request) {
+        return rootKeywordRepository.findAllByStatus(request.getStatus());
+    }
 }
