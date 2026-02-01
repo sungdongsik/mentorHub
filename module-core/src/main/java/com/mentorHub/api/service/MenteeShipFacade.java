@@ -23,6 +23,8 @@ public class MenteeShipFacade {
 
     private final RootKeywordService rootKeywordService;
 
+    private final VectorService vectorService;
+
     @Transactional(readOnly = true)
     public List<MenteeEntity> getMenteesWithReview(MenteeEntity request) {
 
@@ -118,7 +120,10 @@ public class MenteeShipFacade {
 
         // 키워드 매칭 시켜서 save 시켜주기
         List<MenteeKeywordEntity> menteeKeyword = rootKeywordService.findByMenteeKeyword(keywords, en);
-        menteeService.setMenteeKeyword(menteeKeyword);
+        en.setKeywords(menteeKeyword);
+
+        // vectorDB 멘티 정보 저장시키기
+        vectorService.saveMenteeDocument(en);
 
         return en;
     }

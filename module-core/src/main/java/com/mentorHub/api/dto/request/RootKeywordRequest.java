@@ -10,7 +10,6 @@ import lombok.ToString;
 public class RootKeywordRequest {
     private RootKeywordAliasStatus status;
 
-
     public RootKeywordEntity toEntity() {
         return RootKeywordEntity.builder()
                 .status(status)
