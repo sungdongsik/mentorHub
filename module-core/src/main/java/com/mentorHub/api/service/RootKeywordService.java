@@ -78,4 +78,12 @@ public class RootKeywordService {
     public List<RootKeywordEntity> getKeywordApproval(RootKeywordEntity request) {
         return rootKeywordRepository.findAllByStatus(request.getStatus());
     }
+
+    public RootKeywordEntity pubKeywordApproval(RootKeywordEntity request) {
+        RootKeywordEntity en = rootKeywordRepository.save(request);
+
+        // vectorDB에 해당 키워드 업데이트 로직 추가하기
+
+        return en;
+    }
 }

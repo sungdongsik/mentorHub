@@ -1,17 +1,16 @@
 package com.mentorHub.api.controller;
 
 import com.mentorHub.api.dto.PageResponse;
+import com.mentorHub.api.dto.request.RootKeywordPutRequest;
 import com.mentorHub.api.dto.request.RootKeywordRequest;
+import com.mentorHub.api.dto.response.RootKeywordPutResponse;
 import com.mentorHub.api.dto.response.RootKeywordResponse;
 import com.mentorHub.api.entity.RootKeywordEntity;
 import com.mentorHub.api.service.RootKeywordService;
 import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +32,14 @@ public class AdminKeywordApprovalController {
                 .toList();
 
         return ApiResponse.success(PageResponse.of(responses));
+    }
+
+    @PutMapping
+    public ApiResponse<RootKeywordPutResponse> pubKeywordApproval(@RequestBody RootKeywordPutRequest request) {
+        log.info("request: {}", request);
+        RootKeywordEntity en = rootKeywordService.pubKeywordApproval(request.toEntity());
+
+        return ApiResponse.success(RootKeywordPutResponse.from(en));
     }
 
 

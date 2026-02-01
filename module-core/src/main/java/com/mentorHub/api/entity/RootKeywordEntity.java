@@ -4,6 +4,7 @@ import com.util.RootKeywordAliasStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class RootKeywordEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rootKeywordId;
 
+    @Column(updatable = false)
     private String canonicalName;
 
     @Enumerated(EnumType.STRING)
@@ -30,6 +32,9 @@ public class RootKeywordEntity {
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
 
     // 정적 팩토리 메서드
     public static RootKeywordEntity create(String canonicalName) {
