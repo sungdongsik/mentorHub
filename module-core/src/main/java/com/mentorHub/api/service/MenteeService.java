@@ -72,4 +72,8 @@ public class MenteeService {
     public List<MenteeKeywordEntity> findAllByWritingIdIn(List<Long> writingIds) {
         return menteeKeywordRepository.findAllByMentee_WritingIdIn(writingIds);
     }
+
+    public List<MenteeEntity> findAllByKeywordApproval(RootKeywordEntity en) {
+        return menteeRepository.findDistinctByKeywords_RootKeyword_RootKeywordId(en.getRootKeywordId());
+    }
 }
