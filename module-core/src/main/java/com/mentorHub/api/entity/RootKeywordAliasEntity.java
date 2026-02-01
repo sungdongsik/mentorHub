@@ -2,6 +2,7 @@ package com.mentorHub.api.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,15 +12,16 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "TB_KEYWORD_ALIAS")
+@Builder
+@Table(name = "TB_ROOT_KEYWORD_ALIAS")
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class KeywordAliasEntity {
+public class RootKeywordAliasEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long keywordAliasId;
+    private Long rootKeywordAliasId;
 
     private String aliasName;
 
@@ -30,4 +32,11 @@ public class KeywordAliasEntity {
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
+
+    public static RootKeywordAliasEntity create(String aliasName, RootKeywordEntity en) {
+        return RootKeywordAliasEntity.builder()
+                .aliasName(aliasName)
+                .rootKeyword(en)
+                .build();
+    }
 }

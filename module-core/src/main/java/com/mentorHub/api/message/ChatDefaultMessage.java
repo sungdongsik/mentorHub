@@ -1,36 +1,24 @@
 package com.mentorHub.api.message;
 
 import lombok.Getter;
+import org.springframework.ai.document.Document;
+
+import java.util.List;
 
 @Getter
 public enum ChatDefaultMessage {
 
     INTENT_CLASSIFIER(
             """
-            너는 멘티 추천 서비스의 AI 어시스턴트다.
-    
-            아래 절차를 반드시 순서대로 수행하라.
-    
-            1. 사용자의 질문 의도를 판단한다.
-               - MENTEE_SEARCH : 기술, 스킬, 조건 등을 기반으로 멘티를 찾으려는 질문
-               - CHAT    : 일반 대화, 인사, 잡담, 단순 질문
-    
-            2. 의도가 MENTEE_SEARCH인 경우에만 질문에서 핵심 키워드를 추출한다.
-               - 기술명, 언어, 프레임워크, 직무, 관심 분야 위주로 추출한다.
-               - CHAT인 경우 MENTEE_SEARCH는 빈 배열로 반환한다.
-    
-            3. 사용자에게 보여줄 최종 응답 메시지를 생성한다.
-    
-            ⚠️ 반드시 아래 JSON 형식으로만 응답해야 한다.
-            ⚠️ JSON 외의 어떤 문장도 절대 포함하지 마라.
-    
-            {
-              "intent": "MENTEE_SEARCH" | "CHAT",
-              "keywords": ["keyword1", "keyword2"],
-              "answer": "사용자에게 보여줄 최종 응답"
-            }
-    
-            사용자 질문: %s
+            당신은 멘티들의 정보를 잘 알고 있는 전문 상담가입니다. 
+            아래 제공된 [멘티 정보]를 바탕으로 사용자의 질문에 친절하게 답변해 주세요.
+            만약 제공된 정보에 답이 없다면, 모른다고 답하기보다는 아는 범위 내에서 조언해 주세요.
+
+            [멘티 정보]
+            %s
+
+            [사용자 질문]
+            %s
             """
     );
 
@@ -40,8 +28,8 @@ public enum ChatDefaultMessage {
         this.message = message;
     }
 
-    public String format(String format) {
-        return message.formatted(format);
+    public String format(List<Document> documents, String format) {
+        return message.formatted(documents, format);
     }
 
 }

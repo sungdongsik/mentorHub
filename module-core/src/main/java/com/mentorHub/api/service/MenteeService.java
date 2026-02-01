@@ -5,9 +5,7 @@ import com.mentorHub.api.entity.*;
 import com.mentorHub.api.repository.*;
 import com.mentorHub.api.repository.query.MenteeQuery;
 import com.mentorHub.common.BusinessException;
-import com.util.MenteeRecruitmentStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,20 +25,14 @@ public class MenteeService {
 
     private final MenteeKeywordRepository menteeKeywordRepository;
 
-    private final RootKeywordRepository rootKeywordRepository;
-
     @Transactional(readOnly = true)
     public List<MenteeEntity> getMentees(MenteeEntity request) {
         // 멘티 목록 조회
         return menteeQuery.getMentees(request);
     }
 
-    public MenteeEntity setMentees(MenteeEntity request, List<KeywordCreateRequest> keywords){
-        MenteeEntity en = menteeRepository.save(request);
-        List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
-        setMenteeKeyword(menteeKeyword);
-
-        return en;
+    public MenteeEntity setMentees(MenteeEntity request){
+        return menteeRepository.save(request);
     }
 
     public MenteeEntity deleteMentees(MenteeEntity request) {
@@ -58,8 +50,8 @@ public class MenteeService {
 
     public MenteeEntity putMentees(MenteeEntity request, List<KeywordCreateRequest> keywords) {
         MenteeEntity en = menteeRepository.save(request);
-        List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
-        en.replaceKeywords(menteeKeyword);
+        //List<MenteeKeywordEntity> menteeKeyword = findByMenteeKeyword(keywords, en);
+        //en.replaceKeywords(menteeKeyword);
 
         return en;
     }
@@ -78,29 +70,10 @@ public class MenteeService {
     }
 
     public List<MenteeKeywordEntity> findAllByWritingIdIn(List<Long> writingIds) {
-        return menteeKeywordRepository.findAllByMenteeWritingIdIn(writingIds);
+        return menteeKeywordRepository.findAllByMentee_WritingIdIn(writingIds);
     }
 
-    public List<MenteeEntity> findByKeywords(List<String> keywords) {
-        return menteeKeywordRepository.findByKeywords(keywords, MenteeRecruitmentStatus.RECRUITING, PageRequest.of(0, 10));
-    }
-
-    public List<MenteeKeywordEntity> findByMenteeKeyword(List<KeywordCreateRequest> request, MenteeEntity en) {
-
-        return request.stream()
-                .map(req ->
-                        MenteeKeywordEntity.builder()
-                            .keyword(req.getKeyword())
-                            .rootKeyword(rootKeywordRepository
-                                    .findByCanonicalName(req.getKeyword())
-                                    .orElseThrow())
-                            .mentee(en)
-                            .build()
-                )
-                .toList();
-    }
-
-    public void setMenteeKeyword(List<MenteeKeywordEntity> keywords) {
-        menteeKeywordRepository.saveAll(keywords);
+    public List<MenteeEntity> findAllByKeywordApproval(RootKeywordEntity en) {
+        return menteeRepository.findDistinctByKeywords_RootKeyword_RootKeywordId(en.getRootKeywordId());
     }
 }

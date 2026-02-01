@@ -1,10 +1,9 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.dto.request.KeywordCreateRequest;
 import com.mentorHub.api.dto.request.ReviewCreateRequest;
 import com.mentorHub.api.dto.request.ReviewPutRequest;
-import com.mentorHub.api.entity.MenteeEntity;
-import com.mentorHub.api.entity.MenteeKeywordEntity;
-import com.mentorHub.api.entity.ReviewEntity;
+import com.mentorHub.api.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +20,10 @@ public class MenteeShipFacade {
     private final MenteeService menteeService;
 
     private final ReviewService reviewService;
+
+    private final RootKeywordService rootKeywordService;
+
+    private final VectorService vectorService;
 
     @Transactional(readOnly = true)
     public List<MenteeEntity> getMenteesWithReview(MenteeEntity request) {
@@ -107,4 +110,23 @@ public class MenteeShipFacade {
             );
         }
     }
+
+    @Transactional
+    public MenteeEntity setMentees(MenteeEntity request, List<KeywordCreateRequest> keywords) {
+        MenteeEntity en = menteeService.setMentees(request);
+
+        // 없는 키워드 생성 및 저장 -> 비승인으로 저장 시키기
+        rootKeywordService.ensureKeywordsExist(keywords);
+
+        // 키워드 매칭 시켜서 save 시켜주기
+        List<MenteeKeywordEntity> menteeKeyword = rootKeywordService.findByMenteeKeyword(keywords, en);
+        en.setKeywords(menteeKeyword);
+
+        // vectorDB 멘티 정보 저장시키기
+        vectorService.saveMenteeDocument(en);
+
+        return en;
+    }
+
+
 }
