@@ -18,7 +18,7 @@ public interface RootKeywordRepository extends JpaRepository<RootKeywordEntity, 
       ON rka.rootKeyword = rk
     WHERE rka.aliasName IN :aliasName
     """)
-    Optional<RootKeywordEntity> findByCanonicalName(@Param("aliasName") String aliasName);
+    List<RootKeywordEntity> findByCanonicalName(@Param("aliasName") List<String> aliasNames);
 
     List<RootKeywordEntity> findAllByStatus(RootKeywordAliasStatus status);
 }
