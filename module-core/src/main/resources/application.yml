@@ -27,11 +27,10 @@ spring:
           options:
             model: text-embedding-004  # Gemini embedding 모델
     vectorstore:
-      chroma:
-        client:
-          host: http://localhost
-          port: 8000
-        initialize-schema: true
+      qdrant:
+        host: localhost
+        port: 6333
+        api-key:
         collection-name: mentee_writing_vectors
-      openai:
-        api-key: ${GEMINI_API_KEY}
+        use-tls: false
+        initialize-schema: false
