@@ -2,6 +2,7 @@ package com.mentorHub.api.service;
 
 import com.mentorHub.api.dto.request.ChatMessageCreateRequest;
 import com.mentorHub.api.dto.response.ChatMessageResponse;
+import com.mentorHub.api.vector.VectorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;

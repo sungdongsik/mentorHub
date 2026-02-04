@@ -29,8 +29,8 @@ spring:
     vectorstore:
       qdrant:
         host: localhost                 # Qdrant 서버 주소
-        port: 6333                      # Qdrant REST API 포트
+        port: 6334                      # Qdrant GRPC 포트
         api-key:                        # Qdrant 인증용 API Key (로컬이면 보통 비워둠)
         collection-name: mentee_writing_vectors  # 멘티 글 임베딩을 저장하는 컬렉션 이름
         use-tls: false                  # HTTPS(TLS) 사용 여부 (로컬 환경에서는 false)
-        initialize-schema: false        # 애플리케이션 시작 시 컬렉션 자동 생성 여부
+        initialize-schema: true        # 애플리케이션 시작 시 컬렉션 자동 생성 여부
