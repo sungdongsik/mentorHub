@@ -129,7 +129,7 @@ public class MenteeShipFacade {
 
         // vectorDB 멘티 정보 저장시키기
         Document document = menteeVectorAssembler.assemble(en);
-        vectorService.saveDocument(document);
+        vectorService.save(document);
 
         return en;
     }

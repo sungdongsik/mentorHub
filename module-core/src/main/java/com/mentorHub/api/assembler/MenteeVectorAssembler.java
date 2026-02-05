@@ -3,11 +3,11 @@ package com.mentorHub.api.assembler;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.MenteeKeywordEntity;
 import com.util.RootKeywordAliasStatus;
+import com.util.VectorIdUtil;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,7 +22,7 @@ public class MenteeVectorAssembler implements VectorDocumentAssembler<MenteeEnti
                 .collect(Collectors.joining(", "));
 
         return new Document(
-                UUID.randomUUID().toString(), // ID
+                VectorIdUtil.createId(en.getWritingId()), // ID
                 en.getName() + "," + approvedKeywords, // 벡터화할 텍스트 내용
                 Map.of("writing_id", en.getWritingId())
         );

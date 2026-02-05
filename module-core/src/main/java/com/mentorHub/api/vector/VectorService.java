@@ -15,10 +15,17 @@ public class VectorService {
     private final VectorStore vectorStore;
 
     /**
-     * Vector Store에 저장
+     * Vector Store에 단일 저장
      */
-    public void saveDocument(Document document) {
+    public void save(Document document) {
         vectorStore.add(List.of(document));
+    }
+
+    /**
+     * Vector Store에 리스트 저장
+     */
+    public void saveAll(List<Document> document) {
+        vectorStore.add(document);
     }
 
     /**
