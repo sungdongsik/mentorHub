@@ -7,6 +7,7 @@ import com.util.VectorIdUtil;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,10 @@ public class MenteeVectorAssembler implements VectorDocumentAssembler<MenteeEnti
         return new Document(
                 VectorIdUtil.createId(en.getWritingId()), // ID
                 en.getName() + "," + approvedKeywords, // 벡터화할 텍스트 내용
-                Map.of("writing_id", en.getWritingId())
+                Map.of("writing_ids", List.of("writing:" + en.getWritingId()),
+                        "writing_id", en.getWritingId()
+
+                )
         );
     }
 }

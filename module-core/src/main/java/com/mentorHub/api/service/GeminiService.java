@@ -1,5 +1,6 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.dto.ChatResponse;
 import com.mentorHub.api.message.ChatDefaultMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
@@ -14,7 +15,7 @@ public class GeminiService {
 
     private final ChatClient chatClient;
 
-    public String classify(List<Document> documents, String message) {
+    public ChatResponse classify(List<Document> documents, String message) {
 
         String prompt = ChatDefaultMessage.INTENT_CLASSIFIER.format(documents, message);
 
@@ -22,7 +23,7 @@ public class GeminiService {
                 .prompt()
                 .user(prompt)
                 .call()
-                .content();
+                .entity(ChatResponse.class);
     }
 
 }

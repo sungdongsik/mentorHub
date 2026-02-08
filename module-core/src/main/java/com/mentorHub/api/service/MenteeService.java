@@ -5,6 +5,7 @@ import com.mentorHub.api.entity.*;
 import com.mentorHub.api.repository.*;
 import com.mentorHub.api.repository.query.MenteeQuery;
 import com.mentorHub.common.BusinessException;
+import com.util.RootKeywordAliasStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -75,5 +76,9 @@ public class MenteeService {
 
     public List<MenteeEntity> findAllByKeywordApproval(RootKeywordEntity en) {
         return menteeRepository.findDistinctByKeywords_RootKeyword_RootKeywordId(en.getRootKeywordId());
+    }
+
+    public List<MenteeEntity> findByWritingIdsAndActiveKeywords(List<Long> writingIds) {
+        return menteeRepository.findByWritingIdsAndActiveKeywords(writingIds, RootKeywordAliasStatus.ACTIVE);
     }
 }
