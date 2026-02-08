@@ -24,14 +24,14 @@ spring:
             temperature: 0.5           # 응답 창의성 조절 (0.0=정확 / 1.0=창의적, 0.5는 균형형)
         embedding:
           api-key: ${GEMINI_API_KEY}
-          options:
-            model: text-embedding-004  # Gemini embedding 모델
+          text:
+            options:
+              model: gemini-embedding-001  # Gemini embedding 모델
     vectorstore:
-      chroma:
-        client:
-          host: http://localhost
-          port: 8000
-        initialize-schema: true
-        collection-name: mentee_writing_vectors
-      openai:
-        api-key: ${GEMINI_API_KEY}
+      qdrant:
+        host: localhost                 # Qdrant 서버 주소
+        port: 6334                      # Qdrant GRPC 포트
+        api-key:                        # Qdrant 인증용 API Key (로컬이면 보통 비워둠)
+        collection-name: mentee_writing_vectors  # 멘티 글 임베딩을 저장하는 컬렉션 이름
+        use-tls: false                  # HTTPS(TLS) 사용 여부 (로컬 환경에서는 false)
+        initialize-schema: true        # 애플리케이션 시작 시 컬렉션 자동 생성 여부

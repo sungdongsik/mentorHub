@@ -37,4 +37,12 @@ public class MenteeKeywordEntity {
 
     @LastModifiedDate
     private LocalDateTime updatedDate;
+
+    public static MenteeKeywordEntity of(MenteeEntity mentee, RootKeywordEntity rootKeyword) {
+        return MenteeKeywordEntity.builder()
+                .mentee(mentee)
+                .rootKeyword(rootKeyword)
+                .keyword(rootKeyword.getCanonicalName())
+                .build();
+    }
 }

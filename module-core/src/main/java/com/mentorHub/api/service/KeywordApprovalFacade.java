@@ -1,8 +1,11 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.assembler.MenteeVectorAssembler;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.RootKeywordEntity;
+import com.mentorHub.api.vector.VectorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,8 @@ public class KeywordApprovalFacade {
 
     private final VectorService vectorService;
 
+    private final MenteeVectorAssembler menteeVectorAssembler;
+
     public RootKeywordEntity pubKeywordApproval(RootKeywordEntity request) {
 
         // PENDING -> ACTIVE 업데이트 해주기
@@ -26,9 +31,11 @@ public class KeywordApprovalFacade {
         List<MenteeEntity> mentees = menteeService.findAllByKeywordApproval(en);
 
         // 각 멘티의 정보를 벡터 DB에 다시 반영
-        for (MenteeEntity mentee : mentees) {
-            vectorService.saveMenteeDocument(mentee);
-        }
+        List<Document> docs = mentees.stream()
+                .map(menteeVectorAssembler::assemble)
+                .toList();
+
+        vectorService.saveAll(docs);
 
         return en;
     }

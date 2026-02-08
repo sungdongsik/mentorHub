@@ -37,14 +37,16 @@ public class RootKeywordService {
     }
 
     public List<MenteeKeywordEntity> findByMenteeKeyword(List<KeywordCreateRequest> request, MenteeEntity en) {
-        return request.stream()
-                .map(req ->
-                        MenteeKeywordEntity.builder()
-                                .keyword(req.getKeyword())
-                                .rootKeyword(rootKeywordRepository.findByCanonicalName(req.getKeyword()).orElseThrow())
-                                .mentee(en)
-                                .build()
-                )
+
+        List<String> aliasName = request.stream()
+                .map(KeywordCreateRequest::getKeyword)
+                .distinct()
+                .toList();
+
+        List<RootKeywordEntity> rootKeywords = rootKeywordRepository.findByCanonicalName(aliasName);
+
+        return rootKeywords.stream()
+                .map(rk -> MenteeKeywordEntity.of(en, rk))
                 .toList();
     }
 
