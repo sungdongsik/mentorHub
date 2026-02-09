@@ -1,6 +1,5 @@
 package com.mentorHub.api.service;
 
-import com.mentorHub.api.assembler.MenteeVectorAssembler;
 import com.mentorHub.api.dto.request.KeywordCreateRequest;
 import com.mentorHub.api.dto.request.ReviewCreateRequest;
 import com.mentorHub.api.dto.request.ReviewPutRequest;
@@ -28,7 +27,7 @@ public class MenteeShipFacade {
 
     private final VectorService vectorService;
 
-    private final MenteeVectorAssembler menteeVectorAssembler;
+    private final MenteeVectorAssemblerService menteeVectorAssemblerService;
 
     @Transactional(readOnly = true)
     public List<MenteeEntity> getMenteesWithReview(MenteeEntity request) {
@@ -128,7 +127,7 @@ public class MenteeShipFacade {
         en.setKeywords(menteeKeyword);
 
         // vectorDB 멘티 정보 저장시키기
-        Document document = menteeVectorAssembler.assemble(en);
+        Document document = menteeVectorAssemblerService.assemble(en);
         vectorService.save(document);
 
         return en;
