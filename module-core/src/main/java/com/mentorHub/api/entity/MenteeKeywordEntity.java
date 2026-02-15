@@ -38,11 +38,18 @@ public class MenteeKeywordEntity {
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
-    public static MenteeKeywordEntity of(MenteeEntity mentee, RootKeywordEntity rootKeyword) {
+    public static MenteeKeywordEntity of(MenteeEntity mentee, RootKeywordEntity alias) {
         return MenteeKeywordEntity.builder()
                 .mentee(mentee)
-                .rootKeyword(rootKeyword)
-                .keyword(rootKeyword.getCanonicalName())
+                .keyword(alias.getCanonicalName())
+                .rootKeyword(alias)
+                .build();
+    }
+
+    public static MenteeKeywordEntity of(MenteeEntity mentee, String keyword) {
+        return MenteeKeywordEntity.builder()
+                .mentee(mentee)
+                .keyword(keyword)
                 .build();
     }
 }

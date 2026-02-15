@@ -4,10 +4,7 @@ import com.mentorHub.api.dto.ChatResponse;
 import com.mentorHub.api.dto.request.ChatMessageCreateRequest;
 import com.mentorHub.api.dto.response.ChatMessageResponse;
 import com.mentorHub.api.dto.response.MenteeSummaryResponse;
-import com.mentorHub.api.entity.MenteeEntity;
-import com.mentorHub.api.entity.MenteeKeywordEntity;
 import com.mentorHub.api.vector.VectorService;
-import com.util.RootKeywordAliasStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
@@ -33,19 +30,7 @@ public class MenteeChatFacade {
 
         // MENTEE_SEARCH일 경우 로직 태우기
         if (response.isMenteeSearch()) {
-            List<MenteeEntity> mentees = menteeService.findByWritingIdsAndActiveKeywords(response.getWritingIds());
-
-            // 로직 나중에 수정하자!! 퍼사드가 너무 많은 처리를 하는 거 같음..
-            List<MenteeSummaryResponse> summaries = mentees.stream()
-                    .map(m -> new MenteeSummaryResponse(
-                            m.getName(),
-                            m.getKeywords().stream()
-                                    .filter(k -> k.getRootKeyword().getStatus() == RootKeywordAliasStatus.ACTIVE)
-                                    .map(MenteeKeywordEntity::getKeyword)
-                                    .distinct()
-                                    .toList()
-                    ))
-                    .toList();
+            List<MenteeSummaryResponse> summaries = menteeService.findByWritingIdsAndActiveKeywords(response.getWritingIds());
 
             return ChatMessageResponse.from(response, summaries);
         }

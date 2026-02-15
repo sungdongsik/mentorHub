@@ -1,6 +1,7 @@
 package com.mentorHub.api.service;
 
 import com.mentorHub.api.dto.request.KeywordCreateRequest;
+import com.mentorHub.api.dto.response.MenteeSummaryResponse;
 import com.mentorHub.api.entity.*;
 import com.mentorHub.api.repository.*;
 import com.mentorHub.api.repository.query.MenteeQuery;
@@ -78,7 +79,14 @@ public class MenteeService {
         return menteeRepository.findDistinctByKeywords_RootKeyword_RootKeywordId(en.getRootKeywordId());
     }
 
-    public List<MenteeEntity> findByWritingIdsAndActiveKeywords(List<Long> writingIds) {
-        return menteeRepository.findByWritingIdsAndActiveKeywords(writingIds, RootKeywordAliasStatus.ACTIVE);
+    public List<MenteeSummaryResponse> findByWritingIdsAndActiveKeywords(List<Long> writingIds) {
+
+        List<MenteeEntity> mentees = menteeRepository.findByWritingIdsAndActiveKeywords(writingIds, RootKeywordAliasStatus.ACTIVE);
+
+        List<MenteeSummaryResponse> summaries = mentees.stream()
+                .map(MenteeSummaryResponse::from)
+                .toList();
+
+        return summaries;
     }
 }

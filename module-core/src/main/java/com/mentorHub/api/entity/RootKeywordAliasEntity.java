@@ -1,5 +1,6 @@
 package com.mentorHub.api.entity;
 
+import com.util.RootKeywordAliasStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,10 +34,13 @@ public class RootKeywordAliasEntity {
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
-    public static RootKeywordAliasEntity create(String aliasName, RootKeywordEntity en) {
+    @Enumerated(EnumType.STRING)
+    private RootKeywordAliasStatus status;
+
+    public static RootKeywordAliasEntity create(String aliasName) {
         return RootKeywordAliasEntity.builder()
                 .aliasName(aliasName)
-                .rootKeyword(en)
+                .status(RootKeywordAliasStatus.PENDING)
                 .build();
     }
 }

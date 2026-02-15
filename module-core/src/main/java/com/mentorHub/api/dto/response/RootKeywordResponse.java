@@ -1,24 +1,29 @@
 package com.mentorHub.api.dto.response;
 
-import com.mentorHub.api.entity.RootKeywordEntity;
+import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.util.RootKeywordAliasStatus;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class RootKeywordResponse {
-    private Long rootKeywordId;
+    private Long rootKeywordAliasId;
 
-    private String canonicalName;
+    private String aliasName;
 
     private RootKeywordAliasStatus status;
 
-    public static RootKeywordResponse from(RootKeywordEntity en) {
+    private List<RootKeywordCandidateResponse> candidateRoots;
+
+    public static RootKeywordResponse from(RootKeywordAliasEntity en, List<RootKeywordCandidateResponse> candidates) {
         return RootKeywordResponse.builder()
-                .rootKeywordId(en.getRootKeywordId())
-                .canonicalName(en.getCanonicalName())
+                .rootKeywordAliasId(en.getRootKeywordAliasId())
+                .aliasName(en.getAliasName())
                 .status(en.getStatus())
+                .candidateRoots(candidates)
                 .build();
     }
 }
