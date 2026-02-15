@@ -1,17 +1,19 @@
 package com.mentorHub.api.service;
 
 import com.mentorHub.api.dto.request.KeywordCreateRequest;
-import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.MenteeKeywordEntity;
+import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.mentorHub.api.entity.RootKeywordEntity;
 import com.mentorHub.api.repository.RootKeywordAliasRepository;
 import com.mentorHub.api.repository.RootKeywordRepository;
+import com.util.RootKeywordAliasStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -38,7 +40,7 @@ public class RootKeywordService {
 
         Map<String, RootKeywordEntity> rootMap = rootKeywordAlias.stream()
                         .collect(Collectors.toMap(
-                                RootKeywordEntity::getCanonicalName,
+                                e -> e.getCanonicalName().toLowerCase(Locale.ROOT),
                                 Function.identity()
                         ));
 
@@ -81,11 +83,15 @@ public class RootKeywordService {
         rootKeywordAliasRepository.saveAll(newAliases);
     }
 
-    public List<RootKeywordEntity> getKeywordApproval(RootKeywordEntity request) {
-        return rootKeywordRepository.findAllByStatus(request.getStatus());
+    public List<RootKeywordAliasEntity> getKeywordApproval(RootKeywordEntity request) {
+        return rootKeywordAliasRepository.findByStatus(request.getStatus());
     }
 
     public RootKeywordEntity pubKeywordApproval(RootKeywordEntity request) {
         return rootKeywordRepository.save(request);
+    }
+
+    public List<RootKeywordEntity> getKeywordActive() {
+        return rootKeywordRepository.findAllByStatus(RootKeywordAliasStatus.ACTIVE);
     }
 }

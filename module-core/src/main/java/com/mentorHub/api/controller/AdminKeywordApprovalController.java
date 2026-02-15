@@ -7,7 +7,6 @@ import com.mentorHub.api.dto.response.RootKeywordPutResponse;
 import com.mentorHub.api.dto.response.RootKeywordResponse;
 import com.mentorHub.api.entity.RootKeywordEntity;
 import com.mentorHub.api.service.KeywordApprovalFacade;
-import com.mentorHub.api.service.RootKeywordService;
 import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,20 +20,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminKeywordApprovalController {
 
-    private final RootKeywordService rootKeywordService;
-
     private final KeywordApprovalFacade keywordApprovalFacade;
 
     @GetMapping
     public ApiResponse<PageResponse<RootKeywordResponse>> getKeywordApproval(@ModelAttribute RootKeywordRequest request) {
         log.info("request: {}", request);
-        List<RootKeywordEntity> approval = rootKeywordService.getKeywordApproval(request.toEntity());
+        List<RootKeywordResponse> approval = keywordApprovalFacade.getKeywordApproval(request.toEntity());
 
-        List<RootKeywordResponse> responses = approval.stream()
-                .map(RootKeywordResponse::from)
-                .toList();
-
-        return ApiResponse.success(PageResponse.of(responses));
+        return ApiResponse.success(PageResponse.of(approval));
     }
 
     @PutMapping

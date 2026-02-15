@@ -1,5 +1,6 @@
 package com.mentorHub.api.dto.response;
 
+import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.util.RootKeywordAliasStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,11 +18,12 @@ public class RootKeywordResponse {
 
     private List<RootKeywordCandidateResponse> candidateRoots;
 
-    /*public static RootKeywordResponse from(RootKeywordEntity en) {
+    public static RootKeywordResponse from(RootKeywordAliasEntity en, List<RootKeywordCandidateResponse> candidates) {
         return RootKeywordResponse.builder()
-                .rootKeywordId(en.getRootKeywordId())
-                .canonicalName(en.getCanonicalName())
+                .rootKeywordAliasId(en.getRootKeywordAliasId())
+                .aliasName(en.getAliasName())
                 .status(en.getStatus())
+                .candidateRoots(candidates)
                 .build();
-    }*/
+    }
 }
