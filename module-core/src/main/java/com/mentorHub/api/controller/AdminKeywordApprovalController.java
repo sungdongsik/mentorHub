@@ -5,7 +5,7 @@ import com.mentorHub.api.dto.request.RootKeywordPutRequest;
 import com.mentorHub.api.dto.request.RootKeywordRequest;
 import com.mentorHub.api.dto.response.RootKeywordPutResponse;
 import com.mentorHub.api.dto.response.RootKeywordResponse;
-import com.mentorHub.api.entity.RootKeywordEntity;
+import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.mentorHub.api.service.KeywordApprovalFacade;
 import com.mentorHub.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class AdminKeywordApprovalController {
     @PutMapping
     public ApiResponse<RootKeywordPutResponse> pubKeywordApproval(@RequestBody RootKeywordPutRequest request) {
         log.info("request: {}", request);
-        RootKeywordEntity en = keywordApprovalFacade.pubKeywordApproval(request.toEntity());
+        RootKeywordAliasEntity en = keywordApprovalFacade.pubKeywordApproval(request);
 
         return ApiResponse.success(RootKeywordPutResponse.from(en));
     }
