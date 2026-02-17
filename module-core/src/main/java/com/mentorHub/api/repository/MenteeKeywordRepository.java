@@ -9,4 +9,6 @@ public interface MenteeKeywordRepository extends JpaRepository<MenteeKeywordEnti
 
     // writingId 리스트에 포함된 모든 키워드 엔티티 조회
     List<MenteeKeywordEntity> findAllByMentee_WritingIdIn(List<Long> writingIds);
+
+    List<MenteeKeywordEntity> findAllByKeyword(String keyword);
 }

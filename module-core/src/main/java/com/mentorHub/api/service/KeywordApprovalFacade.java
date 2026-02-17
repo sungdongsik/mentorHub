@@ -1,29 +1,25 @@
 package com.mentorHub.api.service;
 
+import com.mentorHub.api.dto.request.RootKeywordPutRequest;
 import com.mentorHub.api.dto.response.RootKeywordCandidateResponse;
 import com.mentorHub.api.dto.response.RootKeywordResponse;
-import com.mentorHub.api.entity.MenteeEntity;
 import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.mentorHub.api.entity.RootKeywordEntity;
-import com.mentorHub.api.vector.VectorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class KeywordApprovalFacade {
 
     private final MenteeService menteeService;
 
     private final RootKeywordService rootKeywordService;
-
-    private final VectorService vectorService;
-
-    private final MenteeVectorAssemblerService menteeVectorAssemblerService;
 
     public List<RootKeywordResponse> getKeywordApproval(RootKeywordEntity request) {
         List<RootKeywordAliasEntity> aliases = rootKeywordService.getKeywordApproval(request);
@@ -57,25 +53,31 @@ public class KeywordApprovalFacade {
                 .toList();
     }
 
-    public RootKeywordEntity pubKeywordApproval(RootKeywordEntity request) {
+    /**
+     * 키워드 승인/반려 요청을 처리하고, 관련 멘티들의 정보를 업데이트합니다.
+     *
+     * @param request 키워드 승인/반려 정보를 담은 요청 객체
+     * @return 처리된 RootKeywordAliasEntity
+     */
+    public RootKeywordAliasEntity pubKeywordApproval(RootKeywordPutRequest request) {
+        RootKeywordEntity rootKeyword = null;
 
-        // PENDING -> ACTIVE 업데이트 해주기
-        RootKeywordEntity en = rootKeywordService.pubKeywordApproval(request);
+        // '승인' 요청 처리: 키워드를 활성화하고 멘티의 키워드를 업데이트합니다.
+        if (request.isActive()) {
+            rootKeyword = rootKeywordService.findOrCreate(request.getRootKeywordId(), request.getAliasName());
+            menteeService.updateKeywordsAndRefreshVector(request.getAliasName(), rootKeyword);
+        }
+        // '반려' 요청 처리: 멘티의 키워드에서 해당 내용을 null로 변경합니다.
+        else if (request.isDeleted()) {
+            rootKeywordService.deleteRootKeyword(request.getRootKeywordId());
+            menteeService.updateKeywordsAndRefreshVector(request.getAliasName(), null);
+        }
 
-        // 해당 루트 키워드를 사용 중인 멘티들을 조회
-        List<MenteeEntity> mentees = menteeService.findAllByKeywordApproval(en);
-
-        // 각 멘티의 정보를 벡터 DB에 다시 반영
-        List<Document> docs = mentees.stream()
-                .map(menteeVectorAssemblerService::assemble)
-                .toList();
-
-        vectorService.saveAll(docs);
-
-        return en;
+        // 최종적으로 alias의 상태를 업데이트하고 결과를 반환합니다.
+        return rootKeywordService.pubKeywordApproval(request.toEntity(rootKeyword));
     }
 
-    float score(String alias, String canonical) {
+    private float score(String alias, String canonical) {
         alias = alias.toLowerCase(Locale.ROOT);
         canonical = canonical.toLowerCase(Locale.ROOT);
 

@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -87,11 +84,40 @@ public class RootKeywordService {
         return rootKeywordAliasRepository.findByStatus(request.getStatus());
     }
 
-    public RootKeywordEntity pubKeywordApproval(RootKeywordEntity request) {
-        return rootKeywordRepository.save(request);
+    public RootKeywordAliasEntity pubKeywordApproval(RootKeywordAliasEntity request) {
+        return rootKeywordAliasRepository.save(request);
     }
 
     public List<RootKeywordEntity> getKeywordActive() {
         return rootKeywordRepository.findAllByStatus(RootKeywordAliasStatus.ACTIVE);
+    }
+
+    public RootKeywordEntity getRootKeyword(Long rootKeywordId) {
+        return rootKeywordRepository.findById(rootKeywordId).orElse(null);
+    }
+
+    public RootKeywordEntity createRootKeyword(String canonicalName) {
+        return rootKeywordRepository.save(RootKeywordEntity.builder()
+                .canonicalName(canonicalName)
+                .status(RootKeywordAliasStatus.ACTIVE)
+                .build());
+    }
+
+    /**
+     * 요청에 따라 RootKeyword를 찾거나, 존재하지 않으면 새로 생성합니다.
+     *
+     * @param rootKeywordId 조회할 RootKeyword의 ID (null일 수 있음)
+     * @param aliasName     새로 생성할 경우 사용될 이름
+     * @return 찾아내거나 새로 생성된 RootKeywordEntity
+     */
+    public RootKeywordEntity findOrCreate(Long rootKeywordId, String aliasName) {
+        if (rootKeywordId != null) {
+            return getRootKeyword(rootKeywordId);
+        }
+        return createRootKeyword(aliasName);
+    }
+
+    public void deleteRootKeyword(Long rootKeywordId) {
+        rootKeywordRepository.deleteById(rootKeywordId);
     }
 }
