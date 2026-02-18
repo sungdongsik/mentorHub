@@ -64,18 +64,17 @@ public class RootKeywordService {
                 .distinct()
                 .toList();
 
-        // alias 키워드들을 조건 걸어서 조회
-        List<RootKeywordAliasEntity> aliases = rootKeywordAliasRepository.findAllByAliasNameIn(keywordNames);
-
-        // 이미 존재하는 alias 이름만 Set 으로 추출
-        Set<String> existingNames = aliases.stream()
+        Set<String> existingNames = rootKeywordAliasRepository.findAllByAliasNameIn(keywordNames)
+                .stream()
                 .map(RootKeywordAliasEntity::getAliasName)
                 .collect(Collectors.toSet());
 
+
         List<RootKeywordAliasEntity> newAliases = keywordNames.stream()
                 .filter(name -> !existingNames.contains(name))
-                .map(RootKeywordAliasEntity::create) // create 메서드가 PENDING 상태로 생성
+                .map(RootKeywordAliasEntity::create)
                 .toList();
+
 
         rootKeywordAliasRepository.saveAll(newAliases);
     }
