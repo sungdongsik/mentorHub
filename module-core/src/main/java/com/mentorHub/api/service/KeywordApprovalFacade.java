@@ -6,6 +6,8 @@ import com.mentorHub.api.dto.response.RootKeywordResponse;
 import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.mentorHub.api.entity.RootKeywordEntity;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +20,15 @@ import java.util.Locale;
 public class KeywordApprovalFacade {
 
     private final MenteeService menteeService;
-
     private final RootKeywordService rootKeywordService;
+
+    // 1차 필터링을 위한 Levenshtein 거리 임계값 (이 값 이하일 때만 후보로 선정)
+    private static final int LEVENSHTEIN_THRESHOLD = 3;
+
+    // 문자열 유사도 계산을 위한 유틸리티 인스턴스 (Thread-safe 하므로 static final로 재사용)
+    private static final JaroWinklerSimilarity JARO_WINKLER_SIMILARITY = new JaroWinklerSimilarity();
+
+    private static final LevenshteinDistance LEVENSHTEIN_DISTANCE = LevenshteinDistance.getDefaultInstance();
 
     public List<RootKeywordResponse> getKeywordApproval(RootKeywordEntity request) {
         List<RootKeywordAliasEntity> aliases = rootKeywordService.getKeywordApproval(request);
@@ -36,15 +45,13 @@ public class KeywordApprovalFacade {
                     String aliasLower = alias.getAliasName().toLowerCase(Locale.ROOT);
 
                     List<RootKeywordCandidateResponse> candidates = allRoots.stream()
-                            .filter(root ->
-                                    root.getCanonicalName()
-                                            .toLowerCase(Locale.ROOT)
-                                            .contains(aliasLower)
-                            )
+                            // 1차 필터: Levenshtein Distance를 사용하여 편집 거리가 가까운 키워드만 필터링
+                            .filter(root -> levenshteinFilter(aliasLower, root.getCanonicalName().toLowerCase(Locale.ROOT)))
                             .map(root -> RootKeywordCandidateResponse.builder()
                                     .rootKeywordId(root.getRootKeywordId())
                                     .canonicalName(root.getCanonicalName())
-                                    .score(score(alias.getAliasName(), root.getCanonicalName()))
+                                    // 최종 점수: Jaro-Winkler Similarity를 사용하여 유사도 점수 계산 (0.0 ~ 1.0)
+                                    .score(calculateJaroWinklerScore(aliasLower, root.getCanonicalName().toLowerCase(Locale.ROOT)))
                                     .build())
                             .toList();
 
@@ -62,29 +69,31 @@ public class KeywordApprovalFacade {
     public RootKeywordAliasEntity pubKeywordApproval(RootKeywordPutRequest request) {
         RootKeywordEntity rootKeyword = null;
 
-        // '승인' 요청 처리: 키워드를 활성화하고 멘티의 키워드를 업데이트합니다.
         if (request.isActive()) {
             rootKeyword = rootKeywordService.findOrCreate(request.getRootKeywordId(), request.getAliasName());
             menteeService.updateKeywordsAndRefreshVector(request.getAliasName(), rootKeyword);
-        }
-        // '반려' 요청 처리: 멘티의 키워드에서 해당 내용을 null로 변경합니다.
-        else if (request.isDeleted()) {
+        } else if (request.isDeleted()) {
             rootKeywordService.deleteRootKeyword(request.getRootKeywordId());
             menteeService.updateKeywordsAndRefreshVector(request.getAliasName(), null);
         }
 
-        // 최종적으로 alias의 상태를 업데이트하고 결과를 반환합니다.
         return rootKeywordService.pubKeywordApproval(request.toEntity(rootKeyword));
     }
 
-    private float score(String alias, String canonical) {
-        alias = alias.toLowerCase(Locale.ROOT);
-        canonical = canonical.toLowerCase(Locale.ROOT);
+    /**
+     * Levenshtein Distance를 계산하여 임계값 이하인지 확인합니다.
+     * 편집 거리(삽입, 삭제, 대체 횟수)가 작을수록 두 문자열이 유사합니다.
+     */
+    private boolean levenshteinFilter(String s1, String s2) {
+        return LEVENSHTEIN_DISTANCE.apply(s1, s2) <= LEVENSHTEIN_THRESHOLD;
+    }
 
-        if (!canonical.contains(alias)) {
-            return 0.0f;
-        }
-
-        return (float) alias.length() / canonical.length();
+    /**
+     * Jaro-Winkler Similarity를 계산하여 반환합니다.
+     * 공통 접두사에 가중치를 두어 오타나 변형에 대해 더 정확한 유사도를 제공합니다.
+     * @return 0.0 (불일치) ~ 1.0 (완전 일치) 사이의 값
+     */
+    private float calculateJaroWinklerScore(String s1, String s2) {
+        return JARO_WINKLER_SIMILARITY.apply(s1, s2).floatValue();
     }
 }

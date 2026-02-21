@@ -26,34 +26,30 @@ public class RootKeywordService {
     private final RootKeywordAliasRepository rootKeywordAliasRepository;
 
     public List<MenteeKeywordEntity> findByMenteeKeyword(List<KeywordCreateRequest> request, MenteeEntity en) {
-
-        List<String> aliasName = request.stream()
+        List<String> aliasNames = request.stream()
                 .map(KeywordCreateRequest::getKeyword)
                 .distinct()
                 .toList();
 
-        // 상태와 상관없이 이름으로 모든 Alias 조회 (PENDING 포함)
-        List<RootKeywordEntity> rootKeywordAlias = rootKeywordRepository.findCanonicalName(aliasName);
+        Map<String, RootKeywordEntity> rootKeywordMap = findRootKeywordsAsMap(aliasNames);
 
-        Map<String, RootKeywordEntity> rootMap = rootKeywordAlias.stream()
-                        .collect(Collectors.toMap(
-                                e -> e.getCanonicalName().toLowerCase(Locale.ROOT),
-                                Function.identity()
-                        ));
-
-        return aliasName.stream()
-                .map(keyword -> {
-                    RootKeywordEntity root = rootMap.get(keyword);
-
-                    // root 있으면 root 기준
-                    if (root != null) {
-                        return MenteeKeywordEntity.of(en, root);
-                    }
-
-                    // 없으면 사용자 입력 그대로
-                    return MenteeKeywordEntity.of(en, keyword);
-                })
+        return aliasNames.stream()
+                .map(keyword -> createMenteeKeyword(en, keyword, rootKeywordMap))
                 .toList();
+    }
+
+    private MenteeKeywordEntity createMenteeKeyword(MenteeEntity mentee, String keyword, Map<String, RootKeywordEntity> rootKeywordMap) {
+        RootKeywordEntity root = rootKeywordMap.get(keyword.toLowerCase(Locale.ROOT));
+        return (root != null) ? MenteeKeywordEntity.of(mentee, root) : MenteeKeywordEntity.of(mentee, keyword);
+    }
+
+    private Map<String, RootKeywordEntity> findRootKeywordsAsMap(List<String> aliasNames) {
+        List<RootKeywordEntity> rootKeywords = rootKeywordRepository.findCanonicalName(aliasNames);
+        return rootKeywords.stream()
+                .collect(Collectors.toMap(
+                        e -> e.getCanonicalName().toLowerCase(Locale.ROOT),
+                        Function.identity()
+                ));
     }
 
     public void ensureKeywordsExist(List<KeywordCreateRequest> keywords) {
