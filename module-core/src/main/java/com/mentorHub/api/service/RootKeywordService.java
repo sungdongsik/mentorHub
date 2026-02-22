@@ -9,6 +9,8 @@ import com.mentorHub.api.repository.RootKeywordAliasRepository;
 import com.mentorHub.api.repository.RootKeywordRepository;
 import com.util.RootKeywordAliasStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,8 +77,9 @@ public class RootKeywordService {
         rootKeywordAliasRepository.saveAll(newAliases);
     }
 
-    public List<RootKeywordAliasEntity> getKeywordApproval(RootKeywordEntity request) {
-        return rootKeywordAliasRepository.findByStatus(request.getStatus());
+    public List<RootKeywordAliasEntity> getKeywordApproval(RootKeywordEntity request, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return rootKeywordAliasRepository.findByStatus(request.getStatus(), pageable);
     }
 
     public RootKeywordAliasEntity pubKeywordApproval(RootKeywordAliasEntity request) {

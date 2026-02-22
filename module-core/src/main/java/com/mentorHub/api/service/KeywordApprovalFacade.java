@@ -30,14 +30,14 @@ public class KeywordApprovalFacade {
 
     private static final LevenshteinDistance LEVENSHTEIN_DISTANCE = LevenshteinDistance.getDefaultInstance();
 
-    public List<RootKeywordResponse> getKeywordApproval(RootKeywordEntity request) {
-        List<RootKeywordAliasEntity> aliases = rootKeywordService.getKeywordApproval(request);
+    public List<RootKeywordResponse> getKeywordApproval(RootKeywordEntity request, int page, int size) {
+        List<RootKeywordAliasEntity> aliases = rootKeywordService.getKeywordApproval(request, page, size);
 
         if (aliases.isEmpty()) {
             return List.of();
         }
 
-        // 성능 최적화: 전체 RootKeyword를 한 번에 조회하여 메모리에서 매칭 (N+1 문제 해결)
+        // ROOT 테이블에서 ACTIVE 값 가져오기
         List<RootKeywordEntity> allRoots = rootKeywordService.getKeywordActive();
 
         return aliases.stream()

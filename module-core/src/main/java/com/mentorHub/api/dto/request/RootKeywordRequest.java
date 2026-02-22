@@ -9,6 +9,8 @@ import lombok.*;
 @ToString
 public class RootKeywordRequest {
     private RootKeywordAliasStatus status;
+    private int page = 0;
+    private int size = 10;
 
     public RootKeywordEntity toEntity() {
         return RootKeywordEntity.builder()

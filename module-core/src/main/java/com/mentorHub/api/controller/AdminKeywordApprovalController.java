@@ -25,7 +25,7 @@ public class AdminKeywordApprovalController {
     @GetMapping
     public ApiResponse<PageResponse<RootKeywordResponse>> getKeywordApproval(@ModelAttribute RootKeywordRequest request) {
         log.info("request: {}", request);
-        List<RootKeywordResponse> approval = keywordApprovalFacade.getKeywordApproval(request.toEntity());
+        List<RootKeywordResponse> approval = keywordApprovalFacade.getKeywordApproval(request.toEntity(), request.getPage(), request.getSize());
 
         return ApiResponse.success(PageResponse.of(approval));
     }

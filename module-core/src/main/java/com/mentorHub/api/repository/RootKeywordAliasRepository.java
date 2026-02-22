@@ -2,6 +2,7 @@ package com.mentorHub.api.repository;
 
 import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.util.RootKeywordAliasStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -9,5 +10,5 @@ import java.util.List;
 public interface RootKeywordAliasRepository extends JpaRepository<RootKeywordAliasEntity, Long> {
     List<RootKeywordAliasEntity> findAllByAliasNameIn(List<String> aliasNames);
 
-    List<RootKeywordAliasEntity> findByStatus(RootKeywordAliasStatus status);
+    List<RootKeywordAliasEntity> findByStatus(RootKeywordAliasStatus status, Pageable pageable);
 }
