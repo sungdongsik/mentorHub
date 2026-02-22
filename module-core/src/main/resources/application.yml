@@ -35,3 +35,18 @@ spring:
         collection-name: mentee_writing_vectors  # 멘티 글 임베딩을 저장하는 컬렉션 이름
         use-tls: false                  # HTTPS(TLS) 사용 여부 (로컬 환경에서는 false)
         initialize-schema: true        # 애플리케이션 시작 시 컬렉션 자동 생성 여부
+  mail:
+    host: smtp.gmail.com                # SMTP 서버 호스트 (Gmail 사용)
+    port: 587                           # SMTP 포트 (TLS 사용 시 587)
+    username: sds970320@gmail.com       # 발신자 이메일 계정
+    password: rdsl jjye khre vabo       # 앱 비밀번호 (보안상 환경변수 사용 권장)
+    properties:
+      mail:
+        smtp:
+          auth: true                    # SMTP 인증 사용 여부
+          starttls:
+            enable: true                # STARTTLS 활성화 (보안 연결)
+            required: true              # STARTTLS 필수 사용 설정
+          connectiontimeout: 5000       # 연결 타임아웃 (밀리초)
+          timeout: 5000                 # 읽기 타임아웃 (밀리초)
+          writetimeout: 5000            # 쓰기 타임아웃 (밀리초)
