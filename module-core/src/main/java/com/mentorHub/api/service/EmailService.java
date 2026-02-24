@@ -13,9 +13,9 @@ public class EmailService {
 
     public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        emailSender.send(message);
+        message.setTo(to); // 보낼 이메일 주소
+        message.setSubject(subject); // 메일 제목
+        message.setText(text); // 메일 내용
+        emailSender.send(message); // 메일 전송
     }
 }
