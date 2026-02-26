@@ -35,7 +35,7 @@ public class RootKeywordScheduler {
 
         if (!pendingAliases.isEmpty()) {
             String emailContent = pendingAliases.stream()
-                    .map(alias -> "키워드명: " + alias.getAliasName() + ", 상태: " + alias.getStatus())
+                    .map(alias -> "키워드명: " + alias.getAliasName() + ", 상태: " + alias.getStatus().getName())
                     .collect(Collectors.joining("\n"));
 
             emailService.sendSimpleMessage(adminEmail, "승인 대기 중인 키워드 목록", emailContent);
