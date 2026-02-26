@@ -46,8 +46,7 @@ public class RootKeywordService {
     }
 
     private Map<String, RootKeywordEntity> findRootKeywordsAsMap(List<String> aliasNames) {
-        List<RootKeywordEntity> rootKeywords = rootKeywordRepository.findCanonicalName(aliasNames);
-        return rootKeywords.stream()
+        return rootKeywordRepository.findCanonicalName(aliasNames).stream()
                 .collect(Collectors.toMap(
                         e -> e.getCanonicalName().toLowerCase(Locale.ROOT),
                         Function.identity()
