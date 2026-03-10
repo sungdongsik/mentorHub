@@ -37,6 +37,8 @@ public class RootKeywordAliasEntity {
     @Enumerated(EnumType.STRING)
     private RootKeywordAliasStatus status;
 
+    private String remark;
+
     public static RootKeywordAliasEntity create(String aliasName) {
         return RootKeywordAliasEntity.builder()
                 .aliasName(aliasName)

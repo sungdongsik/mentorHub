@@ -1,6 +1,6 @@
 package com.mentorHub.api.dto.response;
 
-import com.mentorHub.api.entity.RootKeywordEntity;
+import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.util.RootKeywordAliasStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +8,17 @@ import lombok.Getter;
 @Getter
 @Builder
 public class RootKeywordPutResponse {
-    private Long rootKeywordId;
+    private Long rootKeywordAliasId;
 
     private RootKeywordAliasStatus status;
 
-    public static RootKeywordPutResponse from(RootKeywordEntity en) {
+    private String remark;
+
+    public static RootKeywordPutResponse from(RootKeywordAliasEntity en) {
         return RootKeywordPutResponse.builder()
-                .rootKeywordId(en.getRootKeywordId())
+                .rootKeywordAliasId(en.getRootKeywordAliasId())
                 .status(en.getStatus())
+                .remark(en.getRemark())
                 .build();
     }
 }

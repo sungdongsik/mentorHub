@@ -2,6 +2,7 @@ package com.mentorHub.api.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
 public class PageResponse<T> {
     private List<T> contents;
 
-    private int totalCount;
+    private long totalCount;
 
     private int totalPages;
 
@@ -49,5 +50,13 @@ public class PageResponse<T> {
                 .pageSize(pageSize)
                 .build();
     }
-}
 
+    public static <T> PageResponse<T> of(Page<T> page) {
+        return PageResponse.<T>builder()
+                .contents(page.getContent())
+                .totalCount(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .pageSize(page.getSize())
+                .build();
+    }
+}
