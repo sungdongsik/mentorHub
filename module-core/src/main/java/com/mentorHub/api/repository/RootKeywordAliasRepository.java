@@ -11,4 +11,6 @@ public interface RootKeywordAliasRepository extends JpaRepository<RootKeywordAli
     List<RootKeywordAliasEntity> findAllByAliasNameIn(List<String> aliasNames);
 
     List<RootKeywordAliasEntity> findByStatus(RootKeywordAliasStatus status, Pageable pageable);
+
+    List<RootKeywordAliasEntity> findByStatus(RootKeywordAliasStatus status);
 }
