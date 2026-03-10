@@ -30,7 +30,7 @@ public class KeywordApprovalFacade {
 
     private static final LevenshteinDistance LEVENSHTEIN_DISTANCE = LevenshteinDistance.getDefaultInstance();
 
-    public List<RootKeywordResponse> getKeywordApproval(RootKeywordEntity request, int page, int size) {
+    public List<RootKeywordResponse> getKeywordApproval(RootKeywordAliasEntity request, int page, int size) {
         List<RootKeywordAliasEntity> aliases = rootKeywordService.getKeywordApproval(request, page, size);
 
         if (aliases.isEmpty()) {

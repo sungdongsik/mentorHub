@@ -76,9 +76,13 @@ public class RootKeywordService {
         rootKeywordAliasRepository.saveAll(newAliases);
     }
 
-    public List<RootKeywordAliasEntity> getKeywordApproval(RootKeywordEntity request, int page, int size) {
+    public List<RootKeywordAliasEntity> getKeywordApproval(RootKeywordAliasEntity request, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return rootKeywordAliasRepository.findByStatus(request.getStatus(), pageable);
+    }
+
+    public List<RootKeywordAliasEntity> getKeywordApproval(RootKeywordAliasStatus status) {
+        return rootKeywordAliasRepository.findByStatus(status);
     }
 
     public RootKeywordAliasEntity pubKeywordApproval(RootKeywordAliasEntity request) {
