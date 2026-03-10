@@ -1,5 +1,6 @@
 package com.mentorHub.api.dto.request;
 
+import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.mentorHub.api.entity.RootKeywordEntity;
 import com.util.RootKeywordAliasStatus;
 import lombok.*;
@@ -10,8 +11,8 @@ import lombok.*;
 public class RootKeywordRequest {
     private RootKeywordAliasStatus status;
 
-    public RootKeywordEntity toEntity() {
-        return RootKeywordEntity.builder()
+    public RootKeywordAliasEntity toEntity() {
+        return RootKeywordAliasEntity.builder()
                 .status(status)
                 .build();
     }

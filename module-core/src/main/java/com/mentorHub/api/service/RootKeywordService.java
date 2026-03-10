@@ -83,8 +83,8 @@ public class RootKeywordService {
         rootKeywordAliasRepository.saveAll(newAliases);
     }
 
-    public List<RootKeywordAliasEntity> getKeywordApproval(RootKeywordEntity request) {
-        return rootKeywordAliasRepository.findByStatus(request.getStatus());
+    public List<RootKeywordAliasEntity> getKeywordApproval(RootKeywordAliasStatus request) {
+        return rootKeywordAliasRepository.findByStatus(request);
     }
 
     public RootKeywordEntity pubKeywordApproval(RootKeywordEntity request) {

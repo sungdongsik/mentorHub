@@ -25,8 +25,8 @@ public class KeywordApprovalFacade {
 
     private final MenteeVectorAssemblerService menteeVectorAssemblerService;
 
-    public List<RootKeywordResponse> getKeywordApproval(RootKeywordEntity request) {
-        List<RootKeywordAliasEntity> aliases = rootKeywordService.getKeywordApproval(request);
+    public List<RootKeywordResponse> getKeywordApproval(RootKeywordAliasEntity request) {
+        List<RootKeywordAliasEntity> aliases = rootKeywordService.getKeywordApproval(request.getStatus());
 
         if (aliases.isEmpty()) {
             return List.of();
