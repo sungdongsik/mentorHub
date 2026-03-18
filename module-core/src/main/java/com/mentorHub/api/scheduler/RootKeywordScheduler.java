@@ -41,10 +41,14 @@ public class RootKeywordScheduler {
                     .map(alias -> "키워드명: " + alias.getAliasName() + ", 상태: " + alias.getStatus().getName())
                     .collect(Collectors.joining("\n"));
 
-            emailService.sendSimpleMessage(adminEmail, subject, emailContent);
-            emailHistoryService.saveEmailHistory(adminEmail, subject, emailContent);
+            boolean success = emailService.sendSimpleMessage(adminEmail, subject, emailContent);
+            emailHistoryService.saveEmailHistory(adminEmail, subject, emailContent, success);
 
-            log.info("이메일 발송 및 히스토리 저장 완료. 총 {}개의 대기 중인 키워드가 전송되었습니다.", pendingAliases.size());
+            if (success) {
+                log.info("이메일 발송 및 히스토리 저장 완료. 총 {}개의 대기 중인 키워드가 전송되었습니다.", pendingAliases.size());
+            } else {
+                log.error("이메일 발송 실패. 총 {}개의 대기 중인 키워드가 전송되지 않았습니다.", pendingAliases.size());
+            }
         } else {
             log.info("전송할 대기 중인 키워드가 없습니다.");
         }
