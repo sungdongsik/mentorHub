@@ -30,18 +30,18 @@ public class EmailHistoryEntity {
     @Lob
     private String content;
 
-    private boolean success;
+    private boolean isSuccess;
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
-    public static EmailHistoryEntity of(String recipient, String subject, String content, boolean success) {
+    public static EmailHistoryEntity of(String recipient, String subject, String content, boolean isSuccess) {
         return EmailHistoryEntity.builder()
                 .recipient(recipient)
                 .subject(subject)
                 .content(content)
-                .success(success)
+                .isSuccess(isSuccess)
                 .build();
     }
 }
