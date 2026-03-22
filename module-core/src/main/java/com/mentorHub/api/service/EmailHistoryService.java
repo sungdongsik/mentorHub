@@ -13,8 +13,8 @@ public class EmailHistoryService {
 
     private final EmailHistoryRepository emailHistoryRepository;
 
-    public void saveEmailHistory(String recipient, String subject, String content) {
-        EmailHistoryEntity emailHistory = EmailHistoryEntity.of(recipient, subject, content);
+    public void saveEmailHistory(String recipient, String subject, String content, boolean success) {
+        EmailHistoryEntity emailHistory = EmailHistoryEntity.of(recipient, subject, content, success);
         emailHistoryRepository.save(emailHistory);
     }
 }
