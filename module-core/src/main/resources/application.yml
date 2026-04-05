@@ -12,6 +12,9 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+  batch:
+    jdbc:
+      initialize-schema: always
   ai:
     google:
       genai:
