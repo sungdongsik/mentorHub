@@ -14,22 +14,24 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Builder
-@Table(name = "TB_EMAIL_HISTORY")
+@Table(name = "TB_EMAIL_VERIFICATION")
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class EmailHistoryEntity {
+public class EmailVerificationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long emailHisId;
+    private Long verificationId;
 
-    private String recipient;
+    @Column(nullable = false)
+    private String email;
 
-    private String subject;
+    @Column(nullable = false)
+    private String code;
 
-    @Lob
-    private String content;
+    @Column(nullable = false)
+    private LocalDateTime expiryDate;
 
     @Enumerated(EnumType.STRING)
     private CommonStatus isSuccess;
@@ -38,12 +40,11 @@ public class EmailHistoryEntity {
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
-    public static EmailHistoryEntity of(String recipient, String subject, String content, CommonStatus isSuccess) {
-        return EmailHistoryEntity.builder()
-                .recipient(recipient)
-                .subject(subject)
-                .content(content)
-                .isSuccess(isSuccess)
-                .build();
+    public void verify() {
+        this.isSuccess.equals(CommonStatus.SUCCESS.name());
+    }
+
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(expiryDate);
     }
 }

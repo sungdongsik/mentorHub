@@ -6,11 +6,12 @@ import com.mentorHub.api.dto.response.RootKeywordResponse;
 import com.mentorHub.api.entity.RootKeywordAliasEntity;
 import com.mentorHub.api.entity.RootKeywordEntity;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -31,16 +32,23 @@ public class KeywordApprovalFacade {
         List<RootKeywordEntity> allRoots = rootKeywordService.getKeywordActive();
 
         return aliases.stream()
-                .map(alias -> {
-                    List<RootKeywordCandidateResponse> candidates = allRoots.stream()
-                            .map(root -> RootKeywordCandidateResponse.builder()
-                                    .rootKeywordId(root.getRootKeywordId())
-                                    .canonicalName(root.getCanonicalName())
-                                    .build())
-                            .toList();
+                .map(alias -> RootKeywordResponse.from(alias, findCandidates(alias, allRoots)))
+                .toList();
+    }
 
-                    return RootKeywordResponse.from(alias, candidates);
-                })
+    /**
+     * 특정 별칭과 유사한 루트 키워드 후보군을 계산하여 거리순으로 정렬합니다.
+     */
+    private List<RootKeywordCandidateResponse> findCandidates(RootKeywordAliasEntity alias, List<RootKeywordEntity> allRoots) {
+        String targetName = alias.getAliasName().toLowerCase();
+
+        return allRoots.stream()
+                .sorted(Comparator.comparingInt(root ->
+                        StringUtils.getLevenshteinDistance(targetName, root.getCanonicalName().toLowerCase())))
+                .map(root -> RootKeywordCandidateResponse.builder()
+                        .rootKeywordId(root.getRootKeywordId())
+                        .canonicalName(root.getCanonicalName())
+                        .build())
                 .toList();
     }
 

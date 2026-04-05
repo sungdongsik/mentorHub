@@ -13,7 +13,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TB_USER")
+@Table(name = "TB_USER",
+        uniqueConstraints = @UniqueConstraint(columnNames = "email")
+)
 @Builder
 @Getter
 @NoArgsConstructor

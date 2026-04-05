@@ -1,5 +1,6 @@
 package com.mentorHub.api.service;
 
+import com.util.CommonStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,17 +14,17 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    public boolean sendSimpleMessage(String to, String subject, String text) {
+    public CommonStatus sendSimpleMessage(String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to); // 보낼 이메ail 주소
             message.setSubject(subject); // 메일 제목
             message.setText(text); // 메일 내용
             emailSender.send(message); // 메일 전송
-            return true;
+            return CommonStatus.SUCCESS;
         } catch (Exception e) {
             log.error("메일 전송 실패: {}", e.getMessage());
-            return false;
+            return CommonStatus.FAIL;
         }
     }
 }

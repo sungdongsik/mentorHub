@@ -10,7 +10,4 @@ public class RootKeywordCandidateResponse {
     private Long rootKeywordId;
 
     private String canonicalName;
-
-    private float score;
-
 }
