@@ -27,7 +27,7 @@ public class RootKeywordScheduler {
      * 매일 새벽 3시에 실행되도록 설정된 스케줄러입니다.
      * (Cron: 초 분 시 일 월 요일)
      */
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 3 * * *")
     public void executeDailyTasks() {
         log.info("일일 작업 스케줄러 시작...");
         try {
