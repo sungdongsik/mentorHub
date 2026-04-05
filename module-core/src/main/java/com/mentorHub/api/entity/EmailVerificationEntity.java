@@ -33,14 +33,15 @@ public class EmailVerificationEntity {
     @Column(nullable = false)
     private LocalDateTime expiryDate;
 
-    private String isVerified;
+    @Enumerated(EnumType.STRING)
+    private CommonStatus isSuccess;
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
     public void verify() {
-        this.isVerified.equals(CommonStatus.SUCCESS.name());
+        this.isSuccess.equals(CommonStatus.SUCCESS.name());
     }
 
     public boolean isExpired() {

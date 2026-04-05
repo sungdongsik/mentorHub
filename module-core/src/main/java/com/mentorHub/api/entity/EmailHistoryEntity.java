@@ -31,7 +31,8 @@ public class EmailHistoryEntity {
     @Lob
     private String content;
 
-    private String isSuccess;
+    @Enumerated(EnumType.STRING)
+    private CommonStatus isSuccess;
 
     @CreatedDate
     @Column(updatable = false)
@@ -42,7 +43,7 @@ public class EmailHistoryEntity {
                 .recipient(recipient)
                 .subject(subject)
                 .content(content)
-                .isSuccess(isSuccess.name())
+                .isSuccess(isSuccess)
                 .build();
     }
 }

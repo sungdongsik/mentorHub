@@ -31,7 +31,7 @@ public class EmailVerificationService {
                 .email(request.getEmail())
                 .code(code)
                 .expiryDate(expiryDate)
-                .isVerified(CommonStatus.FAIL.name())
+                .isSuccess(CommonStatus.FAIL)
                 .build();
 
         // 인증 데이터 저장
