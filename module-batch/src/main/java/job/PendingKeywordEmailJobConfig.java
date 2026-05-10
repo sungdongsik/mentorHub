@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 import tasklet.CollectKeywordTasklet;
-import tasklet.PendingKeywordEmailTasklet;
 import tasklet.SendKeywordEmailTasklet;
 
 @Configuration
