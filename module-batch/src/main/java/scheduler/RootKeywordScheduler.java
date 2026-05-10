@@ -1,4 +1,4 @@
-package com.mentorHub.api.scheduler;
+package scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

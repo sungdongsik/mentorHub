@@ -1,0 +1,13 @@
+plugins {
+    id("java-common-conventions")
+}
+
+
+dependencies {
+    implementation(project(":module-core"))
+    implementation(project(":module-util"))
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+}
